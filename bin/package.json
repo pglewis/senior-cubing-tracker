@@ -1,0 +1,18 @@
+{
+    "name": "@repo/bin",
+    "private": true,
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "lint": "eslint .",
+        "tsc": "tsc",
+        "get-data": "node get-data.ts",
+        "create-topranks": "node create-topranks.ts"
+    },
+    "dependencies": {
+        "@repo/common": "*"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.18"
+    }
+}

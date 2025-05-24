@@ -11,14 +11,20 @@
     "scripts": {
         "dev": "npm run dev -w app",
         "preview": "npm run preview -w app",
-        "lint": "npm run lint --workspaces",
-        "build": "npm run build --workspaces --if-present"
+        "lint": "npm run lint --workspaces --if-present",
+        "tsc": "npm run tsc --workspaces --if-present",
+        "build": "npm run lint && npm run tsc && npm run build --workspaces --if-present",
+        "copy-dev-data": "shx cp dist/data/* app/data/"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",
+        "@stylistic/eslint-plugin-js": "^2.12.1",
         "eslint": "^9.25.0",
+        "eslint-plugin-jsdoc": "^50.6.1",
         "globals": "^16.0.0",
+        "shx": "^0.4.0",
         "typescript": "~5.8.3",
         "typescript-eslint": "^8.30.1"
+
     }
 }

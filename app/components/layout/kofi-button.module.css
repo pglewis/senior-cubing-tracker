@@ -1,0 +1,28 @@
+.container {
+    display: inline-block;
+}
+
+.button {
+    background-color: #e64503;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 15px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #d13e02;
+}
+
+.text {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.img {
+    height: 15px;
+    width: auto;
+}

@@ -1,0 +1,84 @@
+@font-face {
+    font-family: "Ubuntu Sans Variable";
+    src: url("../assets/fonts/ubuntu-sans-variable-wdth-wght.woff2") format('truetype');
+    font-weight: 300 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ubuntu Sans Variable";
+    src: url("../assets/fonts/ubuntu-sans-italic-variable-wdth-wght.woff2") format('truetype');
+    font-weight: 300 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Ubuntu Sans Variable", sans-serif;
+    line-height: 1.5;
+    background-color: #222;
+    color: gainsboro;
+}
+
+input,
+button,
+select {
+    font-family: inherit;
+    border-radius: 6px;
+    line-height: 1.5em;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+}
+
+button {
+    padding: 0;
+    border: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    background: none;
+}
+
+button:focus-visible {
+    outline: 2px solid black;
+    border-radius: 2px;
+}
+
+fieldset,
+select,
+input {
+    font-size: 16px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+a:link,
+a:visited {
+    color: #fff3cc;
+}
+
+ul.disc {
+    list-style-type: disc;
+}
+
+ul.disc li {
+    margin-left: 0;
+}
+
+ul {
+    margin: 0 0 10px 0;
+    list-style-type: none;
+}
+
+ul li {
+    margin-left: 4px;
+}

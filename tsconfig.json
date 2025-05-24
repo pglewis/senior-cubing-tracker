@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		/* Common Options */
+		"target": "ES2022",
+		"module": "ESNext",
+		"useDefineForClassFields": true,
+		"skipLibCheck": true,
+		"moduleDetection": "force",
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+	},
+	"files": [],
+	"references": [
+		{
+			"path": "./app"
+		},
+		{
+			"path": "./bin"
+		},
+	],
+}

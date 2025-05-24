@@ -1,5 +1,5 @@
 export function KinchRanks() {
     return (
-        <h2>Senior Kinch Ranks</h2>
+        <div>Explore comprehensive rankings that showcase overall performance across the full spectrum of WCA events.</div>
     );
 }

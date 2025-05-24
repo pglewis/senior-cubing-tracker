@@ -1,7 +1,26 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    background: #222;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header h2 {
+    margin: 0 0 0 1rem;
+    font-size: 1.25rem;
+}
+
 .container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 1rem 2rem;
 }
 
 .footer {

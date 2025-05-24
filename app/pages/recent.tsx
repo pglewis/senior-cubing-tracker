@@ -1,5 +1,5 @@
 export function Recent() {
     return (
-        <h2>Recent Senior Records</h2>
+        <div>Discover the latest achievements from senior cubers pushing the boundaries of speed and skill.</div>
     );
 }

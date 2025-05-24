@@ -1,5 +1,5 @@
 export function Results() {
     return (
-        <h2>Senior Results</h2>
+        <div>Navigate through detailed competition results and statistics from the senior cubing community.</div>
     );
 }

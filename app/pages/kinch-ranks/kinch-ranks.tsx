@@ -37,6 +37,8 @@ export function KinchRanks() {
                 <SearchBox
                     value={wcaId}
                     onChange={(value) => setParams({wcaId: value})}
+                    age={age}
+                    region={region}
                 />
                 <AgeFilter
                     value={age}

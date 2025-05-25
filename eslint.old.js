@@ -1,30 +1,29 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
+// @ts-check
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 import stylisticJs from "@stylistic/eslint-plugin-js";
+import jsdoc from "eslint-plugin-jsdoc";
+import globals from "globals";
 
 export default tseslint.config(
-	{ignores: ['dist']},
+	eslint.configs.recommended,
+	tseslint.configs.recommended,
 	{
-		extends: [js.configs.recommended, ...tseslint.configs.recommended],
-		files: ['**/*.{ts,tsx}'],
-		languageOptions: {
-			ecmaVersion: 2020,
-			globals: globals.browser,
-		},
+		ignores: [
+			"**/node_modules/**",
+			"dist",
+			"site/data",
+			"site/recent/scripts/vendor"
+		]
+	},
+	{languageOptions: {globals: globals.browser}},
+	{
 		plugins: {
-			'react-hooks': reactHooks,
-			'react-refresh': reactRefresh,
 			"@stylistic/js": stylisticJs,
+			"jsdoc": jsdoc,
 		},
 		rules: {
-			...reactHooks.configs.recommended.rules,
-			'react-refresh/only-export-components': [
-				'warn',
-				{allowConstantExport: true},
-			],
+			"no-duplicate-imports": "error",
 			"no-console": ["error", {allow: ["error"]}],
 			"@stylistic/js/linebreak-style": ["error", "unix"],
 			"@stylistic/js/brace-style": ["error", "1tbs"],
@@ -51,6 +50,32 @@ export default tseslint.config(
 			"@stylistic/js/rest-spread-spacing": ["error", "never"],
 			"@stylistic/js/semi": ["error", "always"],
 			"@stylistic/js/quotes": ["error", "double", {"avoidEscape": true}],
+			...jsdoc.configs["flat/recommended"].rules,
+			"jsdoc/check-indentation": "error",
+			"jsdoc/check-line-alignment": ["error", "always"],
+			"jsdoc/check-template-names": "error",
+			"jsdoc/informative-docs": "error",
+			"jsdoc/lines-before-block": "error",
+			"jsdoc/no-blank-blocks": "warn",
+			"jsdoc/require-asterisk-prefix": "error",
+			"jsdoc/require-jsdoc": "off",
+			"jsdoc/require-throws": "error",
+			//"jsdoc/require-description": "warn",
+			"jsdoc/require-hyphen-before-param-description": "warn",
+			"jsdoc/require-property-description": "off",
+			"jsdoc/require-param-description": "off",
+			"jsdoc/require-returns-description": "off",
+			"jsdoc/require-returns-type": "off",
+			"jsdoc/require-param-type": "off",
+		}
+	},
+	{
+		// Overrides for node scripts in the 'bin/' directory
+		files: ["bin/**/*.ts"],
+		languageOptions: {
+			globals: {
+				...globals.node, // merge node globals
+			},
 		},
 	},
 );

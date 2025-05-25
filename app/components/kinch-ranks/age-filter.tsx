@@ -1,5 +1,5 @@
-import type {ChangeEvent} from 'react';
-import {useData} from '@repo/app/hooks/use-data';
+import type {ChangeEvent} from "react";
+import {useData} from "@repo/app/hooks/use-data";
 import type {TopRank} from "@repo/common/types/kinch-types";
 
 interface AgeFilterProps {

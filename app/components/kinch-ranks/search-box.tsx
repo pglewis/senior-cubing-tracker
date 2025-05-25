@@ -1,79 +1,144 @@
-import {useState, useCallback} from 'react';
-import type {ChangeEvent} from 'react';
-import {useKinchRanks} from '@repo/app/hooks/use-kinch-ranks';
-import {debounce} from '@repo/common/util/debounce';
-import type {KinchRank} from '@repo/common/types/kinch-types';
-import styles from './search-box.module.css';
+import type {ChangeEvent} from "react";
+import {SearchResults} from "./search-results";
+import {useSearchBox} from "./use-search-box";
+import styles from "./search-box.module.css";
+import {useCallback, useState} from "react";
+import type {KinchRank} from "@repo/common/types/kinch-types";
 
 interface SearchBoxProps {
-    value: string;
-    onChange: (value: string) => void;
-    age: string;
-    region: string;
+	value: string;
+	onSelect: (value: string) => void;
+	age: string;
+	region: string;
 }
 
-export function SearchBox({value, onChange, age, region}: SearchBoxProps) {
-    const kinchRanks = useKinchRanks({age, region});
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [searchTerm, setSearchTerm] = useState(value);
-    const [filteredResults, setFilteredResults] = useState<KinchRank[]>([]);
+export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
+	const {
+		searchTerm,
+		filteredResults,
+		setSearchTerm,
+		filterResults
+	} = useSearchBox({value, age, region});
 
-    const filterResults = useCallback((term: string) => {
-        if (term.length <= 2) {
-            setFilteredResults([]);
-            setShowDropdown(false);
-            return;
-        }
+	const [isOpen, setIsOpen] = useState(false);
+	const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
-        const lowerTerm = term.toLowerCase();
-        const results = kinchRanks
-            .filter(rank =>
-                rank.personID.toLowerCase().includes(lowerTerm) ||
-                rank.personName.toLowerCase().includes(lowerTerm)
-            )
-            .slice(0, 10);
+	const handleSelect = useCallback((result: KinchRank) => {
+		setSearchTerm(result.personID);
+		onSelect(result.personID);
+		setIsOpen(false);
+		setHighlightedIndex(-1);
+	}, [onSelect, setSearchTerm]);
 
-        setFilteredResults(results);
-        setShowDropdown(results.length > 0);
-    }, [kinchRanks]);
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (!isOpen && e.key === "Enter" && !searchTerm) {
+			e.preventDefault();
+			onSelect("");
+			return;
+		}
 
-    const debouncedFilter = debounce(filterResults, 350);
+		if (!isOpen) return;
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        setSearchTerm(newValue);
-        onChange(newValue);
-        debouncedFilter(newValue);
-    };
+		switch (e.key) {
+			case "ArrowDown": {
+				e.preventDefault();
+				setHighlightedIndex(prev =>
+					prev < filteredResults.length - 1 ? prev + 1 : 0
+				);
+				break;
+			}
+			case "ArrowUp": {
+				e.preventDefault();
+				setHighlightedIndex(prev =>
+					prev > 0 ? prev - 1 : filteredResults.length - 1
+				);
+				break;
+			}
+			case "Enter": {
+				e.preventDefault();
+				if (highlightedIndex >= 0) {
+					handleSelect(filteredResults[highlightedIndex]);
+				}
+				break;
+			}
+			case "Escape": {
+				e.preventDefault();
+				setIsOpen(false);
+				setHighlightedIndex(-1);
+				break;
+			}
+			case "Home": {
+				e.preventDefault();
+				setHighlightedIndex(0);
+				break;
+			}
+			case "End": {
+				e.preventDefault();
+				setHighlightedIndex(filteredResults.length - 1);
+				break;
+			}
+			case "PageUp": {
+				e.preventDefault();
+				setHighlightedIndex(0);
+				break;
+			}
+			case "PageDown": {
+				e.preventDefault();
+				setHighlightedIndex(filteredResults.length - 1);
+				break;
+			}
+		}
+	};
 
-    const handleSelect = (result: KinchRank) => {
-        onChange(result.personID);
-        setShowDropdown(false);
-        setSearchTerm(result.personID);
-    };
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const newValue = e.target.value;
+		setSearchTerm(newValue);
+		setHighlightedIndex(-1);
+		if (!newValue) {
+			onSelect("");
+			setIsOpen(false);
+		} else {
+			setIsOpen(true);
+			filterResults(newValue);
+		}
+	};
 
-    return (
-        <div className={styles.container}>
-            <input
-                type="text"
-                placeholder="Search name or WCA ID"
-                value={searchTerm}
-                onChange={handleChange}
-                autoComplete="off"
-                spellCheck={false}
-            />
-            {showDropdown && (
-                <ul className={styles.results}>
-                    {filteredResults.map(result => (
-                        <li
-                            key={result.personID}
-                            onClick={() => handleSelect(result)}
-                        >
-                            {result.personName} ({result.personID})
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
+	const handleBlur = (e: React.FocusEvent) => {
+		if (e.relatedTarget && (e.relatedTarget as HTMLElement).closest(`.${styles.results}`)) {
+			return;
+		}
+		setIsOpen(false);
+		setHighlightedIndex(-1);
+	};
+
+	return (
+		<div className={styles.container}>
+			<input
+				type="text"
+				role="combobox"
+				aria-expanded={isOpen}
+				aria-controls="search-listbox"
+				aria-activedescendant={
+					highlightedIndex >= 0
+						? `option-${filteredResults[highlightedIndex].personID}`
+						: undefined
+				}
+				placeholder="Search name or WCA ID"
+				value={searchTerm}
+				onChange={handleChange}
+				onKeyDown={handleKeyDown}
+				onBlur={handleBlur}
+				autoComplete="off"
+				spellCheck={false}
+			/>
+			{isOpen && filteredResults.length > 0 && (
+				<SearchResults
+					results={filteredResults}
+					highlightedIndex={highlightedIndex}
+					onSelect={handleSelect}
+					onHighlight={setHighlightedIndex}
+				/>
+			)}
+		</div>
+	);
 }

@@ -42,12 +42,12 @@ export function KinchRanks() {
 				/>
 				<AgeFilter
 					value={age}
-					onChange={(value) => setParams({age: value})}
+					onChange={(value) => setParams({age: value, page: 1})}
 					region={region}
 				/>
 				<RegionFilter
 					value={region}
-					onChange={(value) => setParams({region: value})}
+					onChange={(value) => setParams({region: value, page: 1})}
 					continents={continents}
 					countries={countries}
 				/>

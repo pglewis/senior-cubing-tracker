@@ -1,3 +1,4 @@
+import {useEffect, useState} from "react";
 import styles from "./pagination.module.css";
 
 interface PaginationProps {
@@ -7,6 +8,33 @@ interface PaginationProps {
 }
 
 export function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+	const [inputValue, setInputValue] = useState(String(currentPage));
+
+	// Update input value when currentPage prop changes
+	useEffect(() => {
+		setInputValue(String(currentPage));
+	}, [currentPage]);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInputValue(e.target.value);
+	};
+
+	const handleInputComplete = () => {
+		const pageNumber = parseInt(inputValue.trim(), 10);
+		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+			onPageChange(pageNumber);
+		} else {
+			// Reset to current page if invalid
+			setInputValue(String(currentPage));
+		}
+	};
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			handleInputComplete();
+		}
+	};
+
 	const handlePrevious = () => {
 		if (currentPage > 1) {
 			onPageChange(currentPage - 1);
@@ -16,13 +44,6 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 	const handleNext = () => {
 		if (currentPage < totalPages) {
 			onPageChange(currentPage + 1);
-		}
-	};
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const pageNumber = parseInt(e.target.value, 10);
-		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
-			onPageChange(pageNumber);
 		}
 	};
 
@@ -78,11 +99,13 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 			<span style={{marginLeft: ".5em"}}>
 				page{" "}
 				<input
-					type="number"
-					min={1}
-					max={totalPages}
-					value={currentPage}
+					type="text"
+					inputMode="numeric"
+					pattern="[0-9]*"
+					value={inputValue}
 					onChange={handleInputChange}
+					onBlur={handleInputComplete}
+					onKeyDown={handleKeyDown}
 				/>
 				{" "}of {totalPages}
 			</span>

@@ -24,5 +24,17 @@
 
 .pageSelectorBox input[type="number"] {
     font-size: inherit;
-    width: 2.7em;
+    width: 3em; /* Increased from 2.7em */
+}
+
+/* Hide spinner buttons in WebKit browsers */
+.pageSelectorBox input[type="number"]::-webkit-outer-spin-button,
+.pageSelectorBox input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pageSelectorBox input[type="text"] {
+    font-size: inherit;
+    width: 3em;
 }

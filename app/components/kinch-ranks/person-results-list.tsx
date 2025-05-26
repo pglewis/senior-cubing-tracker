@@ -1,19 +1,19 @@
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import styles from "./search-box.module.css";
 
-interface SearchResultsProps {
+interface PersonResultsListProps {
 	results: KinchRank[];
-	highlightedIndex: number;
+	highlightedIndex: number | undefined;
 	onSelect: (result: KinchRank) => void;
-	onHighlight: (index: number) => void;
+	onHighlight: (index: number | undefined) => void;
 }
 
-export function SearchResults({
+export function PersonResultsList({
 	results,
 	highlightedIndex,
 	onSelect,
 	onHighlight
-}: SearchResultsProps) {
+}: PersonResultsListProps) {
 	const handleMouseDown = (e: React.MouseEvent) => {
 		e.preventDefault();
 	};

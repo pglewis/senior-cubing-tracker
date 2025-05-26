@@ -1,9 +1,10 @@
 import type {ChangeEvent} from "react";
-import {SearchResults} from "./search-results";
-import {useSearchBox} from "./use-search-box";
+import {PersonResultsList} from "./person-results-list";
+import {useKinchPersonSearch} from "./use-kinch-person-search";
 import styles from "./search-box.module.css";
-import {useCallback, useState} from "react";
+import {useCallback, useState, useEffect} from "react";
 import type {KinchRank} from "@repo/common/types/kinch-types";
+import {debounce} from "@repo/common/util/debounce";
 
 interface SearchBoxProps {
 	value: string;
@@ -12,23 +13,28 @@ interface SearchBoxProps {
 	region: string;
 }
 
-export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
-	const {
-		searchTerm,
-		filteredResults,
-		setSearchTerm,
-		filterResults
-	} = useSearchBox({value, age, region});
+const debouncedFilterResults = debounce(
+	(filterFn: (term: string) => KinchRank[], term: string, callback: (results: KinchRank[]) => void) => {
+		callback(filterFn(term));
+	});
 
+export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
+	const {filterResults} = useKinchPersonSearch({age, region});
+	const [searchTerm, setSearchTerm] = useState(value);
+	const [results, setResults] = useState<KinchRank[]>([]);
 	const [isOpen, setIsOpen] = useState(false);
-	const [highlightedIndex, setHighlightedIndex] = useState(-1);
+	const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined);
+
+	useEffect(() => {
+		setSearchTerm(value);
+	}, [value]);
 
 	const handleSelect = useCallback((result: KinchRank) => {
 		setSearchTerm(result.personID);
 		onSelect(result.personID);
 		setIsOpen(false);
-		setHighlightedIndex(-1);
-	}, [onSelect, setSearchTerm]);
+		setHighlightedIndex(undefined);
+	}, [onSelect]);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (!isOpen && e.key === "Enter" && !searchTerm) {
@@ -43,48 +49,28 @@ export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
 			case "ArrowDown": {
 				e.preventDefault();
 				setHighlightedIndex(prev =>
-					prev < filteredResults.length - 1 ? prev + 1 : 0
+					prev === undefined || prev >= results.length - 1 ? 0 : prev + 1
 				);
 				break;
 			}
 			case "ArrowUp": {
 				e.preventDefault();
 				setHighlightedIndex(prev =>
-					prev > 0 ? prev - 1 : filteredResults.length - 1
+					prev === undefined || prev <= 0 ? results.length - 1 : prev - 1
 				);
 				break;
 			}
 			case "Enter": {
 				e.preventDefault();
-				if (highlightedIndex >= 0) {
-					handleSelect(filteredResults[highlightedIndex]);
+				if (highlightedIndex !== undefined) {
+					handleSelect(results[highlightedIndex]);
 				}
 				break;
 			}
 			case "Escape": {
 				e.preventDefault();
 				setIsOpen(false);
-				setHighlightedIndex(-1);
-				break;
-			}
-			case "Home": {
-				e.preventDefault();
-				setHighlightedIndex(0);
-				break;
-			}
-			case "End": {
-				e.preventDefault();
-				setHighlightedIndex(filteredResults.length - 1);
-				break;
-			}
-			case "PageUp": {
-				e.preventDefault();
-				setHighlightedIndex(0);
-				break;
-			}
-			case "PageDown": {
-				e.preventDefault();
-				setHighlightedIndex(filteredResults.length - 1);
+				setHighlightedIndex(undefined);
 				break;
 			}
 		}
@@ -93,13 +79,14 @@ export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
 		setSearchTerm(newValue);
-		setHighlightedIndex(-1);
+		setHighlightedIndex(undefined);
 		if (!newValue) {
 			onSelect("");
 			setIsOpen(false);
+			setResults([]);
 		} else {
 			setIsOpen(true);
-			filterResults(newValue);
+			debouncedFilterResults(filterResults, newValue, setResults);
 		}
 	};
 
@@ -108,7 +95,7 @@ export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
 			return;
 		}
 		setIsOpen(false);
-		setHighlightedIndex(-1);
+		setHighlightedIndex(undefined);
 	};
 
 	return (
@@ -119,8 +106,8 @@ export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
 				aria-expanded={isOpen}
 				aria-controls="search-listbox"
 				aria-activedescendant={
-					highlightedIndex >= 0
-						? `option-${filteredResults[highlightedIndex].personID}`
+					highlightedIndex !== undefined
+						? `option-${results[highlightedIndex].personID}`
 						: undefined
 				}
 				placeholder="Search name or WCA ID"
@@ -131,9 +118,9 @@ export function SearchBox({value, onSelect, age, region}: SearchBoxProps) {
 				autoComplete="off"
 				spellCheck={false}
 			/>
-			{isOpen && filteredResults.length > 0 && (
-				<SearchResults
-					results={filteredResults}
+			{isOpen && results.length > 0 && (
+				<PersonResultsList
+					results={results}
 					highlightedIndex={highlightedIndex}
 					onSelect={handleSelect}
 					onHighlight={setHighlightedIndex}

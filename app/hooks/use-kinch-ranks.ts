@@ -1,21 +1,21 @@
 import {useMemo} from "react";
 import {useData} from "./use-data";
 import {
+	scoreAverageOnly,
 	type KinchRank,
 	type KinchEvent,
 	type TopRank,
-	scoreAverageOnly
 } from "@repo/common/types/kinch-types";
 import type {
 	ExtendedRankingsData,
 	WCAEvent,
-	EventRanking
+	EventRanking,
 } from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
 
 interface KinchFilters {
-	age: string;
-	region: string;
+	age: string,
+	region: string,
 }
 
 export function useKinchRanks(filters: KinchFilters): KinchRank[] {
@@ -26,16 +26,16 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 			return [];
 		}
 
-		let allRanks = rankings.data.persons.map(p =>
+		let ranks = rankings.data.persons.map(p =>
 			getRanksForPerson(rankings, topRanks, {
 				age: filters.age,
 				region: filters.region
 			}, p.id)
 		);
-		allRanks = allRanks.filter(r => r.overall > 0);
-		allRanks.sort((a, b) => b.overall - a.overall);
+		ranks = ranks.filter(r => r.overall > 0);
+		ranks.sort((a, b) => b.overall - a.overall);
 
-		return allRanks;
+		return ranks;
 	}, [rankings, topRanks, filters.age, filters.region]);
 }
 
@@ -43,7 +43,7 @@ function getRanksForPerson(
 	rankings: ExtendedRankingsData,
 	topRanks: TopRank[],
 	filters: KinchFilters,
-	personID: string
+	personID: string,
 ): KinchRank {
 	const rankingsData = rankings.data;
 	const person = rankingsData.persons.find(p => p.id === personID);

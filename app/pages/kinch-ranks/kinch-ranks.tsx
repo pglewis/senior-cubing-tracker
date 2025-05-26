@@ -1,16 +1,18 @@
-import {Link} from "react-router-dom";
-import {useKinchParams} from "@repo/app/hooks/use-kinch-params";
+import {useMemo} from "react";
 import {useData} from "@repo/app/hooks/use-data";
-import {SearchBox} from "@repo/app/components/kinch-ranks/search-box";
+import {Link} from "react-router-dom";
+import {getFilteredRegions} from "./helpers/get-filtered-regions";
+import {useKinchParams} from "@repo/app/hooks/use-kinch-params";
 import {AgeFilter} from "@repo/app/components/kinch-ranks/age-filter";
 import {RegionFilter} from "@repo/app/components/kinch-ranks/region-filter";
-import {getFilteredRegions} from "./helpers/get-filtered-regions";
-import {useMemo} from "react";
+import {PersonSearch} from "@repo/app/components/kinch-ranks/person-search";
+import {PersonScores} from "@repo/app/components/kinch-ranks/person-scores";
+import {KinchLeaderboard} from "@repo/app/components/kinch-ranks/kinch-leaderboard";
 import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
 	const {rankings, topRanks, isInitializing, error} = useData();
-	const {page, age, region, wcaid, setParams} = useKinchParams();
+	const {age, region, wcaid, setParams} = useKinchParams();
 
 	const {continents, countries} = useMemo(() => (
 		rankings && topRanks
@@ -37,9 +39,9 @@ export function KinchRanks() {
 			<h3><Link to="/kinch-ranks/faq">What are Kinch Ranks?</Link></h3>
 
 			<div className={styles.filters}>
-				<SearchBox
+				<PersonSearch
 					value={wcaid}
-					onSelect={(value) => setParams({wcaid: value, region: "world"})} // Fix: wcaId -> wcaid
+					onSelect={(value) => setParams({wcaid: value, region: "world"})}
 					age={age}
 					region={region}
 				/>
@@ -56,12 +58,11 @@ export function KinchRanks() {
 				/>
 			</div>
 
-			<div>
-				Page: {page}<br />
-				Age: {age}<br />
-				Region: {region}<br />
-				WCA ID: {wcaid}<br />
-			</div>
+			{wcaid ? (
+				<PersonScores wcaId={wcaid} age={age} />
+			) : (
+				<KinchLeaderboard age={age} region={region} />
+			)}
 		</div>
 	);
 }

@@ -1,0 +1,74 @@
+/* Table styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+/* Table header styles */
+.header {
+    cursor: pointer;
+    padding: 0.5rem;
+    text-align: left;
+    margin: 1rem 0;
+}
+
+.eventHeader,
+.scoreHeader {
+    cursor: pointer;
+}
+
+/* Add arrow indicator for sorted column */
+.sorted::after {
+    content: "▲";
+    padding-left: 0.4em;
+    font-size: 0.8em;
+}
+
+/* Table column widths and alignment */
+.eventColumn {
+    width: 10em;
+    text-align: left;
+}
+
+.scoreColumn {
+    width: 4em;
+    text-align: right;
+}
+
+.resultColumn {
+    width: 8em;
+    text-align: right;
+}
+
+/* Table row styles */
+.row:nth-child(odd) {
+    background-color: #2a2a2a;
+}
+
+.row:hover {
+    background: #454545;
+}
+
+/* Score highlighting - increase specificity by including .row */
+.row.topScore {
+    background-color: #00ff0080 !important;
+}
+
+.row.highScore {
+    background-color: #00ff0050 !important;
+}
+
+.row.goodScore {
+    background-color: #00ff0020 !important;
+}
+
+/* Links */
+.link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

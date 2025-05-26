@@ -38,6 +38,14 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 		void loadData();
 	}, []);
 
+	if (isInitializing) {
+		return <div>Loading rankings...</div>;
+	}
+
+	if (error) {
+		return <div>Error loading data: {error.message}</div>;
+	}
+
 	return (
 		<DataContext.Provider value={{rankings, topRanks, isInitializing, error}}>
 			{children}

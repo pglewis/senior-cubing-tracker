@@ -11,27 +11,17 @@ import {KinchLeaderboard} from "@repo/app/components/kinch-ranks/kinch-leaderboa
 import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
-	const {rankings, topRanks, isInitializing, error} = useData();
+	const {rankings, topRanks} = useData();
 	const {age, region, wcaid, setParams} = useKinchParams();
 
 	const {continents, countries} = useMemo(() => (
-		rankings && topRanks
-			? getFilteredRegions(
-				rankings,
-				wcaid,
-				age,
-				topRanks
-			)
-			: {continents: [], countries: []}
+		getFilteredRegions(
+			rankings,
+			wcaid,
+			age,
+			topRanks
+		)
 	), [rankings, topRanks, wcaid, age]);
-
-	if (error) {
-		return <div className="error">Failed to load data: {error.message}</div>;
-	}
-
-	if (isInitializing) {
-		return <div>Loading rankings...</div>;
-	}
 
 	return (
 		<div className={styles.container}>

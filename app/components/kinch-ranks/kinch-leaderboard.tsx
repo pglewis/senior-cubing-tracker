@@ -14,7 +14,6 @@ export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
 	const kinchRanks = useKinchRanks({age, region});
 	const {page} = useKinchParams();
 
-	// Calculate start and end indices for current page
 	const startIdx = (page - 1) * ROWS_PER_PAGE;
 	const endIdx = startIdx + ROWS_PER_PAGE;
 	const displayRanks = kinchRanks.slice(startIdx, endIdx);

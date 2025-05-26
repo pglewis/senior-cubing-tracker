@@ -1,11 +1,11 @@
 import {useSearchParams} from "react-router-dom";
 
-interface KinchParams {
-	page: number;
-	age: string;
-	region: string;
-	wcaid: string;
-}
+export interface KinchParams {
+	page: number,
+	age: string,
+	region: string,
+	wcaid: string,
+};
 
 const defaults: KinchParams = {
 	page: 1,

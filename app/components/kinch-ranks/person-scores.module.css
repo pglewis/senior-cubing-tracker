@@ -72,3 +72,7 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.nav {
+    margin-bottom: 1rem;
+}

@@ -1,5 +1,5 @@
 import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
-import {useKinchParams} from "@repo/app/hooks/use-kinch-params";
+import {useKinchParams, type KinchParams} from "@repo/app/hooks/use-kinch-params";
 import styles from "./kinch-leaderboard.module.css";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 
@@ -12,7 +12,7 @@ interface KinchLeaderboardProps {
 
 export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
 	const kinchRanks = useKinchRanks({age, region});
-	const {page} = useKinchParams();
+	const {page, setParams} = useKinchParams(); // Add setParams
 
 	const startIdx = (page - 1) * ROWS_PER_PAGE;
 	const endIdx = startIdx + ROWS_PER_PAGE;
@@ -31,6 +31,7 @@ export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
 						key={rank.personID}
 						rank={rank}
 						ranking={startIdx + index + 1}
+						setParams={setParams} // Pass setParams to row
 					/>
 				))}
 			</tbody>
@@ -41,23 +42,22 @@ export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
 interface LeaderboardRowProps {
 	rank: KinchRank;
 	ranking: number;
+	setParams: (params: Partial<KinchParams>) => void; // Add to props
 }
 
-function LeaderboardRow({rank, ranking}: LeaderboardRowProps) {
+function LeaderboardRow({rank, ranking, setParams}: LeaderboardRowProps) {
 	const {personID, personName, overall} = rank;
-	const url = new URL(window.location.href);
-	url.searchParams.set("wcaid", personID);
 
 	return (
 		<tr className={styles.row}>
 			<td className={styles.rankColumn}>{ranking}</td>
 			<td className={styles.nameColumn}>
 				<a
-					href={`${url.pathname}${url.search}`}
+					href="#"
 					className={styles.link}
 					onClick={(e) => {
 						e.preventDefault();
-						// setParams handled by parent component
+						setParams({wcaid: personID, region: "world"});
 					}}
 				>
 					{personName}

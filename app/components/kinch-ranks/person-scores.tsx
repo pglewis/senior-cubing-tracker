@@ -1,8 +1,11 @@
 import {useState, type JSX} from "react";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
+import {useKinchParams} from "@repo/app/hooks/use-kinch-params";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
 import styles from "./person-scores.module.css";
+
+const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 
 interface PersonScoresProps {
     wcaId: string;
@@ -12,9 +15,13 @@ interface PersonScoresProps {
 export function PersonScores({wcaId, age}: PersonScoresProps) {
 	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region: "world"});
+	const {setParams} = useKinchParams();
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
 	const rankIndex = kinchRanks.findIndex(rank => rank.personID === wcaId);
+
+	// Calculate target page
+	const targetPage = Math.ceil((rankIndex + 1) / ROWS_PER_PAGE);
 
 	if (rankIndex < 0) {
 		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
@@ -36,8 +43,19 @@ export function PersonScores({wcaId, age}: PersonScoresProps) {
 	return (
 		<div>
 			<div className={styles.header}>
+				<div className={styles.nav}>
+					<a
+						href="#"
+						onClick={(e) => {
+							e.preventDefault();
+							setParams({wcaid: "", page: targetPage});
+						}}
+					>
+						← Show in rankings list (#{rankIndex + 1})
+					</a>
+				</div>
 				<h3>
-					<a className={styles.link} href={competitorURL} target="_blank" rel="noopener noreferrer">
+					<a className={styles.link} href={competitorURL}>
 						{kinchRank.personName}
 					</a>
 				</h3>

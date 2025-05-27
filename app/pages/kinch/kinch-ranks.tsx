@@ -1,15 +1,15 @@
 import {useMemo} from "react";
 import {Link, useSearchParams, useLocation} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
-import {useKinchContext} from "@repo/app/hooks/use-kinch-context";
-import {getFilteredRegions} from "./helpers/get-filtered-regions";
-import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
-import {AgeFilter} from "@repo/app/components/kinch-ranks/age-filter";
-import {RegionFilter} from "@repo/app/components/kinch-ranks/region-filter";
-import {PersonSearch} from "@repo/app/components/kinch-ranks/person-search";
-import {Pagination} from "@repo/app/components/kinch-ranks/pagination";
-import {PersonScores} from "@repo/app/components/kinch-ranks/person-scores";
-import {KinchLeaderboard} from "@repo/app/components/kinch-ranks/kinch-leaderboard";
+import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
+import {getFilteredRegions} from "@repo/app/features/kinch/utils/get-filtered-regions";
+import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
+import {AgeFilter} from "@repo/app/features/kinch/components/filters/age-filter";
+import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
+import {PersonSearch} from "@repo/app/features/kinch/components/person-search/person-search";
+import {Pagination} from "@repo/app/components/shared/pagination";
+import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
+import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
 import styles from "./kinch-ranks.module.css";
 import {DataLastUpdated} from "../../components/data-last-updated";
 

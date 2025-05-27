@@ -1,6 +1,6 @@
 import {useCallback} from "react";
-import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
 import type {KinchRank} from "@repo/common/types/kinch-types";
+import {useKinchRanks} from "./use-kinch-ranks";
 
 interface UseKinchPersonSearchProps {
 	age: string;

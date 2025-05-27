@@ -1,7 +1,7 @@
 import {useEffect, useRef} from "react";
-import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
-import {useKinchContext} from "@repo/app/hooks/use-kinch-context";
 import styles from "./kinch-leaderboard.module.css";
+import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
+import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 
 const ROWS_PER_PAGE = 25;
 

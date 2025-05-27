@@ -1,5 +1,4 @@
 import {useMemo} from "react";
-import {useData} from "./use-data";
 import {
 	scoreAverageOnly,
 	type KinchRank,
@@ -12,6 +11,7 @@ import type {
 	EventRanking,
 } from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
+import {useData} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
 	age: string,

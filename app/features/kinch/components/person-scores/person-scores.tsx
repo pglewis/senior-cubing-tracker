@@ -1,7 +1,7 @@
 import {useState, type JSX} from "react";
 import {Link} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
-import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
+import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
 import styles from "./person-scores.module.css";
 

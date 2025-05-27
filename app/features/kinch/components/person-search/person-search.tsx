@@ -1,6 +1,6 @@
 import type {ChangeEvent} from "react";
 import {PersonResultsList} from "./person-results-list";
-import {useKinchPersonSearch} from "./use-kinch-person-search";
+import {useKinchPersonSearch} from "../../hooks/use-kinch-person-search";
 import styles from "./search-box.module.css";
 import {useCallback, useState, useEffect} from "react";
 import type {KinchRank} from "@repo/common/types/kinch-types";

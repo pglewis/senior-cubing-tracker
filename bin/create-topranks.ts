@@ -1,6 +1,7 @@
 import {readFile, writeFile} from "fs/promises";
 import type {ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 import {scoreAverageOnly, type TopRank} from "@repo/common/types/kinch-types";
+import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 
 const RANKINGS_FILE = "../dist/data/senior-rankings.json";
 const TOPRANKS_FILE = "../dist/data/topranks.json";
@@ -10,7 +11,7 @@ async function main(): Promise<void> {
 	const rawData = await readFile(RANKINGS_FILE, "utf-8");
 	const rankings: ExtendedRankingsData = JSON.parse(rawData);
 
-	// Now you can use the rankings data with buildTopRanks()
+	// Generate top ranks data for each event/age/region combination
 	const topRanks = buildTopRanks(rankings);
 
 	await writeFile(TOPRANKS_FILE, JSON.stringify(topRanks, null, 0), "utf8");
@@ -22,14 +23,12 @@ void main().catch((error: Error) => {
 	process.exit(1);
 });
 
+// Generate top ranks data for each event/age/region combination
 export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 	const rankingsData = rankings.data;
 	const topRanks: TopRank[] = [];
 
-	// format (time, number, multi), id (eg "333"), name ("3x3x3 Cube"), rankings[]
 	for (const event of rankingsData.events) {
-
-		// type (single/average) and age(40, 50, etc), ranks[]
 		for (const eventRanking of event.rankings) {
 			const {age, ranks} = eventRanking;
 
@@ -37,7 +36,7 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 				continue;
 			}
 
-			// Stash the top (world) ranking
+			// World ranking (no prefix needed)
 			topRanks.push({
 				eventID: event.id,
 				type: eventRanking.type,
@@ -46,35 +45,34 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 				result: ranks[0].best
 			});
 
-			// rank (#), id (wca id), best (results), competition (comp ID)
-			const regions = new Set();
+			const regions = new Set<string>();
 			for (const rank of ranks) {
 				const person = rankingsData.persons[rankings.personIDToIndex[rank.id]];
 				const country = rankingsData.countries[rankings.countryIDToIndex[person.country]];
 				const continent = rankingsData.continents[rankings.continentIDToIndex[country.continent]];
 
-				// First ranking for each continent is top for the region
-				if (!regions.has(continent.id)) {
-					regions.add(continent.id);
-
+				// First ranking for each continent is the top ranking for the region
+				const continentRegion = toRegionParam(continent.id, true);
+				if (!regions.has(continentRegion)) {
+					regions.add(continentRegion);
 					topRanks.push({
 						eventID: event.id,
 						type: eventRanking.type,
 						age: age,
-						region: continent.id,
+						region: continentRegion,
 						result: rank.best,
 					});
 				}
 
-				// First ranking for each country is top for the region
-				if (!regions.has(country.id)) {
-					regions.add(country.id);
-
+				// First ranking for each country is the top ranking for the region
+				const countryRegion = toRegionParam(country.id, false);
+				if (!regions.has(countryRegion)) {
+					regions.add(countryRegion);
 					topRanks.push({
 						eventID: event.id,
 						type: eventRanking.type,
 						age: age,
-						region: country.id,
+						region: countryRegion,
 						result: rank.best,
 					});
 				}

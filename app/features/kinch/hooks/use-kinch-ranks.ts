@@ -11,11 +11,12 @@ import type {
 	EventRanking,
 } from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
+import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {useData} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
-	age: string,
-	region: string,
+	age: string;
+	region: string; // Prefixed region ID (e.g. "CNA" or "NNA")
 }
 
 export function useKinchRanks(filters: KinchFilters): KinchRank[] {
@@ -46,7 +47,7 @@ function getRanksForPerson(
 	personID: string,
 ): KinchRank {
 	const rankingsData = rankings.data;
-	const person = rankingsData.persons.find(p => p.id === personID);
+	const person = rankingsData.persons[rankings.personIDToIndex[personID]];
 	if (!person) {
 		throw new Error(`We were looking for someone's rankings but WCA ID "${personID}" was not found.`);
 	}
@@ -60,7 +61,12 @@ function getRanksForPerson(
 
 	const country = rankingsData.countries[rankings.countryIDToIndex[person.country]];
 	const continent = rankingsData.continents[rankings.continentIDToIndex[country.continent]];
-	if (filters.region !== "world" && filters.region !== country.id && filters.region !== continent.id) {
+
+	// Check if person belongs to the selected region
+	if (filters.region !== "world" &&
+		filters.region !== toRegionParam(country.id, false) &&
+		filters.region !== toRegionParam(continent.id, true)
+	) {
 		return kinchRank;
 	}
 
@@ -97,10 +103,10 @@ function getTopRank(
 	filters: KinchFilters
 ): TopRank | undefined {
 	const topRank = topRanks.find(r =>
-		r.eventID === eventID
-		&& r.type === type
-		&& r.age === Number(filters.age)
-		&& r.region === filters.region
+		r.eventID === eventID &&
+		r.type === type &&
+		r.age === Number(filters.age) &&
+		r.region === filters.region // filters.region is already prefixed
 	);
 
 	return topRank;

@@ -15,7 +15,8 @@ export function ExternalLinks() {
 				</dt>
 				<dd>
 					Michael George's senior rankings data is the foundation of this site, it would be impossible
-					without his ongoing efforts to compile and maintain official ranking data for competitors over 40.
+					without his ongoing efforts to compile and maintain official results and ranking data for
+					competitors over 40.
 
 					Here you can find:
 					<ul className={styles.list}>
@@ -54,7 +55,7 @@ export function ExternalLinks() {
 					</a>
 				</dt>
 				<dd>
-					Facebook group focused on competitors over 40 (all cubers are welcome). Weekly video competitions,
+					Facebook group focused on competitors over 40 (cubers of all ages are welcome). Weekly video competitions,
 					daily scrambles, daily challenges, and more.
 				</dd>
 			</dl>

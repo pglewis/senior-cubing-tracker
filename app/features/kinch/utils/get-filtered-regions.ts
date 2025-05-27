@@ -1,5 +1,6 @@
 import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 import type {TopRank} from "@repo/common/types/kinch-types";
+import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 
 interface FilteredRegions {
 	continents: Continent[];
@@ -27,10 +28,16 @@ export function getFilteredRegions(
 
 	return {
 		continents: continents.filter(c =>
-			topRanks.some(tr => tr.age === Number(age) && tr.region === c.id)
+			topRanks.some(tr =>
+				tr.age === Number(age) &&
+				tr.region === toRegionParam(c.id, true)
+			)
 		),
 		countries: countries.filter(c =>
-			topRanks.some(tr => tr.age === Number(age) && tr.region === c.id)
+			topRanks.some(tr =>
+				tr.age === Number(age) &&
+				tr.region === toRegionParam(c.id, false)
+			)
 		)
 	};
 }

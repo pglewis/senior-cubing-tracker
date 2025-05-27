@@ -1,5 +1,5 @@
-import type {ChangeEvent} from "react";
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
+import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 
 interface RegionFilterProps {
 	value: string;
@@ -9,18 +9,20 @@ interface RegionFilterProps {
 }
 
 export function RegionFilter({value, onChange, continents, countries}: RegionFilterProps) {
-	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		onChange(e.target.value);
-	};
-
 	return (
 		<div>
-			<select value={value} onChange={handleChange}>
+			<select
+				value={value}
+				onChange={e => onChange(e.target.value)}
+			>
 				<option value="world">World</option>
 
 				<optgroup label="Continents">
 					{continents.map(continent => (
-						<option key={continent.id} value={continent.id}>
+						<option
+							key={continent.id}
+							value={toRegionParam(continent.id, true)}
+						>
 							{continent.name}
 						</option>
 					))}
@@ -30,7 +32,10 @@ export function RegionFilter({value, onChange, continents, countries}: RegionFil
 					{countries
 						.sort((a, b) => a.name.localeCompare(b.name))
 						.map(country => (
-							<option key={country.id} value={country.id}>
+							<option
+								key={country.id}
+								value={toRegionParam(country.id, false)}
+							>
 								{country.name}
 							</option>
 						))}

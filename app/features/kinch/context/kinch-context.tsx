@@ -1,7 +1,8 @@
 import {type ReactNode} from "react";
 import {useSearchParams} from "react-router-dom";
+import {fromRegionParam} from "@repo/common/util/kinch-region-utils";
+import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-types";
 import {KinchContext} from "./kinch-instance";
-import type {KinchContextParams} from "./kinch-types";
 
 const defaults = {
 	page: 1,
@@ -25,12 +26,30 @@ export function KinchProvider({children}: {children: ReactNode}) {
 		setSearchParams(newParams);
 	};
 
-	const value = {
+	const region = searchParams.get("region") || defaults.region;
+	const {id, isContinent} = fromRegionParam(region);
+
+	let regionType: RegionInfo["type"];
+	if (id === "world") {
+		regionType = "world";
+	} else if (isContinent) {
+		regionType = "continent";
+	} else {
+		regionType = "country";
+	}
+
+	const regionInfo: RegionInfo = {
+		id,
+		type: regionType
+	};
+
+	const value: KinchContextType = {
 		page: Number(searchParams.get("page")) || defaults.page,
 		age: searchParams.get("age") || defaults.age,
-		region: searchParams.get("region") || defaults.region,
+		region,
+		regionInfo,
 		wcaid: searchParams.get("wcaid") || defaults.wcaid,
-		setParams
+		setParams,
 	};
 
 	return (

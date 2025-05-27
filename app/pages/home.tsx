@@ -5,10 +5,11 @@ export function Home() {
 	return (
 		<>
 			<nav>
+				<h3>On the site</h3>
 				<dl>
 					<dt><Link to="/recent">Recent Senior Records</Link></dt>
 					<dd>
-						Shows the recent top senior results, easily find who is out there raising the bar for everyone else.
+						Shows the recent top senior results, see who is out there raising the bar for everyone else.
 					</dd>
 				</dl>
 				<dl>

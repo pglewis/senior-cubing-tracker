@@ -1,7 +1,7 @@
 import {useState, type JSX} from "react";
+import {Link} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
-import {useKinchParams} from "@repo/app/hooks/use-kinch-params";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
 import styles from "./person-scores.module.css";
 
@@ -10,12 +10,12 @@ const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 interface PersonScoresProps {
     wcaId: string;
     age: string;
+    region: string; // Add region prop
 }
 
-export function PersonScores({wcaId, age}: PersonScoresProps) {
+export function PersonScores({wcaId, age, region}: PersonScoresProps) {
 	const {rankings} = useData();
-	const kinchRanks = useKinchRanks({age, region: "world"});
-	const {setParams} = useKinchParams();
+	const kinchRanks = useKinchRanks({age, region}); // Use the region prop
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
 	const rankIndex = kinchRanks.findIndex(rank => rank.personID === wcaId);
@@ -44,15 +44,13 @@ export function PersonScores({wcaId, age}: PersonScoresProps) {
 		<div>
 			<div className={styles.header}>
 				<div className={styles.nav}>
-					<a
-						href="#"
-						onClick={(e) => {
-							e.preventDefault();
-							setParams({wcaid: "", page: targetPage});
-						}}
+					<Link
+						to={`/kinch-ranks?page=${targetPage}&age=${age}&region=${region}`}
+						state={{highlight: wcaId}}
+						className={styles.link}
 					>
 						← Show in rankings list (#{rankIndex + 1})
-					</a>
+					</Link>
 				</div>
 				<h3>
 					<a className={styles.link} href={competitorURL}>
@@ -60,7 +58,7 @@ export function PersonScores({wcaId, age}: PersonScoresProps) {
 					</a>
 				</h3>
 				<div>Age Group: {age}</div>
-				<div>Region: World</div>
+				<div>Region: {region}</div>
 				<div>Rank: {ranking}</div>
 				<div>Overall score: {kinchRank.overall.toFixed(2)}</div>
 			</div>

@@ -34,3 +34,8 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.highlighted {
+    background-color: var(--color-highlight-bg);
+    transition: background-color 0.5s ease-out;
+}

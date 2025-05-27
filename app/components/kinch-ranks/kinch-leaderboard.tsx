@@ -1,22 +1,30 @@
+import {useEffect, useRef} from "react";
 import {useKinchRanks} from "@repo/app/hooks/use-kinch-ranks";
-import {useKinchParams, type KinchParams} from "@repo/app/hooks/use-kinch-params";
+import {useKinchContext} from "@repo/app/hooks/use-kinch-context";
 import styles from "./kinch-leaderboard.module.css";
-import type {KinchRank} from "@repo/common/types/kinch-types";
 
 const ROWS_PER_PAGE = 25;
 
 interface KinchLeaderboardProps {
-	age: string;
-	region: string;
+    age: string;
+    region: string;
+    highlightId?: string;
 }
 
-export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
+export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardProps) {
 	const kinchRanks = useKinchRanks({age, region});
-	const {page, setParams} = useKinchParams(); // Add setParams
+	const {page, setParams} = useKinchContext();
+	const highlightRef = useRef<HTMLTableRowElement>(null);
 
 	const startIdx = (page - 1) * ROWS_PER_PAGE;
 	const endIdx = startIdx + ROWS_PER_PAGE;
 	const displayRanks = kinchRanks.slice(startIdx, endIdx);
+
+	useEffect(() => {
+		if (highlightId && highlightRef.current) {
+			highlightRef.current.scrollIntoView();
+		}
+	}, [highlightId]);
 
 	return (
 		<table className={styles.table}>
@@ -27,43 +35,28 @@ export function KinchLeaderboard({age, region}: KinchLeaderboardProps) {
 					<th className={styles.scoreColumn}>Score</th>
 				</tr>
 				{displayRanks.map((rank, index) => (
-					<LeaderboardRow
+					<tr
 						key={rank.personID}
-						rank={rank}
-						ranking={startIdx + index + 1}
-						setParams={setParams} // Pass setParams to row
-					/>
+						ref={rank.personID === highlightId ? highlightRef : null}
+						className={`${styles.row} ${rank.personID === highlightId ? styles.highlighted : ""}`}
+					>
+						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
+						<td className={styles.nameColumn}>
+							<a
+								href="#"
+								className={styles.link}
+								onClick={(e) => {
+									e.preventDefault();
+									setParams({wcaid: rank.personID, region: "world"});
+								}}
+							>
+								{rank.personName}
+							</a>
+						</td>
+						<td className={styles.scoreColumn}>{rank.overall.toFixed(2)}</td>
+					</tr>
 				))}
 			</tbody>
 		</table>
-	);
-}
-
-interface LeaderboardRowProps {
-	rank: KinchRank;
-	ranking: number;
-	setParams: (params: Partial<KinchParams>) => void; // Add to props
-}
-
-function LeaderboardRow({rank, ranking, setParams}: LeaderboardRowProps) {
-	const {personID, personName, overall} = rank;
-
-	return (
-		<tr className={styles.row}>
-			<td className={styles.rankColumn}>{ranking}</td>
-			<td className={styles.nameColumn}>
-				<a
-					href="#"
-					className={styles.link}
-					onClick={(e) => {
-						e.preventDefault();
-						setParams({wcaid: personID, region: "world"});
-					}}
-				>
-					{personName}
-				</a>
-			</td>
-			<td className={styles.scoreColumn}>{overall.toFixed(2)}</td>
-		</tr>
 	);
 }

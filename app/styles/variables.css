@@ -6,6 +6,7 @@
     --color-primary: #e64503;
     --color-link: #fff3cc;
     --color-border: #ccc;
+    --color-highlight-bg: #454545;  /* Added subtle emphasis color */
 
     /* Layout */
     --content-max-width: 320px;

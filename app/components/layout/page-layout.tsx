@@ -1,5 +1,4 @@
 import {Outlet} from "react-router-dom";
-import {KofiButton} from "./kofi-button";
 import {MainNav} from "../navigation/main-nav";
 import styles from "./page-layout.module.css";
 
@@ -13,11 +12,6 @@ export function PageLayout() {
 			<main className={styles.container}>
 				<Outlet />
 			</main>
-			<footer className={styles.footer}>
-				<hr />
-				<KofiButton />
-				<p>Powered by pizza and beer</p>
-			</footer>
 		</>
 	);
 }

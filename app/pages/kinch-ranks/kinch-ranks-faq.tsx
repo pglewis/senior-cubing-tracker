@@ -1,10 +1,17 @@
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 export function KinchRanksFaq() {
+	const {state} = useLocation();
+	const returnPath = state?.from || "/kinch-ranks";
+
 	return (
 		<div>
 			<h2>Senior Kinch Ranks FAQ</h2>
-			<div><Link to="/kinch-ranks">Back to the Senior Kinch Ranks</Link></div>
+			<div>
+				<Link to={returnPath}>
+					← Return to previous view
+				</Link>
+			</div>
 			<div id="content">
 				<p>
 					Kinch Ranks is a system designed to measure competitors' overall performance across all official WCA

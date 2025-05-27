@@ -1,10 +1,8 @@
-import type {ChangeEvent} from "react";
-import {PersonResultsList} from "./person-results-list";
-import {useKinchPersonSearch} from "../../hooks/use-kinch-person-search";
-import styles from "./search-box.module.css";
-import {useCallback, useState, useEffect} from "react";
+import {useCallback, useState, useEffect, type ChangeEvent} from "react";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import {debounce} from "@repo/common/util/debounce";
+import {useKinchPersonSearch} from "@repo/app/features/kinch/hooks/use-kinch-person-search";
+import styles from "./person-search.module.css";
 
 interface SearchBoxProps {
 	value: string;
@@ -17,6 +15,13 @@ const debouncedFilterResults = debounce(
 	(filterFn: (term: string) => KinchRank[], term: string, callback: (results: KinchRank[]) => void) => {
 		callback(filterFn(term));
 	});
+
+interface PersonResultsListProps {
+	results: KinchRank[];
+	highlightedIndex: number | undefined;
+	onSelect: (result: KinchRank) => void;
+	onHighlight: (index: number | undefined) => void;
+}
 
 export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 	const {filterResults} = useKinchPersonSearch({age, region});
@@ -119,7 +124,7 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 				spellCheck={false}
 			/>
 			{isOpen && results.length > 0 && (
-				<PersonResultsList
+				<PersonSearchList
 					results={results}
 					highlightedIndex={highlightedIndex}
 					onSelect={handleSelect}
@@ -127,5 +132,35 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 				/>
 			)}
 		</div>
+	);
+}
+
+function PersonSearchList({results, highlightedIndex, onSelect, onHighlight}: PersonResultsListProps) {
+	const handleMouseDown = (e: React.MouseEvent) => {
+		e.preventDefault();
+	};
+
+	return (
+		<ul
+			id="search-listbox"
+			role="listbox"
+			className={styles.results}
+			aria-label="Search results"
+		>
+			{results.map((kinchRank, index) => (
+				<li
+					id={`option-${kinchRank.personID}`}
+					key={kinchRank.personID}
+					role="option"
+					aria-selected={index === highlightedIndex}
+					onClick={() => onSelect(kinchRank)}
+					onMouseDown={handleMouseDown}
+					onMouseEnter={() => onHighlight(index)}
+					className={index === highlightedIndex ? styles.highlighted : ""}
+				>
+					{kinchRank.personName} ({kinchRank.personID})
+				</li>
+			))}
+		</ul>
 	);
 }

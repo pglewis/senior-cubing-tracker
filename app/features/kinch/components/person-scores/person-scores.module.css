@@ -56,7 +56,6 @@
     background: #454545;
 }
 
-/* Score highlighting - increase specificity by including .row */
 .row.topScore {
     background-color: #00ff0080 !important;
 }

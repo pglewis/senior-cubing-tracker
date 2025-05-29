@@ -16,7 +16,7 @@ export function KofiButton() {
 						alt="Ko-fi donations"
 						className={styles.img}
 					/>
-					Donate to the site
+					Support the site
 				</span>
 			</a>
 		</div>

@@ -25,7 +25,7 @@ export function MainNav() {
 					<Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
 					<Link to="/recent" onClick={() => setIsOpen(false)}>Recent Senior Records</Link>
 					<Link to="/kinch-ranks" onClick={() => setIsOpen(false)}>Senior Kinch Ranks</Link>
-					<Link to="/results" onClick={() => setIsOpen(false)}>Senior Results</Link>
+					<Link to="/results" onClick={() => setIsOpen(false)}>Senior Profiles</Link>
 				</div>
 				<div className={styles.menuFooter}>
 					<KofiButton />

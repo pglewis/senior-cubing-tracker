@@ -8,21 +8,18 @@ import styles from "./person-scores.module.css";
 const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 
 interface PersonScoresProps {
-    wcaId: string;
-    age: string;
-    region: string; // Add region prop
+	wcaId: string,
+	age: string,
+	region: string, // Prefixed with continent/country prefix
+	regionName: string,
 }
 
-export function PersonScores({wcaId, age, region}: PersonScoresProps) {
+export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps) {
 	const {rankings} = useData();
-	const kinchRanks = useKinchRanks({age, region}); // Use the region prop
+	const kinchRanks = useKinchRanks({age, region});
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
 	const rankIndex = kinchRanks.findIndex(rank => rank.personID === wcaId);
-
-	// Calculate target page
-	const targetPage = Math.ceil((rankIndex + 1) / ROWS_PER_PAGE);
-
 	if (rankIndex < 0) {
 		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
 		if (!person) {
@@ -33,6 +30,7 @@ export function PersonScores({wcaId, age, region}: PersonScoresProps) {
 
 	const kinchRank = kinchRanks[rankIndex];
 	const ranking = rankIndex + 1;
+	const targetPage = Math.ceil(ranking / ROWS_PER_PAGE);
 	const competitorURL = `https://www.worldcubeassociation.org/persons/${wcaId}`;
 
 	const sortedEvents = [...kinchRank.events];
@@ -43,41 +41,36 @@ export function PersonScores({wcaId, age, region}: PersonScoresProps) {
 	return (
 		<div>
 			<div className={styles.header}>
-				<div className={styles.nav}>
-					<Link
-						to={`/kinch-ranks?page=${targetPage}&age=${age}&region=${region}`}
-						state={{highlight: wcaId}}
-						className={styles.link}
-					>
-						← Show in rankings list (#{rankIndex + 1})
-					</Link>
-				</div>
 				<h3>
 					<a className={styles.link} href={competitorURL}>
 						{kinchRank.personName}
 					</a>
 				</h3>
-				<div>Age Group: {age}</div>
-				<div>Region: {region}</div>
-				<div>Rank: {ranking}</div>
-				<div>Overall score: {kinchRank.overall.toFixed(2)}</div>
+				<div>
+					Age Group: {age}
+				</div>
+				<div>
+					Region: {regionName}
+				</div>
+				<div>
+					Rank: #{ranking} (<ShowInRankingsListLink targetPage={targetPage} wcaId={wcaId} age={age} region={region} />)
+				</div>
+				<div>
+					Overall score: {kinchRank.overall.toFixed(2)}
+				</div>
 			</div>
 
 			<table className={styles.table}>
 				<tbody>
 					<tr>
 						<th
-							className={`${styles.header} ${styles.eventColumn} ${
-								sortBy === "event" ? styles.sorted : ""
-							}`}
+							className={`${styles.header} ${styles.eventColumn} ${sortBy === "event" ? styles.sorted : ""}`}
 							onClick={() => setSortBy("event")}
 						>
 							Event
 						</th>
 						<th
-							className={`${styles.header} ${styles.scoreColumn} ${
-								sortBy === "score" ? styles.sorted : ""
-							}`}
+							className={`${styles.header} ${styles.scoreColumn} ${sortBy === "score" ? styles.sorted : ""}`}
 							onClick={() => setSortBy("score")}
 						>
 							Score
@@ -99,9 +92,28 @@ export function PersonScores({wcaId, age, region}: PersonScoresProps) {
 	);
 }
 
+interface ShowInRankingsListLinkProps {
+	targetPage: number,
+	age: string,
+	region: string,
+	wcaId: string,
+};
+
+function ShowInRankingsListLink({targetPage, age, region, wcaId}: ShowInRankingsListLinkProps) {
+	return (
+		<Link
+			to={`/kinch-ranks?page=${targetPage}&age=${age}&region=${region}`}
+			state={{highlight: wcaId}}
+			className={styles.link}
+		>
+			Show in rankings list
+		</Link>
+	);
+}
+
 interface EventRowProps {
-    event: KinchEvent;
-    age: string;
+	event: KinchEvent;
+	age: string;
 }
 
 function EventRow({event, age}: EventRowProps) {

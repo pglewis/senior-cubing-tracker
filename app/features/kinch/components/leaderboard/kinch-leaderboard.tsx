@@ -47,7 +47,7 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 								className={styles.link}
 								onClick={(e) => {
 									e.preventDefault();
-									setParams({wcaid: rank.personID, region: "world"});
+									setParams({wcaid: rank.personID, region: region});
 								}}
 							>
 								{rank.personName}

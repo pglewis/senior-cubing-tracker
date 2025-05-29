@@ -15,8 +15,8 @@ import {DataLastUpdated} from "../../components/data-last-updated";
 
 export function KinchRanks() {
 	const {rankings, topRanks} = useData();
-	const {age, region, wcaid, page, setParams} = useKinchContext();
-	const {state} = useLocation(); // Add this to get router state
+	const {age, wcaid, region, regionInfo, page, setParams} = useKinchContext();
+	const {state} = useLocation();
 	const [searchParams] = useSearchParams();
 	const kinchRanks = useKinchRanks({age, region});
 
@@ -28,6 +28,15 @@ export function KinchRanks() {
 			topRanks
 		)
 	), [rankings, topRanks, wcaid, age]);
+
+	let regionName: string;
+	if (regionInfo.type === "world") {
+		regionName = regionInfo.type;
+	} else if (regionInfo.type === "continent") {
+		regionName = rankings.data.continents[rankings.continentIDToIndex[regionInfo.id]].name;
+	} else {
+		regionName = rankings.data.countries[rankings.countryIDToIndex[regionInfo.id]].name;
+	}
 
 	const totalPages = Math.ceil(kinchRanks.length / 25);
 
@@ -48,7 +57,7 @@ export function KinchRanks() {
 					value={wcaid}
 					onSelect={(value) => setParams({wcaid: value, region: "world"})}
 					age={age}
-					region={region}
+					region={region} // Prefixed with continent/country prefix
 				/>
 				<AgeFilter
 					value={age}
@@ -77,6 +86,7 @@ export function KinchRanks() {
 					wcaId={wcaid}
 					age={age}
 					region={region}
+					regionName={regionName} // The raw region ID, regardless of whether continent or country
 				/>
 			) : (
 				<KinchLeaderboard

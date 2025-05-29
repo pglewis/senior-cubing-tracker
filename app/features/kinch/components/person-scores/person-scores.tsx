@@ -33,6 +33,7 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 	const targetPage = Math.ceil(ranking / ROWS_PER_PAGE);
 	const competitorURL = `https://www.worldcubeassociation.org/persons/${wcaId}`;
 
+	// Default: sort by WCA event sort order (kinchRank events are already in this order)
 	const sortedEvents = [...kinchRank.events];
 	if (sortBy === "score") {
 		sortedEvents.sort((a, b) => b.score - a.score);
@@ -64,13 +65,13 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 				<tbody>
 					<tr>
 						<th
-							className={`${styles.header} ${styles.eventColumn} ${sortBy === "event" ? styles.sorted : ""}`}
+							className={`${styles.header} ${styles.eventColumn} ${sortBy === "event" ? styles.sortedAsc : ""}`}
 							onClick={() => setSortBy("event")}
 						>
 							Event
 						</th>
 						<th
-							className={`${styles.header} ${styles.scoreColumn} ${sortBy === "score" ? styles.sorted : ""}`}
+							className={`${styles.header} ${styles.scoreColumn} ${sortBy === "score" ? styles.sortedDesc : ""}`}
 							onClick={() => setSortBy("score")}
 						>
 							Score

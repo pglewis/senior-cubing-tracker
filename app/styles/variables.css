@@ -1,12 +1,12 @@
 :root {
     /* Colors */
     --color-background: #222;
-    --color-background-header: #2a2a2a;  /* New variable for header */
+    --color-background-header: #2a2a2a;
     --color-text: gainsboro;
     --color-primary: #e64503;
     --color-link: #fff3cc;
     --color-border: #ccc;
-    --color-highlight-bg: #454545;  /* Added subtle emphasis color */
+    --color-highlight-bg: #454545;
 
     /* Layout */
     --content-max-width: 320px;

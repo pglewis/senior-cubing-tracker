@@ -19,8 +19,14 @@
 }
 
 /* Add arrow indicator for sorted column */
-.sorted::after {
+.sortedAsc::after {
     content: "▲";
+    padding-left: 0.4em;
+    font-size: 0.8em;
+}
+
+.sortedDesc::after {
+    content: "▼";
     padding-left: 0.4em;
     font-size: 0.8em;
 }

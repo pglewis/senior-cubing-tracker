@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
+import {Tabs} from "@repo/app/components/shared/tabs";
 import styles from "./person-scores.module.css";
 
 const ROWS_PER_PAGE = 25; // Match the leaderboard constant
@@ -12,15 +13,17 @@ interface PersonScoresProps {
 	age: string,
 	region: string, // Prefixed with continent/country prefix
 	regionName: string,
+	onAgeChange: (value: string) => void,
 }
 
-export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps) {
+export function PersonScores({wcaId, age, region, regionName, onAgeChange}: PersonScoresProps) {
 	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region});
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
-	const rankIndex = kinchRanks.findIndex(rank => rank.personID === wcaId);
+	const rankIndex = kinchRanks.findIndex(kr => kr.personID === wcaId);
 	if (rankIndex < 0) {
+		// This could be because the person has no kinch ranks data ()
 		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
 		if (!person) {
 			return <div>WCA ID <b>{wcaId}</b> was not found.</div>;
@@ -39,17 +42,20 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 		sortedEvents.sort((a, b) => b.score - a.score);
 	}
 
+	const ageOptions = [
+		{label: "40+", value: "40"},
+		{label: "50+", value: "50"},
+		{label: "60+", value: "60"}
+	];
+
 	return (
-		<div>
+		<Tabs options={ageOptions} selectedValue={age} onValueChange={onAgeChange}>
 			<div className={styles.header}>
 				<h3>
 					<a className={styles.link} href={competitorURL}>
 						{kinchRank.personName}
 					</a>
 				</h3>
-				<div>
-					Age Group: {age}
-				</div>
 				<div>
 					Region: {regionName}
 				</div>
@@ -89,7 +95,7 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 					))}
 				</tbody>
 			</table>
-		</div>
+		</Tabs>
 	);
 }
 

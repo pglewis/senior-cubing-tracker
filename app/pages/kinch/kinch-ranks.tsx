@@ -18,6 +18,9 @@ export function KinchRanks() {
 	const {age, wcaid, region, regionInfo, page, setParams} = useKinchContext();
 	const {state} = useLocation();
 	const [searchParams] = useSearchParams();
+
+	console.log(rankings.data.persons.find(p => p.wca_id === wcaid));
+
 	const kinchRanks = useKinchRanks({age, region});
 
 	const {continents, countries} = useMemo(() => (
@@ -29,6 +32,7 @@ export function KinchRanks() {
 		)
 	), [rankings, topRanks, wcaid, age]);
 
+	// Extract the display name for the selected region ("World", "Europe", "Italy")
 	let regionName: string;
 	if (regionInfo.type === "world") {
 		regionName = regionInfo.type;
@@ -83,6 +87,7 @@ export function KinchRanks() {
 
 			{wcaid ? (
 				<PersonScores
+					onAgeChange={(value) => setParams({age: value, page: 1})}
 					wcaId={wcaid}
 					age={age}
 					region={region}

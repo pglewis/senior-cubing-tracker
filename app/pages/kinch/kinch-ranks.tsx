@@ -19,8 +19,6 @@ export function KinchRanks() {
 	const {state} = useLocation();
 	const [searchParams] = useSearchParams();
 
-	console.log(rankings.data.persons.find(p => p.wca_id === wcaid));
-
 	const kinchRanks = useKinchRanks({age, region});
 
 	const {continents, countries} = useMemo(() => (

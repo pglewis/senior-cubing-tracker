@@ -1,10 +1,5 @@
 .table {
     width: 100%;
-    border-collapse: collapse;
-}
-
-.row:nth-child(odd) {
-    background-color: #2a2a2a;
 }
 
 .row:hover {
@@ -36,6 +31,6 @@
 }
 
 .table tr.highlighted {
-    background-color: var(--color-highlight-bg);
+    background-color: var(--color-background-highlight);
     transition: background-color 0.5s ease-out;
 }

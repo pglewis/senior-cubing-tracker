@@ -1,12 +1,16 @@
 :root {
+	color-scheme: dark;
+
 	/* Dark theme (default/fallback) */
 	--color-background: #222;
 	--color-background-header: #2a2a2a;
+	--color-background-highlight: #3f3f2f;
 	--color-text: gainsboro;
-	--color-primary: gainsboro;
 	--color-link: #fff3cc;
 	--color-border: #ccc;
-	--color-highlight-bg: #454545;
+	--color-focus: #4a9eff;
+	--color-table-row-odd: var(--color-background);
+	--color-table-row-even: var(--color-background-header);
 
 	/* Layout */
 	--content-max-width: 320px;
@@ -25,13 +29,18 @@
 	--border-radius-md: 8px;
 }
 
+/* Light theme overrides */
 [data-theme="light"] {
-	/* Light theme overrides */
+	color-scheme: light;
+
 	--color-background: #ffffff;
-	--color-background-header: #f8f9fa;
+	--color-background-header: #f4f4f4;
+	--color-background-highlight: rgb(214, 213, 190);
 	--color-text: #212529;
-	--color-primary: #212529;
 	--color-link: #0066cc;
 	--color-border: #dee2e6;
-	--color-highlight-bg: #f8f9fa;
+	--color-focus: #0066cc;
+	--color-table-row-odd: var(--color-background);
+	--color-table-row-even: var(--color-background-header);
+
 }

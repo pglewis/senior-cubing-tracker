@@ -1,91 +1,110 @@
 @import './variables.css';
 
 @font-face {
-    font-family: "Ubuntu Sans Variable";
-    src: url("../assets/fonts/ubuntu-sans-variable-wdth-wght.woff2") format('truetype');
-    font-weight: 300 800;
-    font-style: normal;
-    font-display: swap;
+	font-family: "Ubuntu Sans Variable";
+	src: url("../assets/fonts/ubuntu-sans-variable-wdth-wght.woff2") format('truetype');
+	font-weight: 300 800;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-    font-family: "Ubuntu Sans Variable";
-    src: url("../assets/fonts/ubuntu-sans-italic-variable-wdth-wght.woff2") format('truetype');
-    font-weight: 300 800;
-    font-style: italic;
-    font-display: swap;
+	font-family: "Ubuntu Sans Variable";
+	src: url("../assets/fonts/ubuntu-sans-italic-variable-wdth-wght.woff2") format('truetype');
+	font-weight: 300 800;
+	font-style: italic;
+	font-display: swap;
 }
 
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-    font-family: "Ubuntu Sans Variable", sans-serif;
-    line-height: 1.5;
-    background: var(--color-background);
-    color: var(--color-text);
+	font-family: "Ubuntu Sans Variable", sans-serif;
+	line-height: 1.5;
+	background: var(--color-background);
+	color: var(--color-text);
 }
 
 input,
 button,
 select {
-    font-family: inherit;
-    border-radius: 6px;
-    line-height: 1.5em;
+	font-family: inherit;
+	border-radius: 6px;
+	line-height: 1.5em;
 }
 
-h1, h2, h3, h4 {
-    font-weight: 700;
+h1,
+h2,
+h3,
+h4 {
+	font-weight: 700;
 }
 
 button {
-    padding: 0;
-    border: none;
-    outline: none;
-    font: inherit;
-    color: inherit;
-    background: none;
+	padding: 0;
+	border: none;
+	outline: none;
+	font: inherit;
+	color: inherit;
+	background: none;
 }
 
-button:focus-visible {
-    outline: 2px solid black;
-    border-radius: 2px;
+:focus-visible {
+  outline: 2px solid var(--color-focus, currentcolor);
+  border-radius: 2px;
 }
 
 fieldset,
 select,
 input {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 table {
-    border-collapse: collapse;
+	border-collapse: collapse;
+}
+
+table tr:nth-child(odd) {
+    background-color: var(--color-table-row-odd);
+}
+
+table tr:nth-child(even) {
+    background-color: var(--color-table-row-even);
 }
 
 a:link,
 a:visited {
-    color: var(--color-link);
-    text-decoration: none;
+	color: var(--color-link);
+	text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 ul.disc {
-    list-style-type: disc;
+	list-style-type: disc;
 }
 
 ul.disc li {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 ul {
-    margin: 0 0 10px 0;
-    list-style-type: none;
+	margin: 0 0 10px 0;
+	list-style-type: none;
 }
 
 ul li {
-    margin-left: 4px;
+	margin-left: 4px;
+}
+
+@media print {
+	:root {
+		color-scheme: light;
+		--color-background: white;
+		--color-text: black;
+	}
 }

@@ -1,9 +1,7 @@
 /* Table styles */
 .table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 1rem;
-	background-color: var(--color-background);
 }
 
 /* Table header styles */
@@ -45,11 +43,6 @@
 .resultColumn {
     width: 8em;
     text-align: right;
-}
-
-/* Table row styles */
-.row:nth-child(odd) {
-    background-color: #2a2a2a;
 }
 
 .row:hover {

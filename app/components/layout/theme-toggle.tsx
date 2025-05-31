@@ -34,14 +34,14 @@ function SunIcon() {
 	return (
 		<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className={styles.icon}>
 			<circle cx="12" cy="12" r="5" />
-			<line x1="12" y1="1" x2="12" y2="5" stroke="currentColor" stroke-width="2" />
-			<line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" />
-			<line x1="4.22" y1="4.22" x2="6.64" y2="6.64" stroke="currentColor" stroke-width="2" />
-			<line x1="17.36" y1="17.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" />
-			<line x1="1" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="2" />
-			<line x1="19" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" />
-			<line x1="4.22" y1="19.78" x2="6.64" y2="17.36" stroke="currentColor" stroke-width="2" />
-			<line x1="17.36" y1="6.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" />
+			<line x1="12" y1="1" x2="12" y2="5" stroke="currentColor" strokeWidth="2" />
+			<line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" strokeWidth="2" />
+			<line x1="4.22" y1="4.22" x2="6.64" y2="6.64" stroke="currentColor" strokeWidth="2" />
+			<line x1="17.36" y1="17.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2" />
+			<line x1="1" y1="12" x2="5" y2="12" stroke="currentColor" strokeWidth="2" />
+			<line x1="19" y1="12" x2="23" y2="12" stroke="currentColor" strokeWidth="2" />
+			<line x1="4.22" y1="19.78" x2="6.64" y2="17.36" stroke="currentColor" strokeWidth="2" />
+			<line x1="17.36" y1="6.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2" />
 		</svg>
 	);
 }

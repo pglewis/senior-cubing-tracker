@@ -2,7 +2,6 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {KofiButton} from "../layout/kofi-button";
 import styles from "./main-nav.module.css";
-import {ThemeToggle} from "../shared/theme-toggle";
 
 export function MainNav() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -20,8 +19,6 @@ export function MainNav() {
 					<span></span>
 				</div>
 			</button>
-			<ThemeToggle />
-
 			<nav className={`${styles.menu} ${isOpen ? styles.open : ""}`}>
 				<div className={styles.links}>
 					<Link to="/" onClick={() => setIsOpen(false)}>Home</Link>

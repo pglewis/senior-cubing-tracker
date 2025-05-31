@@ -6,23 +6,17 @@
     height: 4rem;
     background-color: var(--color-background-header);
     z-index: 80;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;  /* This pushes items to edges */
     padding: 0 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.headerLeft {
-    justify-self: start;
 }
 
 .header h2 {
     margin: 0;
     font-size: 1.25rem;
-    justify-self: center;
-}
-
-.headerRight {
-    justify-self: end;
+    position: absolute;     /* Take it out of flex flow */
+    left: 50%;             /* Center it */
+    transform: translateX(-50%);  /* Perfect center */
 }

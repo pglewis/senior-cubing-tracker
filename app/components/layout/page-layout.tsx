@@ -7,13 +7,9 @@ export function PageLayout() {
 	return (
 		<>
 			<header className={styles.header}>
-				<div className={styles.headerLeft}>
-					<MainNav />
-				</div>
+				<MainNav />
 				<h2>Senior Cubing Tracker</h2>
-				<div className={styles.headerRight}>
-					<ThemeToggle />
-				</div>
+				<ThemeToggle />
 			</header>
 			<main className={styles.container}>
 				<Outlet />

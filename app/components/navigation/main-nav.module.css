@@ -6,12 +6,15 @@
     position: relative;
     top: auto;
     left: auto;
+	height: 1.5rem;
     padding: 0.5rem;
     cursor: pointer;
     background: transparent;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 .hamburger:hover {
     background: rgba(255, 255, 255, 0.1);
 }

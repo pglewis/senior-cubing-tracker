@@ -28,7 +28,10 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 	const rankingsData = rankings.data;
 	const topRanks: TopRank[] = [];
 
+	// id, name, format ("time" | "number" | "multi"), rankings: EventRanking[]
 	for (const event of rankingsData.events) {
+
+		// type: "single" | "average", age (40, 50, ...), ranks: Rank[]
 		for (const eventRanking of event.rankings) {
 			const {age, ranks} = eventRanking;
 
@@ -46,6 +49,8 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 			});
 
 			const regions = new Set<string>();
+
+			// rank, id (WCAID), best (event result), competition (Competition["id"]),
 			for (const rank of ranks) {
 				const person = rankingsData.persons[rankings.personIDToIndex[rank.id]];
 				const country = rankingsData.countries[rankings.countryIDToIndex[person.country]];

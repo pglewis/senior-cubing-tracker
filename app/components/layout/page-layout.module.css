@@ -3,12 +3,12 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 4rem;
+    height: var(--header-height);
     background-color: var(--color-background-header);
     z-index: 80;
     display: flex;
     align-items: center;
-    justify-content: space-between;  /* This pushes items to edges */
+    justify-content: space-between;
     padding: 0 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -16,7 +16,11 @@
 .header h2 {
     margin: 0;
     font-size: 1.25rem;
-    position: absolute;     /* Take it out of flex flow */
-    left: 50%;             /* Center it */
+    position: absolute; /* Take it out of flex flow */
+    left: 50%; /* Center it */
     transform: translateX(-50%);  /* Perfect center */
+}
+
+.container {
+    padding-top: var(--header-height);  /* Just enough to clear the fixed header */
 }

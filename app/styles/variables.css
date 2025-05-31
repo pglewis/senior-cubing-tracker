@@ -13,6 +13,7 @@
 	--color-table-row-even: var(--color-background-header);
 
 	/* Layout */
+	--header-height: 4rem;
 	--content-max-width: 320px;
 	--spacing-xs: 0.25rem;
 	--spacing-sm: 0.5rem;

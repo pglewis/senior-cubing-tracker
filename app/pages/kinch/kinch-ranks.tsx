@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {Link, useSearchParams, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {getFilteredRegions} from "@repo/app/features/kinch/utils/get-filtered-regions";
@@ -17,8 +17,6 @@ export function KinchRanks() {
 	const {rankings, topRanks} = useData();
 	const {age, wcaid, region, regionInfo, page, setParams} = useKinchContext();
 	const {state} = useLocation();
-	const [searchParams] = useSearchParams();
-
 	const kinchRanks = useKinchRanks({age, region});
 
 	const {continents, countries} = useMemo(() => (
@@ -45,14 +43,6 @@ export function KinchRanks() {
 	return (
 		<div className={styles.container}>
 			<h2>Senior Kinch Ranks</h2>
-			<h3>
-				<Link
-					to="/kinch-ranks/faq"
-					state={{from: `/kinch-ranks?${searchParams.toString()}`}}
-				>
-					What are Kinch Ranks?
-				</Link>
-			</h3>
 
 			<div className={styles.filters}>
 				<PersonSearch

@@ -1,8 +1,6 @@
-import {useMemo} from "react";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
-import {getFilteredRegions} from "@repo/app/features/kinch/utils/get-filtered-regions";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {AgeFilter} from "@repo/app/features/kinch/components/filters/age-filter";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
@@ -10,23 +8,25 @@ import {PersonSearch} from "@repo/app/features/kinch/components/person-search/pe
 import {Pagination} from "@repo/app/components/shared/pagination";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
+import {DataLastUpdated} from "@repo/app/components/data-last-updated";
 import styles from "./kinch-ranks.module.css";
-import {DataLastUpdated} from "../../components/data-last-updated";
 
 export function KinchRanks() {
-	const {rankings, topRanks} = useData();
-	const {age, wcaid, region, regionInfo, page, setParams} = useKinchContext();
+	const {rankings} = useData();
+	const {
+		age,
+		wcaid,
+		region,
+		regionInfo,
+		page,
+		setParams
+	} = useKinchContext();
 	const {state} = useLocation();
+	const [searchParams] = useSearchParams();
 	const kinchRanks = useKinchRanks({age, region});
 
-	const {continents, countries} = useMemo(() => (
-		getFilteredRegions(
-			rankings,
-			wcaid,
-			age,
-			topRanks
-		)
-	), [rankings, topRanks, wcaid, age]);
+	console.log(state);
+
 
 	// Extract the display name for the selected region ("World", "Europe", "Italy")
 	let regionName: string;
@@ -59,8 +59,8 @@ export function KinchRanks() {
 				<RegionFilter
 					value={region}
 					onChange={(value) => setParams({region: value, page: 1})}
-					continents={continents}
-					countries={countries}
+					continents={regionInfo.continents}
+					countries={regionInfo.countries}
 				/>
 				{totalPages > 1 && !wcaid && (
 					<Pagination
@@ -79,7 +79,7 @@ export function KinchRanks() {
 					wcaId={wcaid}
 					age={age}
 					region={region}
-					regionName={regionName} // The raw region ID, regardless of whether continent or country
+					regionName={regionName}
 				/>
 			) : (
 				<KinchLeaderboard
@@ -88,6 +88,11 @@ export function KinchRanks() {
 					highlightId={state?.highlight}
 				/>
 			)}
+			<h3>
+				<Link to="/kinch-ranks/faq" state={{from: `/kinch-ranks?${searchParams.toString()}`}}>
+					What are Kinch Ranks?
+				</Link>
+			</h3>
 		</div>
 	);
 }

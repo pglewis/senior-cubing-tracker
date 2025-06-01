@@ -1,6 +1,9 @@
-import {type ReactNode} from "react";
+import {useMemo, type ReactNode} from "react";
 import {useSearchParams} from "react-router-dom";
-import {fromRegionParam} from "@repo/common/util/kinch-region-utils";
+import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
+import type {TopRank} from "@repo/common/types/kinch-types";
+import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {useData} from "@repo/app/hooks/use-data";
 import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-types";
 import {KinchContext} from "./kinch-instance";
 
@@ -11,8 +14,13 @@ const defaults = {
 	wcaid: ""
 } as const;
 
-export function KinchProvider({children}: {children: ReactNode}) {
+export function KinchProvider({children}: {children: ReactNode;}) {
+	const {rankings, topRanks} = useData();
 	const [searchParams, setSearchParams] = useSearchParams();
+
+	const page = Number(searchParams.get("page")) || defaults.page;
+	const age = searchParams.get("age") || defaults.age;
+	const wcaid = searchParams.get("wcaid") || defaults.wcaid;
 
 	const setParams = (params: Partial<KinchContextParams>) => {
 		const newParams = new URLSearchParams(searchParams);
@@ -38,17 +46,28 @@ export function KinchProvider({children}: {children: ReactNode}) {
 		regionType = "country";
 	}
 
+	const {continents, countries} = useMemo(() => (
+		getFilteredRegions(
+			rankings,
+			wcaid,
+			age,
+			topRanks
+		)
+	), [rankings, topRanks, wcaid, age]);
+
 	const regionInfo: RegionInfo = {
 		id,
-		type: regionType
+		type: regionType,
+		continents: continents,
+		countries: countries,
 	};
 
 	const value: KinchContextType = {
-		page: Number(searchParams.get("page")) || defaults.page,
-		age: searchParams.get("age") || defaults.age,
+		page: page,
+		age: age,
+		wcaid: wcaid,
 		region,
 		regionInfo,
-		wcaid: searchParams.get("wcaid") || defaults.wcaid,
 		setParams,
 	};
 
@@ -57,4 +76,44 @@ export function KinchProvider({children}: {children: ReactNode}) {
 			{children}
 		</KinchContext.Provider>
 	);
+}
+
+interface FilteredRegions {
+	continents: Continent[],
+	countries: Country[],
+}
+
+function getFilteredRegions(
+	rankings: ExtendedRankingsData,
+	wcaId: string | undefined,
+	age: string,
+	topRanks: TopRank[]
+): FilteredRegions {
+	const {continents, countries} = rankings.data;
+
+	if (wcaId) {
+		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
+		const country = rankings.data.countries[rankings.countryIDToIndex[person.country]];
+		const continent = continents.find(c => c.id === country.continent);
+
+		return {
+			continents: continent ? [continent] : [],
+			countries: [country]
+		};
+	}
+
+	return {
+		continents: continents.filter(c =>
+			topRanks.some(tr =>
+				tr.age === Number(age) &&
+				tr.region === toRegionParam(c.id, true)
+			)
+		),
+		countries: countries.filter(c =>
+			topRanks.some(tr =>
+				tr.age === Number(age) &&
+				tr.region === toRegionParam(c.id, false)
+			)
+		)
+	};
 }

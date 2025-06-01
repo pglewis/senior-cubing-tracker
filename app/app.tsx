@@ -15,12 +15,10 @@ const router = createBrowserRouter([
 			{
 				index: true,
 				element: <Home />
-			},
-			{
+			}, {
 				path: "recent",
 				element: <Recent />
-			},
-			{
+			}, {
 				path: "kinch-ranks",
 				element: <KinchProvider>
 					<Outlet />
@@ -29,14 +27,12 @@ const router = createBrowserRouter([
 					{
 						index: true,
 						element: <KinchRanks />
-					},
-					{
+					}, {
 						path: "faq",
 						element: <KinchRanksFaq />
 					}
 				]
-			},
-			{
+			}, {
 				path: "results",
 				element: <Results />
 			}

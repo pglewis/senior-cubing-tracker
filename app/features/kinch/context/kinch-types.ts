@@ -1,17 +1,25 @@
+import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
+
 export interface KinchContextParams {
-    page: number;
-    age: string;
-    region: string; // Prefixed version for URL (e.g. "CNA")
-    wcaid: string;
-}
+    page: number,
+	age: string,
+	/** Prefixed version for URL (e.g. "CNA") */
+    region: string,
+    wcaid: string,
+};
 
 export interface RegionInfo {
-    id: string; // Unprefixed ID (e.g. "NA")
-    type: "continent" | "country" | "world";
-}
+	/** Unprefixed ID (e.g. "NA") */
+    id: string,
+    type: "continent" | "country" | "world",
+	continents: Continent[],
+	countries: Country[],
+
+};
 
 export interface KinchContextType extends Omit<KinchContextParams, "region"> {
-    region: string; // Keep prefixed version for URL params
-    regionInfo: RegionInfo;
-    setParams: (params: Partial<KinchContextParams>) => void;
-}
+	/** Keep prefixed version for URL params */
+    region: string,
+    regionInfo: RegionInfo,
+    setParams: (params: Partial<KinchContextParams>) => void,
+};

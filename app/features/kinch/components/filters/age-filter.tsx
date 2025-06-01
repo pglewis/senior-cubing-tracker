@@ -1,6 +1,6 @@
-import type {ChangeEvent} from "react";
+import {useMemo} from "react";
 import {useData} from "@repo/app/hooks/use-data";
-import type {TopRank} from "@repo/common/types/kinch-types";
+import {ButtonTabs} from "@repo/app/components/shared/button-tabs";
 
 interface AgeFilterProps {
 	value: string;
@@ -8,33 +8,29 @@ interface AgeFilterProps {
 	region: string;
 }
 
-function getAgeList(topRanks: TopRank[], region: string): number[] {
-	return Array.from(
-		new Set(
-			topRanks
-				.filter(tr => tr.region === region)
-				.map(tr => tr.age)
-		)
-	).sort((a, b) => a - b);
-}
-
 export function AgeFilter({value, onChange, region}: AgeFilterProps) {
 	const {topRanks} = useData();
-	const ageOptions = topRanks ? getAgeList(topRanks, region) : [];
 
-	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		onChange(e.target.value);
+	const ageOptions = useMemo(() => {
+		if (!topRanks) return [];
+
+		return Array.from(new Set(topRanks
+			.filter(tr => tr.region === region)
+			.map(tr => tr.age)
+		))
+			.sort((a, b) => a - b)
+			.map(age => ({value: age.toString(), label: `${age}+`}));
+	}, [topRanks, region]);
+
+	const handleChange = (value: string) => {
+		onChange(value);
 	};
 
 	return (
-		<div>
-			<select value={value} onChange={handleChange}>
-				{ageOptions.map(age => (
-					<option key={age} value={String(age)}>
-						Over {age}
-					</option>
-				))}
-			</select>
-		</div>
+		<ButtonTabs
+			selectedValue={value}
+			onValueChange={handleChange}
+			options={ageOptions}
+		/>
 	);
 }

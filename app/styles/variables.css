@@ -20,6 +20,7 @@
 	/* Layout */
 	--header-height: 4rem; /* Fixed header */
 	--content-max-width: 320px;
+
 	--spacing-xs: 0.25rem;
 	--spacing-sm: 0.5rem;
 	--spacing-md: 1rem;

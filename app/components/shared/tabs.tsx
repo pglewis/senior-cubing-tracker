@@ -2,16 +2,16 @@ import {type ReactNode} from "react";
 import styles from "./tabs.module.css";
 
 interface TabOption {
-	label: string;
-	value: string;
-}
+	label: string,
+	value: string,
+};
 
 interface AgeGroupTabsProps {
-	options: TabOption[];
-	selectedValue: string;
-	onValueChange: (value: string) => void;
-	children: ReactNode;
-}
+	options: TabOption[],
+	selectedValue: string,
+	onValueChange: (value: string) => void,
+	children: ReactNode,
+};
 
 export function Tabs({options, selectedValue, onValueChange, children}: AgeGroupTabsProps) {
 	return (

@@ -1,0 +1,26 @@
+.buttonTabGroup {
+	display: flex;
+	background: var(--color-background-header);
+	border-radius: var(--border-radius-sm);
+	justify-content: center;
+	border: 1px solid var(--color-border);
+}
+
+.buttonTab {
+	flex: 1;
+	padding: var(--spacing-xs) var(--spacing-sm);
+	border: none;
+	background: transparent;
+	color: var(--color-text);
+	cursor: pointer;
+	border-radius: var(--border-radius-sm);
+	font-weight: 500;
+	transition: all 0.2s ease;
+	opacity: 0.7;
+}
+
+.active {
+	background: var(--color-active);
+	color: white;
+	opacity: 1;
+}

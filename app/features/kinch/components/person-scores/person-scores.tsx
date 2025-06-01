@@ -1,14 +1,10 @@
 import {useState, type JSX} from "react";
 import {Link, useLocation} from "react-router-dom";
-import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
-import {Tabs} from "@repo/app/components/shared/tabs";
 import {Card} from "@repo/app/components/shared/card";
 import styles from "./person-scores.module.css";
-import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
-import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 
 const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 
@@ -23,7 +19,8 @@ interface PersonScoresProps {
 export function PersonScores({wcaId, age, region, regionName, onAgeChange}: PersonScoresProps) {
 	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region});
-	const {regionInfo} = useKinchContext();
+	const {state} = useLocation();
+	const returnPath = state?.from || "/kinch-ranks";
 
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
@@ -56,87 +53,54 @@ export function PersonScores({wcaId, age, region, regionName, onAgeChange}: Pers
 	];
 
 	return (
-		<>
-			<PersonHeader
-				continents={regionInfo.continents}
-				countries={regionInfo.countries}
-				personName={kinchRank.personName}
-				profileLink={competitorURL}
-			/>
-			<Tabs options={ageOptions} selectedValue={age} onValueChange={onAgeChange}>
-				<div className={styles.tableHeader}>
-					<div>
-						Region: {regionName}
-					</div>
-					<div>
-						Rank: #{ranking} (<ShowInRankingsListLink targetPage={targetPage} wcaId={wcaId} age={age} region={region} />)
-					</div>
-					<div>
-						Overall score: {kinchRank.overall.toFixed(2)}
-					</div>
+		<div className={styles.personScores}>
+			<Card>
+				<h3 className={styles.personName}>
+					<a className={styles.link} href={competitorURL} target="_blank">
+						{kinchRank.personName}
+					</a>
+				</h3>
+				<div>
+					Rank: #{ranking} (<ShowInRankingsListLink targetPage={targetPage} wcaId={wcaId} age={age} region={region} />)
 				</div>
-				<table className={styles.table}>
-					<tbody>
-						<tr>
-							<th
-								className={`${styles.tableHeader} ${styles.eventColumn} ${sortBy === "event" ? styles.sortedAsc : ""}`}
-								onClick={() => setSortBy("event")}
-							>
-								Event
-							</th>
-							<th
-								className={`${styles.tableHeader} ${styles.scoreColumn} ${sortBy === "score" ? styles.sortedDesc : ""}`}
-								onClick={() => setSortBy("score")}
-							>
-								Score
-							</th>
-							<th className={`${styles.tableHeader} ${styles.resultColumn}`}>
-								Result
-							</th>
-						</tr>
-						{sortedEvents.map(event => (
-							<EventRow
-								key={event.eventID}
-								event={event}
-								age={age}
-							/>
-						))}
-					</tbody>
-				</table>
-			</Tabs>
-		</>
-	);
-}
-
-interface PersonHeaderProps {
-	continents: Continent[],
-	countries: Country[],
-	personName: string,
-	profileLink: string,
-}
-
-function PersonHeader({continents, countries, personName, profileLink}: PersonHeaderProps) {
-	const {region, setParams} = useKinchContext();
-	const {state} = useLocation();
-	const returnPath = state?.from || "/kinch-ranks";
-
-	return (
-		<Card>
-			<h3>
-				<a className={styles.link} href={profileLink}>
-					{personName}
-				</a>
-			</h3>
-			<RegionFilter
-				value={region}
-				onChange={(value) => setParams({region: value, page: 1})}
-				continents={continents}
-				countries={countries}
-			/>
+				<div>
+					Overall score: {kinchRank.overall.toFixed(2)}
+				</div>
+			</Card>
+			<table className={styles.table}>
+				<thead>
+					<tr>
+						<th
+							className={`${styles.tableHeader} ${styles.eventColumn} ${sortBy === "event" ? styles.sortedAsc : ""}`}
+							onClick={() => setSortBy("event")}
+						>
+							Event
+						</th>
+						<th
+							className={`${styles.tableHeader} ${styles.scoreColumn} ${sortBy === "score" ? styles.sortedDesc : ""}`}
+							onClick={() => setSortBy("score")}
+						>
+							Score
+						</th>
+						<th className={`${styles.tableHeader} ${styles.resultColumn}`}>
+							Result
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{sortedEvents.map(event => (
+						<EventRow
+							key={event.eventID}
+							event={event}
+							age={age}
+						/>
+					))}
+				</tbody>
+			</table>
 			<Link to={returnPath}>
 				← Return to previous view
 			</Link>
-		</Card>
+		</div>
 	);
 }
 

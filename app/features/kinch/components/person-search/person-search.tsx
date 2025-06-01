@@ -1,4 +1,5 @@
 import {useCallback, useState, useEffect, type ChangeEvent} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import {debounce} from "@repo/common/util/debounce";
 import {useKinchPersonSearch} from "@repo/app/features/kinch/hooks/use-kinch-person-search";
@@ -29,6 +30,8 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 	const [results, setResults] = useState<KinchRank[]>([]);
 	const [isOpen, setIsOpen] = useState(false);
 	const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined);
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		setSearchTerm(value);
@@ -36,10 +39,18 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 
 	const handleSelect = useCallback((result: KinchRank) => {
 		setSearchTerm(result.personID);
-		onSelect(result.personID);
+
+		// Build the return URL with current params
+		const currentUrl = `${location.pathname}${location.search}`;
+
+		// Navigate with state instead of using onSelect
+		navigate(`/kinch-ranks?wcaid=${result.personID}&age=${age}&region=world`, {
+			state: {from: currentUrl}
+		});
+
 		setIsOpen(false);
 		setHighlightedIndex(undefined);
-	}, [onSelect]);
+	}, [navigate, location, age]);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (!isOpen && e.key === "Enter" && !searchTerm) {

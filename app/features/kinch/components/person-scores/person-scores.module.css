@@ -1,5 +1,5 @@
-.header {
-	background-color: var(--color-background-header);
+.personName {
+	margin: 0;
 }
 
 /* Table styles */
@@ -50,7 +50,7 @@
 }
 
 .row:hover {
-    background: #454545;
+    background: var(--color-background-highlight);
 }
 
 .row.topScore {

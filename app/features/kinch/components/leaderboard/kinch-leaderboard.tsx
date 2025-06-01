@@ -1,4 +1,5 @@
 import {useEffect, useRef} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 import styles from "./kinch-leaderboard.module.css";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
@@ -6,15 +7,17 @@ import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context"
 const ROWS_PER_PAGE = 25;
 
 interface KinchLeaderboardProps {
-    age: string;
-    region: string;
-    highlightId?: string;
+	age: string;
+	region: string;
+	highlightId?: string;
 }
 
 export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardProps) {
 	const kinchRanks = useKinchRanks({age, region});
-	const {page, setParams} = useKinchContext();
+	const {page} = useKinchContext();
 	const highlightRef = useRef<HTMLTableRowElement>(null);
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const startIdx = (page - 1) * ROWS_PER_PAGE;
 	const endIdx = startIdx + ROWS_PER_PAGE;
@@ -26,14 +29,26 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 		}
 	}, [highlightId]);
 
+	const handleNameClick = (personID: string) => {
+		// Build the return URL with current params
+		const currentUrl = `${location.pathname}${location.search}`;
+
+		// Navigate to person view with state
+		navigate(`/kinch-ranks?wcaid=${personID}&age=${age}&region=${region}`, {
+			state: {from: currentUrl}
+		});
+	};
+
 	return (
 		<table className={styles.table}>
-			<tbody>
+			<thead>
 				<tr>
 					<th className={styles.rankColumn}>#</th>
 					<th className={styles.nameColumn}>Name</th>
 					<th className={styles.scoreColumn}>Score</th>
 				</tr>
+			</thead>
+			<tbody>
 				{displayRanks.map((rank, index) => (
 					<tr
 						key={rank.personID}
@@ -47,7 +62,7 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 								className={styles.link}
 								onClick={(e) => {
 									e.preventDefault();
-									setParams({wcaid: rank.personID, region: region});
+									handleNameClick(rank.personID);
 								}}
 							>
 								{rank.personName}

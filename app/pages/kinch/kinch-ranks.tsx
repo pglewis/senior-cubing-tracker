@@ -25,9 +25,6 @@ export function KinchRanks() {
 	const [searchParams] = useSearchParams();
 	const kinchRanks = useKinchRanks({age, region});
 
-	console.log(state);
-
-
 	// Extract the display name for the selected region ("World", "Europe", "Italy")
 	let regionName: string;
 	if (regionInfo.type === "world") {
@@ -71,7 +68,7 @@ export function KinchRanks() {
 				)}
 			</div>
 
-			<DataLastUpdated text={rankings.lastUpdated} />
+			{/* <DataLastUpdated text={rankings.lastUpdated} /> */}
 
 			{wcaid ? (
 				<PersonScores

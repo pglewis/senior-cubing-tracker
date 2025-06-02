@@ -19,6 +19,9 @@ interface KinchFilters {
 	region: string; // Prefixed region ID (e.g. "CNA" or "NNA")
 }
 
+// Outside component - persists across component unmounts
+const kinchCache = new Map();
+
 export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 	const {rankings, topRanks} = useData();
 
@@ -27,14 +30,29 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 			return [];
 		}
 
+		const cacheKey = `${rankings?.lastUpdated || "v1"}-${filters.age || "all"}-${filters.region || "all"}`;
+
+		if (kinchCache.has(cacheKey)) {
+			return kinchCache.get(cacheKey);
+		}
+
 		let ranks = rankings.data.persons.map(p =>
 			getRanksForPerson(rankings, topRanks, {
 				age: filters.age,
 				region: filters.region
 			}, p.id)
 		);
+
 		ranks = ranks.filter(r => r.overall > 0);
 		ranks.sort((a, b) => b.overall - a.overall);
+
+		kinchCache.set(cacheKey, ranks);
+
+		// Cleanup old entries periodically
+		if (kinchCache.size > 50) {
+			const keysToDelete = Array.from(kinchCache.keys()).slice(0, 10);
+			keysToDelete.forEach(key => kinchCache.delete(key));
+		}
 
 		return ranks;
 	}, [rankings, topRanks, filters.age, filters.region]);

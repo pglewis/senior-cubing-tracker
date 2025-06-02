@@ -1,4 +1,4 @@
-import {useCallback, useState, useEffect, type ChangeEvent} from "react";
+import {useCallback, useState, type ChangeEvent} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import {debounce} from "@repo/common/util/debounce";
@@ -6,8 +6,6 @@ import {useKinchPersonSearch} from "@repo/app/features/kinch/hooks/use-kinch-per
 import styles from "./person-search.module.css";
 
 interface SearchBoxProps {
-	value: string;
-	onSelect: (value: string) => void;
 	age: string;
 	region: string;
 }
@@ -24,21 +22,17 @@ interface PersonResultsListProps {
 	onHighlight: (index: number | undefined) => void;
 }
 
-export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
+export function PersonSearch({age, region}: SearchBoxProps) {
 	const {filterResults} = useKinchPersonSearch({age, region});
-	const [searchTerm, setSearchTerm] = useState(value);
+	const [searchTerm, setSearchTerm] = useState("");
 	const [results, setResults] = useState<KinchRank[]>([]);
 	const [isOpen, setIsOpen] = useState(false);
 	const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined);
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	useEffect(() => {
-		setSearchTerm(value);
-	}, [value]);
-
 	const handleSelect = useCallback((result: KinchRank) => {
-		setSearchTerm(result.personID);
+		setSearchTerm("");
 
 		// Build the return URL with current params
 		const currentUrl = `${location.pathname}${location.search}`;
@@ -53,12 +47,6 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 	}, [navigate, location, age]);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (!isOpen && e.key === "Enter" && !searchTerm) {
-			e.preventDefault();
-			onSelect("");
-			return;
-		}
-
 		if (!isOpen) return;
 
 		switch (e.key) {
@@ -97,7 +85,6 @@ export function PersonSearch({value, onSelect, age, region}: SearchBoxProps) {
 		setSearchTerm(newValue);
 		setHighlightedIndex(undefined);
 		if (!newValue) {
-			onSelect("");
 			setIsOpen(false);
 			setResults([]);
 		} else {

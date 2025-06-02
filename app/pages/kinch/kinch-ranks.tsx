@@ -28,7 +28,7 @@ export function KinchRanks() {
 	// Extract the display name for the selected region ("World", "Europe", "Italy")
 	let regionName: string;
 	if (regionInfo.type === "world") {
-		regionName = regionInfo.type;
+		regionName = "World";
 	} else if (regionInfo.type === "continent") {
 		regionName = rankings.data.continents[rankings.continentIDToIndex[regionInfo.id]].name;
 	} else {
@@ -41,23 +41,22 @@ export function KinchRanks() {
 		<div className={styles.container}>
 			<h2>Senior Kinch Ranks</h2>
 
+			<DataLastUpdated text={rankings.lastUpdated} />
 			<div className={styles.filters}>
 				<PersonSearch
-					value={wcaid}
-					onSelect={(value) => setParams({wcaid: value, region: "world"})}
 					age={age}
 					region={region} // Prefixed with continent/country prefix
-				/>
-				<AgeFilter
-					value={age}
-					onChange={(value) => setParams({age: value, page: 1})}
-					region={region}
 				/>
 				<RegionFilter
 					value={region}
 					onChange={(value) => setParams({region: value, page: 1})}
 					continents={regionInfo.continents}
 					countries={regionInfo.countries}
+				/>
+				<AgeFilter
+					value={age}
+					onChange={(value) => setParams({age: value, page: 1})}
+					region={region}
 				/>
 				{totalPages > 1 && !wcaid && (
 					<Pagination
@@ -72,7 +71,6 @@ export function KinchRanks() {
 
 			{wcaid ? (
 				<PersonScores
-					onAgeChange={(value) => setParams({age: value, page: 1})}
 					wcaId={wcaid}
 					age={age}
 					region={region}

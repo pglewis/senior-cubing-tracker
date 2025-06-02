@@ -1,4 +1,5 @@
 import {useState, type JSX} from "react";
+import clsx from "clsx";
 import {Link, useLocation} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
@@ -13,10 +14,9 @@ interface PersonScoresProps {
 	age: string,
 	region: string, // Prefixed with continent/country prefix
 	regionName: string,
-	onAgeChange: (value: string) => void,
 }
 
-export function PersonScores({wcaId, age, region, regionName, onAgeChange}: PersonScoresProps) {
+export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps) {
 	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region});
 	const {state} = useLocation();
@@ -45,13 +45,6 @@ export function PersonScores({wcaId, age, region, regionName, onAgeChange}: Pers
 		sortedEvents.sort((a, b) => b.score - a.score);
 	}
 
-	//--!! 	Hardcoded
-	const ageOptions = [
-		{label: "40+", value: "40"},
-		{label: "50+", value: "50"},
-		{label: "60+", value: "60"}
-	];
-
 	return (
 		<div className={styles.personScores}>
 			<Card>
@@ -61,28 +54,42 @@ export function PersonScores({wcaId, age, region, regionName, onAgeChange}: Pers
 					</a>
 				</h3>
 				<div>
+					{regionName}, {age}+
+				</div>
+				<div>
 					Rank: #{ranking} (<ShowInRankingsListLink targetPage={targetPage} wcaId={wcaId} age={age} region={region} />)
 				</div>
 				<div>
 					Overall score: {kinchRank.overall.toFixed(2)}
 				</div>
+				<Link className={styles.returnLink} to={returnPath}>
+					← Return to previous view
+				</Link>
 			</Card>
 			<table className={styles.table}>
 				<thead>
 					<tr>
 						<th
-							className={`${styles.tableHeader} ${styles.eventColumn} ${sortBy === "event" ? styles.sortedAsc : ""}`}
+							className={clsx(
+								styles.tableHeader,
+								styles.eventColumn,
+								(sortBy === "event") && styles.sortedAsc
+							)}
 							onClick={() => setSortBy("event")}
 						>
 							Event
 						</th>
 						<th
-							className={`${styles.tableHeader} ${styles.scoreColumn} ${sortBy === "score" ? styles.sortedDesc : ""}`}
+							className={clsx(
+								styles.tableHeader,
+								styles.scoreColumn,
+								(sortBy === "score") && styles.sortedDesc,
+							)}
 							onClick={() => setSortBy("score")}
 						>
 							Score
 						</th>
-						<th className={`${styles.tableHeader} ${styles.resultColumn}`}>
+						<th className={clsx(styles.tableHeader, styles.resultColumn)}>
 							Result
 						</th>
 					</tr>
@@ -97,9 +104,6 @@ export function PersonScores({wcaId, age, region, regionName, onAgeChange}: Pers
 					))}
 				</tbody>
 			</table>
-			<Link to={returnPath}>
-				← Return to previous view
-			</Link>
 		</div>
 	);
 }
@@ -155,7 +159,7 @@ function EventRow({event, age}: EventRowProps) {
 	}
 
 	return (
-		<tr className={`${styles.row} ${scoreClass}`}>
+		<tr className={clsx(styles.row, scoreClass)}>
 			<td className={styles.eventColumn}>{eventName}</td>
 			<td className={styles.scoreColumn}>{score.toFixed(2)}</td>
 			<td className={styles.resultColumn}>{resultText}</td>

@@ -1,16 +1,16 @@
 import {useMemo} from "react";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
+import {Pagination} from "@repo/app/components/shared/pagination";
+import {ButtonTabs} from "@repo/app/components/shared/button-tabs";
+import {DataLastUpdated} from "@repo/app/components/data-last-updated";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
 import {PersonSearch} from "@repo/app/features/kinch/components/person-search/person-search";
-import {Pagination} from "@repo/app/components/shared/pagination";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
-import {DataLastUpdated} from "@repo/app/components/data-last-updated";
 import styles from "./kinch-ranks.module.css";
-import {ButtonTabs} from "../../components/shared/button-tabs";
 
 export function KinchRanks() {
 	const {rankings, topRanks} = useData();
@@ -25,16 +25,6 @@ export function KinchRanks() {
 	const {state} = useLocation();
 	const [searchParams] = useSearchParams();
 	const kinchRanks = useKinchRanks({age, region});
-
-	// Extract the display name for the selected region ("World", "Europe", "Italy")
-	let regionName: string;
-	if (regionInfo.type === "world") {
-		regionName = "World";
-	} else if (regionInfo.type === "continent") {
-		regionName = rankings.data.continents[rankings.continentIDToIndex[regionInfo.id]].name;
-	} else {
-		regionName = rankings.data.countries[rankings.countryIDToIndex[regionInfo.id]].name;
-	}
 
 	const ageOptions = useMemo(() => {
 		if (!topRanks) return [];
@@ -85,7 +75,7 @@ export function KinchRanks() {
 					wcaId={wcaid}
 					age={age}
 					region={region}
-					regionName={regionName}
+					regionInfo={regionInfo}
 				/>
 			) : (
 				<KinchLeaderboard

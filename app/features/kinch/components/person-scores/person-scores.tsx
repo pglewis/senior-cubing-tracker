@@ -6,6 +6,7 @@ import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
 import {Card} from "@repo/app/components/shared/card";
 import styles from "./person-scores.module.css";
+import type {RegionInfo} from "@repo/app/features/kinch/context/kinch-types";
 
 const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 
@@ -13,10 +14,10 @@ interface PersonScoresProps {
 	wcaId: string,
 	age: string,
 	region: string, // Prefixed with continent/country prefix
-	regionName: string,
+	regionInfo: RegionInfo,
 }
 
-export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps) {
+export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps) {
 	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region});
 	const {state} = useLocation();
@@ -43,6 +44,16 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 	const sortedEvents = [...kinchRank.events];
 	if (sortBy === "score") {
 		sortedEvents.sort((a, b) => b.score - a.score);
+	}
+
+	// Extract the display name for the selected region ("World", "Europe", "Italy")
+	let regionName: string;
+	if (regionInfo.type === "world") {
+		regionName = "World";
+	} else if (regionInfo.type === "continent") {
+		regionName = rankings.data.continents[rankings.continentIDToIndex[regionInfo.id]].name;
+	} else {
+		regionName = rankings.data.countries[rankings.countryIDToIndex[regionInfo.id]].name;
 	}
 
 	return (
@@ -99,6 +110,7 @@ export function PersonScores({wcaId, age, region, regionName}: PersonScoresProps
 						<EventRow
 							key={event.eventID}
 							event={event}
+							regionInfo={regionInfo}
 							age={age}
 						/>
 					))}
@@ -128,28 +140,42 @@ function ShowInRankingsListLink({targetPage, age, region, wcaId}: ShowInRankings
 }
 
 interface EventRowProps {
-	event: KinchEvent;
-	age: string;
-}
+	event: KinchEvent,
+	age: string,
+	regionInfo: RegionInfo,
+};
 
-function EventRow({event, age}: EventRowProps) {
+function EventRow({event, age, regionInfo}: EventRowProps) {
 	const {eventName, score, result, type} = event;
 
-	let scoreClass = "";
+	let scoreClass;
+	let scoreDisplay = score.toFixed(2);
 	if (score >= 100) {
 		scoreClass = styles.topScore;
 	} else if (score >= 90) {
 		scoreClass = styles.highScore;
 	} else if (score >= 80) {
 		scoreClass = styles.goodScore;
+	} else if (score === 0) {
+		scoreDisplay = "--";
 	}
 
 	let resultText: string | JSX.Element = "--";
 	if (result) {
-		const rankingURL = `https://wca-seniors.org/Senior_Rankings.html#${event.eventID}-${type}-${age}`;
-		const resultType = event.eventID !== "333mbf" && !scoreAverageOnly[event.eventID]
-			? (type === "single" ? " (sing)" : " (avg)")
-			: "";
+		// Build the URL to the correct event/type/age/region listing
+		const baseRankingURL = "https://wca-seniors.org/Senior_Rankings.html";
+		let regionParam = "";
+		if (regionInfo.type === "continent") {
+			regionParam = "-" + regionInfo.id.toLowerCase();
+		} else if (regionInfo.type === "country") {
+			regionParam = "-xx-" + regionInfo.id.toLowerCase();
+		}
+		const rankingURL = `${baseRankingURL}#${event.eventID}-${type}-${age}${regionParam}`;
+
+		let resultType = "";
+		if (event.eventID !== "333mbf" && !scoreAverageOnly[event.eventID]) {
+			resultType = type === "single" ? " (sing)" : " (avg)";
+		}
 
 		resultText = (
 			<a className={styles.link} href={rankingURL} target="_blank" rel="noopener noreferrer">
@@ -161,7 +187,7 @@ function EventRow({event, age}: EventRowProps) {
 	return (
 		<tr className={clsx(styles.row, scoreClass)}>
 			<td className={styles.eventColumn}>{eventName}</td>
-			<td className={styles.scoreColumn}>{score.toFixed(2)}</td>
+			<td className={styles.scoreColumn}>{scoreDisplay}</td>
 			<td className={styles.resultColumn}>{resultText}</td>
 		</tr>
 	);

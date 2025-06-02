@@ -22,6 +22,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 
 	const handleInputBlur = () => {
 		const pageNumber = parseInt(inputValue.trim(), 10);
+
 		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
 			onPageChange(pageNumber);
 		} else {
@@ -99,7 +100,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 				▶
 			</button>
 			<span className={styles.pageOf}>
-				page{" "}
+				{"page "}
 				<input
 					type="text"
 					inputMode="numeric"
@@ -109,7 +110,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 					onBlur={handleInputBlur}
 					onKeyDown={handleKeyDown}
 				/>
-				{" "}of {totalPages}
+				{" of "}{totalPages}
 			</span>
 		</div>
 	);

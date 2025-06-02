@@ -5,24 +5,17 @@ import {debounce} from "@repo/common/util/debounce";
 import {useKinchPersonSearch} from "@repo/app/features/kinch/hooks/use-kinch-person-search";
 import styles from "./person-search.module.css";
 
-interface SearchBoxProps {
-	age: string;
-	region: string;
-}
-
 const debouncedFilterResults = debounce(
 	(filterFn: (term: string) => KinchRank[], term: string, callback: (results: KinchRank[]) => void) => {
 		callback(filterFn(term));
 	});
 
-interface PersonResultsListProps {
-	results: KinchRank[];
-	highlightedIndex: number | undefined;
-	onSelect: (result: KinchRank) => void;
-	onHighlight: (index: number | undefined) => void;
+interface PersonSearchProps {
+	age: string;
+	region: string;
 }
 
-export function PersonSearch({age, region}: SearchBoxProps) {
+export function PersonSearch({age, region}: PersonSearchProps) {
 	const {filterResults} = useKinchPersonSearch({age, region});
 	const [searchTerm, setSearchTerm] = useState("");
 	const [results, setResults] = useState<KinchRank[]>([]);
@@ -82,8 +75,10 @@ export function PersonSearch({age, region}: SearchBoxProps) {
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
+
 		setSearchTerm(newValue);
 		setHighlightedIndex(undefined);
+
 		if (!newValue) {
 			setIsOpen(false);
 			setResults([]);
@@ -131,6 +126,13 @@ export function PersonSearch({age, region}: SearchBoxProps) {
 			)}
 		</div>
 	);
+}
+
+interface PersonResultsListProps {
+	results: KinchRank[];
+	highlightedIndex: number | undefined;
+	onSelect: (result: KinchRank) => void;
+	onHighlight: (index: number | undefined) => void;
 }
 
 function PersonSearchList({results, highlightedIndex, onSelect, onHighlight}: PersonResultsListProps) {

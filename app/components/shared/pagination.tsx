@@ -11,7 +11,7 @@ interface PaginationProps {
 export function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
 	const [inputValue, setInputValue] = useState(String(currentPage));
 
-	// Update input value when currentPage prop changes
+	// Update the input box whenever the currentPage prop changes
 	useEffect(() => {
 		setInputValue(String(currentPage));
 	}, [currentPage]);
@@ -25,7 +25,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
 			onPageChange(pageNumber);
 		} else {
-			// Reset to current page if invalid
+			// Reset to the current page if the input is garbage
 			setInputValue(String(currentPage));
 		}
 	};

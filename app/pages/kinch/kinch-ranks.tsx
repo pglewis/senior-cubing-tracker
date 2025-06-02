@@ -1,8 +1,8 @@
+import {useMemo} from "react";
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
-import {AgeFilter} from "@repo/app/features/kinch/components/filters/age-filter";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
 import {PersonSearch} from "@repo/app/features/kinch/components/person-search/person-search";
 import {Pagination} from "@repo/app/components/shared/pagination";
@@ -10,9 +10,10 @@ import {PersonScores} from "@repo/app/features/kinch/components/person-scores/pe
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated";
 import styles from "./kinch-ranks.module.css";
+import {ButtonTabs} from "../../components/shared/button-tabs";
 
 export function KinchRanks() {
-	const {rankings} = useData();
+	const {rankings, topRanks} = useData();
 	const {
 		age,
 		wcaid,
@@ -35,6 +36,18 @@ export function KinchRanks() {
 		regionName = rankings.data.countries[rankings.countryIDToIndex[regionInfo.id]].name;
 	}
 
+	const ageOptions = useMemo(() => {
+		if (!topRanks) return [];
+
+		return Array.from(new Set(topRanks
+			.filter(tr => tr.region === region)
+			.map(tr => tr.age)
+		))
+			.sort((a, b) => a - b)
+			.map(age => ({value: age.toString(), label: `${age}+`}));
+	}, [topRanks, region]);
+
+
 	const totalPages = Math.ceil(kinchRanks.length / 25);
 
 	return (
@@ -53,10 +66,10 @@ export function KinchRanks() {
 					continents={regionInfo.continents}
 					countries={regionInfo.countries}
 				/>
-				<AgeFilter
-					value={age}
+				<ButtonTabs
+					selectedValue={age}
 					onChange={(value) => setParams({age: value, page: 1})}
-					region={region}
+					options={ageOptions}
 				/>
 				{totalPages > 1 && !wcaid && (
 					<Pagination

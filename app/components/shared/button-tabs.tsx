@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import styles from "./button-tabs.module.css";
 
-interface TabOption {
+export interface ButtonTabOption {
 	label: string,
 	value: string,
 };
 
 interface ButtonTabsProps {
-	options: TabOption[],
+	options: ButtonTabOption[],
 	selectedValue: string,
 	onChange: (value: string) => void,
 }

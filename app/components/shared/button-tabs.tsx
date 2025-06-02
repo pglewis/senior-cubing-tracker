@@ -9,9 +9,9 @@ interface TabOption {
 interface ButtonTabsProps {
 	options: TabOption[],
 	selectedValue: string,
-	onValueChange: (value: string) => void,
+	onChange: (value: string) => void,
 }
-export function ButtonTabs({options, selectedValue, onValueChange}: ButtonTabsProps) {
+export function ButtonTabs({options, selectedValue, onChange}: ButtonTabsProps) {
 	return (
 		<div className={styles.buttonTabGroup}>
 			{options.map((option) => (
@@ -21,7 +21,7 @@ export function ButtonTabs({options, selectedValue, onValueChange}: ButtonTabsPr
 						styles.buttonTab,
 						(selectedValue === option.value) && styles.active
 					)}
-					onClick={() => onValueChange(option.value)}
+					onClick={() => onChange(option.value)}
 				>
 					{option.label}
 				</button>

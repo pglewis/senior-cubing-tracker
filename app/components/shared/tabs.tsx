@@ -6,14 +6,14 @@ interface TabOption {
 	value: string,
 };
 
-interface AgeGroupTabsProps {
+interface TabsProps {
 	options: TabOption[],
 	selectedValue: string,
 	onValueChange: (value: string) => void,
 	children: ReactNode,
 };
 
-export function Tabs({options, selectedValue, onValueChange, children}: AgeGroupTabsProps) {
+export function Tabs({options, selectedValue, onValueChange, children}: TabsProps) {
 	return (
 		<div className={styles.container}>
 			<div className={styles.tabs}>

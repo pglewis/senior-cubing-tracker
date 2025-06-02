@@ -67,8 +67,6 @@ export function KinchRanks() {
 				)}
 			</div>
 
-			{/* <DataLastUpdated text={rankings.lastUpdated} /> */}
-
 			{wcaid ? (
 				<PersonScores
 					wcaId={wcaid}
@@ -83,6 +81,15 @@ export function KinchRanks() {
 					highlightId={state?.highlight}
 				/>
 			)}
+
+			{totalPages > 1 && !wcaid && (
+				<Pagination
+					currentPage={page}
+					totalPages={totalPages}
+					onPageChange={(newPage) => setParams({page: newPage})}
+				/>
+			)}
+
 			<h3>
 				<Link to="/kinch-ranks/faq" state={{from: `/kinch-ranks?${searchParams.toString()}`}}>
 					What are Kinch Ranks?

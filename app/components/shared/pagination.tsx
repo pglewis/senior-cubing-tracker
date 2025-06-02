@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import clsx from "clsx";
 import styles from "./pagination.module.css";
 
 interface PaginationProps {
@@ -19,7 +20,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 		setInputValue(e.target.value);
 	};
 
-	const handleInputComplete = () => {
+	const handleInputBlur = () => {
 		const pageNumber = parseInt(inputValue.trim(), 10);
 		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
 			onPageChange(pageNumber);
@@ -31,7 +32,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
-			handleInputComplete();
+			handleInputBlur();
 		}
 	};
 
@@ -68,21 +69,22 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 	// Generate page buttons
 	const pageButtons = [];
 	for (let page = startPage; page <= endPage; page++) {
+		const className = clsx(
+			styles.pageButton,
+			(page === currentPage) && styles.pageButtonActive
+		);
+
 		pageButtons.push(
-			<button
-				key={page}
-				className={`${styles.pageButton} ${page === currentPage ? styles.pageButtonActive : ""}`}
-				onClick={() => onPageChange(page)}
-			>
+			<button key={page} className={className} onClick={() => onPageChange(page)}>
 				{page}
 			</button>
 		);
 	}
 
 	return (
-		<div className={styles.pageSelectorBox}>
+		<div className={clsx(styles.pageSelector, styles.container)}>
 			<button
-				className={`${styles.pageButton} ${styles.previous}`}
+				className={clsx(styles.pageButton, styles.previous)}
 				onClick={handlePrevious}
 				disabled={currentPage === 1}
 			>
@@ -90,13 +92,13 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 			</button>
 			{pageButtons}
 			<button
-				className={`${styles.pageButton} ${styles.next}`}
+				className={clsx(styles.pageButton, styles.next)}
 				onClick={handleNext}
 				disabled={currentPage === totalPages}
 			>
 				▶
 			</button>
-			<span style={{marginLeft: ".5em"}}>
+			<span className={styles.pageOf}>
 				page{" "}
 				<input
 					type="text"
@@ -104,11 +106,11 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 					pattern="[0-9]*"
 					value={inputValue}
 					onChange={handleInputChange}
-					onBlur={handleInputComplete}
+					onBlur={handleInputBlur}
 					onKeyDown={handleKeyDown}
 				/>
 				{" "}of {totalPages}
 			</span>
 		</div>
 	);
-}
+};

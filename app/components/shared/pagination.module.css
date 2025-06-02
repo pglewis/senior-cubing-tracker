@@ -1,40 +1,36 @@
-.pageSelectorBox {
-    font-size: .9em;
+.pageSelector.container {
+	font-size: var(--font-size-sm);
 }
 
 .pageButton {
-    width: 1.5em;
-    padding: .25em 0;
-    margin: 0 .1em;
-    border-radius: 8px;
-    text-align: center;
-    background: transparent;
+	width: 1.5em;
+	padding: var(--spacing-xs) 0;
+	margin: 0 .1em;
+	border-radius: var(--border-radius-md);
+	text-align: center;
+	background: transparent;
 }
 
-.pageButton:hover {
-    background: #454545;
-    outline: solid 1px #fff3cc;
+.pageButton:hover:not(.pageButtonActive) {
+	background: var(--color-background-highlight);
 }
 
 .pageButtonActive {
-    background: #e64503;
-    color: #fff;
-    outline: solid 1px #888;
+	background: var(--color-active);
+	color: var(--color-text);
 }
 
-.pageSelectorBox input[type="number"] {
-    font-size: inherit;
-    width: 3em; /* Increased from 2.7em */
+.pageButton:disabled {
+    /* Styles for disabled buttons */
+    opacity: 0.25;
+    cursor: not-allowed;
 }
 
-/* Hide spinner buttons in WebKit browsers */
-.pageSelectorBox input[type="number"]::-webkit-outer-spin-button,
-.pageSelectorBox input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.pageOf {
+	margin-left: var(--spacing-sm);
 }
 
-.pageSelectorBox input[type="text"] {
-    font-size: inherit;
-    width: 3em;
+.pageOf input[type="text"] {
+	font-size: var(--font-size-sm);
+	width: 3em;
 }

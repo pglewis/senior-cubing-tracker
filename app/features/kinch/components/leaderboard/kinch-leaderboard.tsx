@@ -29,12 +29,12 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 		}
 	}, [highlightId]);
 
-	const handleNameClick = (personID: string) => {
+	const handleNameClick = (personId: string) => {
 		// Build the return URL with current params
 		const currentUrl = `${location.pathname}${location.search}`;
 
 		// Navigate to person view with state
-		navigate(`/kinch-ranks?wcaid=${personID}&age=${age}&region=${region}`, {
+		navigate(`/kinch-ranks?wcaid=${personId}&age=${age}&region=${region}`, {
 			state: {from: currentUrl}
 		});
 	};
@@ -51,9 +51,9 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 			<tbody>
 				{displayRanks.map((rank, index) => (
 					<tr
-						key={rank.personID}
-						ref={rank.personID === highlightId ? highlightRef : null}
-						className={`${styles.row} ${rank.personID === highlightId ? styles.highlighted : ""}`}
+						key={rank.personId}
+						ref={rank.personId === highlightId ? highlightRef : null}
+						className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
 					>
 						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
 						<td className={styles.nameColumn}>
@@ -62,7 +62,7 @@ export function KinchLeaderboard({age, region, highlightId}: KinchLeaderboardPro
 								className={styles.link}
 								onClick={(e) => {
 									e.preventDefault();
-									handleNameClick(rank.personID);
+									handleNameClick(rank.personId);
 								}}
 							>
 								{rank.personName}

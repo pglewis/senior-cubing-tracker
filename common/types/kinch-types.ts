@@ -1,6 +1,6 @@
-import type {WCAEventID, EventRanking} from "@repo/common/types/rankings-snapshot";
+import type {WCAEventId, EventRanking} from "@repo/common/types/rankings-snapshot";
 
-export const scoreAverageOnly: Record<WCAEventID, boolean> = {
+export const scoreAverageOnly: Record<WCAEventId, boolean> = {
 	"333": true,
 	"222": true,
 	"444": true,
@@ -21,7 +21,7 @@ export const scoreAverageOnly: Record<WCAEventID, boolean> = {
 };
 
 export interface TopRank {
-	eventID: string,
+	eventId: string,
 	type: "single" | "average",
 	age: number,
 	region: string,
@@ -29,14 +29,14 @@ export interface TopRank {
 };
 
 export interface KinchRank {
-	personID: string,
+	personId: string,
 	personName: string,
 	overall: number,
 	events: KinchEvent[],
 };
 
 export interface KinchEvent {
-	eventID: WCAEventID,
+	eventId: WCAEventId,
 	eventName: string,
 	score: number,
 	result: string,

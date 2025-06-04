@@ -92,8 +92,8 @@ function getFilteredRegions(
 	const {continents, countries} = rankings.data;
 
 	if (wcaId) {
-		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
-		const country = rankings.data.countries[rankings.countryIDToIndex[person.country]];
+		const person = rankings.data.persons[rankings.personIdToIndex[wcaId]];
+		const country = rankings.data.countries[rankings.countryIdToIndex[person.country]];
 		const continent = continents.find(c => c.id === country.continent);
 
 		return {

@@ -56,31 +56,31 @@ async function convertToJson(sourceCode: string): Promise<RankingsSnapshot> {
 }
 
 function processRankingData(data: RankingsSnapshot): ExtendedRankingsData {
-	const competitionIDToIndex = buildCompetitionLookup(data);
-	const personIDToIndex = buildPersonLookup(data);
-	const continentIDToIndex = buildContinentLookup(data);
-	const countryIDToIndex = buildCountryLookup(data);
+	const competitionIdToIndex = buildCompetitionLookup(data);
+	const personIdToIndex = buildPersonLookup(data);
+	const continentIdToIndex = buildContinentLookup(data);
+	const countryIdToIndex = buildCountryLookup(data);
 	const activeRegions = buildActiveRegions(
 		data,
-		personIDToIndex,
-		continentIDToIndex,
-		countryIDToIndex
+		personIdToIndex,
+		continentIdToIndex,
+		countryIdToIndex
 	);
 
 	return {
 		lastUpdated: data.refreshed,
 		data: data,
-		competitionIDToIndex,
-		personIDToIndex,
-		continentIDToIndex,
-		countryIDToIndex,
+		competitionIdToIndex: competitionIdToIndex,
+		personIdToIndex: personIdToIndex,
+		continentIdToIndex: continentIdToIndex,
+		countryIdToIndex: countryIdToIndex,
 		activeRegions: activeRegions,
 	};
 }
 
 //
 function buildCompetitionLookup(rankings: RankingsSnapshot) {
-	const lookup: ExtendedRankingsData["competitionIDToIndex"] = {};
+	const lookup: ExtendedRankingsData["competitionIdToIndex"] = {};
 
 	for (const [index, competition] of rankings.competitions.entries()) {
 		lookup[competition.id] = index;
@@ -90,7 +90,7 @@ function buildCompetitionLookup(rankings: RankingsSnapshot) {
 }
 
 function buildPersonLookup(rankings: RankingsSnapshot) {
-	const lookup: ExtendedRankingsData["personIDToIndex"] = {};
+	const lookup: ExtendedRankingsData["personIdToIndex"] = {};
 
 	for (const [index, person] of rankings.persons.entries()) {
 		lookup[person.id] = index;
@@ -100,7 +100,7 @@ function buildPersonLookup(rankings: RankingsSnapshot) {
 }
 
 function buildContinentLookup(rankings: RankingsSnapshot) {
-	const lookup: ExtendedRankingsData["continentIDToIndex"] = {};
+	const lookup: ExtendedRankingsData["continentIdToIndex"] = {};
 
 	for (const [index, continent] of rankings.continents.entries()) {
 		lookup[continent.id] = index;
@@ -110,7 +110,7 @@ function buildContinentLookup(rankings: RankingsSnapshot) {
 }
 
 function buildCountryLookup(rankings: RankingsSnapshot) {
-	const lookup: ExtendedRankingsData["countryIDToIndex"] = {};
+	const lookup: ExtendedRankingsData["countryIdToIndex"] = {};
 
 	for (const [index, country] of rankings.countries.entries()) {
 		lookup[country.id] = index;
@@ -121,9 +121,9 @@ function buildCountryLookup(rankings: RankingsSnapshot) {
 
 function buildActiveRegions(
 	rankingsData: RankingsSnapshot,
-	personIDToIndex: {[key: string]: number;},
-	continentIDToIndex: {[key: string]: number;},
-	countryIDToIndex: {[key: string]: number;}
+	personIdToIndex: {[key: string]: number;},
+	continentIdToIndex: {[key: string]: number;},
+	countryIdToIndex: {[key: string]: number;}
 ): ExtendedRankingsData["activeRegions"] {
 
 	const continents = new Set<string>();
@@ -132,15 +132,15 @@ function buildActiveRegions(
 	for (const event of rankingsData.events) {
 		for (const eventRanking of event.rankings) {
 			for (const rank of eventRanking.ranks) {
-				const person = rankingsData.persons[personIDToIndex[rank.id]];
+				const person = rankingsData.persons[personIdToIndex[rank.id]];
 				if (!person) {
 					throw new Error(`Missing competitor ID ${rank.id}`);
 				}
-				const country = rankingsData.countries[countryIDToIndex[person.country]];
+				const country = rankingsData.countries[countryIdToIndex[person.country]];
 				if (!country) {
 					throw new Error(`Missing country ID ${person.country}`);
 				}
-				const continent = rankingsData.continents[continentIDToIndex[country.continent]];
+				const continent = rankingsData.continents[continentIdToIndex[country.continent]];
 				if (!continent) {
 					throw new Error(`Missing continent ID ${country.continent}`);
 				}

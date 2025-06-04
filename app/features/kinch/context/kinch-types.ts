@@ -9,7 +9,7 @@ export interface KinchContextParams {
 };
 
 export interface RegionInfo {
-	/** Unprefixed ID (e.g. "NA") */
+	/** Unprefixed id (e.g. "NA") */
     id: string,
     type: "continent" | "country" | "world",
 	continents: Continent[],

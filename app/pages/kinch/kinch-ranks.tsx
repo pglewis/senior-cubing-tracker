@@ -66,7 +66,7 @@ export function KinchRanks() {
 
 			<div className={styles.filters}>
 				<Combobox
-					items={kinchRanks.map(kr => ({value: kr.personID, label: kr.personName}))}
+					items={kinchRanks.map(kr => ({value: kr.personId, label: kr.personName}))}
 					placeholder="Search by name or WCA ID"
 					onSelect={handleSelect}
 					filterFn={filterName}

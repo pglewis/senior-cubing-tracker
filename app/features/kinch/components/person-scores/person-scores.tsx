@@ -25,10 +25,10 @@ export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps
 
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
-	const rankIndex = kinchRanks.findIndex(kr => kr.personID === wcaId);
+	const rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaId);
 	if (rankIndex < 0) {
 		// This could be because the person has no kinch ranks data ()
-		const person = rankings.data.persons[rankings.personIDToIndex[wcaId]];
+		const person = rankings.data.persons[rankings.personIdToIndex[wcaId]];
 		if (!person) {
 			return <div>WCA ID <b>{wcaId}</b> was not found.</div>;
 		}
@@ -51,9 +51,9 @@ export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps
 	if (regionInfo.type === "world") {
 		regionName = "World";
 	} else if (regionInfo.type === "continent") {
-		regionName = rankings.data.continents[rankings.continentIDToIndex[regionInfo.id]].name;
+		regionName = rankings.data.continents[rankings.continentIdToIndex[regionInfo.id]].name;
 	} else {
-		regionName = rankings.data.countries[rankings.countryIDToIndex[regionInfo.id]].name;
+		regionName = rankings.data.countries[rankings.countryIdToIndex[regionInfo.id]].name;
 	}
 
 	return (
@@ -108,7 +108,7 @@ export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps
 				<tbody>
 					{sortedEvents.map(event => (
 						<EventRow
-							key={event.eventID}
+							key={event.eventId}
 							event={event}
 							regionInfo={regionInfo}
 							age={age}
@@ -170,10 +170,10 @@ function EventRow({event, age, regionInfo}: EventRowProps) {
 		} else if (regionInfo.type === "country") {
 			regionParam = "-xx-" + regionInfo.id.toLowerCase();
 		}
-		const rankingURL = `${baseRankingURL}#${event.eventID}-${type}-${age}${regionParam}`;
+		const rankingURL = `${baseRankingURL}#${event.eventId}-${type}-${age}${regionParam}`;
 
 		let resultType = "";
-		if (event.eventID !== "333mbf" && !scoreAverageOnly[event.eventID]) {
+		if (event.eventId !== "333mbf" && !scoreAverageOnly[event.eventId]) {
 			resultType = type === "single" ? " (sing)" : " (avg)";
 		}
 

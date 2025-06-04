@@ -2,10 +2,10 @@ export interface ExtendedRankingsData {
 	/** date/time string of the data snapshot in UTC */
 	lastUpdated: string,
 	data: RankingsSnapshot,
-	personIDToIndex: {[key: string]: number;},
-	competitionIDToIndex: {[key: number]: number;},
-	continentIDToIndex: {[key: string]: number;},
-	countryIDToIndex: {[key: string]: number;},
+	personIdToIndex: {[key: string]: number;},
+	competitionIdToIndex: {[key: number]: number;},
+	continentIdToIndex: {[key: string]: number;},
+	countryIdToIndex: {[key: string]: number;},
 	activeRegions: {
 		continents: Continent["id"][],
 		countries: Country["id"][],
@@ -21,7 +21,7 @@ export interface RankingsSnapshot {
 	countries: Country[],
 };
 
-export type WCAEventID =
+export type WCAEventId =
 	"333" |
 	"222" |
 	"444" |
@@ -42,7 +42,7 @@ export type WCAEventID =
 
 export interface WCAEvent {
 	/** eg 333bf */
-	id: WCAEventID
+	id: WCAEventId
 
 	/** eg 3x3x3 Blindfolded */
 	name: string
@@ -83,7 +83,7 @@ export interface Rank {
 	/** estimated numeric rank (considers missing records) */
 	rank: number
 
-	/** Competitor's WCA ID */
+	/** Competitor's WCA id */
 	id: Person["id"]
 
 	/**
@@ -92,7 +92,7 @@ export interface Rank {
 	 */
 	best: string
 
-	/** Competition ID */
+	/** Competition id */
 	competition: Competition["id"]
 
 	/** Sometimes included, opt-in */
@@ -100,10 +100,10 @@ export interface Rank {
 }
 
 export interface Competition {
-	/** Competition ID */
+	/** Competition id */
 	id: number
 
-	/** Competition web ID for linking */
+	/** Competition web id for linking */
 	webId: string
 
 	/** Competition full name */
@@ -136,7 +136,7 @@ export interface Country {
 }
 
 export interface Person {
-	/** Competitor's WCA ID */
+	/** Competitor's WCA id */
 	id: string
 
 	/** Competitor's full name */
@@ -148,6 +148,6 @@ export interface Person {
 	/** 40, 50, 60, ... */
 	age: string
 
-	/** Array of event IDs competed in */
+	/** Array of event ids competed in */
 	events: WCAEvent["id"][]
 }

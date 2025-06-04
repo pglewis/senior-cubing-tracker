@@ -41,7 +41,7 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 
 			// World ranking (no prefix needed)
 			topRanks.push({
-				eventID: event.id,
+				eventId: event.id,
 				type: eventRanking.type,
 				age: age,
 				region: "world",
@@ -50,18 +50,18 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 
 			const regions = new Set<string>();
 
-			// rank, id (WCAID), best (event result), competition (Competition["id"]),
+			// rank, id (WCA id), best (event result), competition (Competition["id"]),
 			for (const rank of ranks) {
-				const person = rankingsData.persons[rankings.personIDToIndex[rank.id]];
-				const country = rankingsData.countries[rankings.countryIDToIndex[person.country]];
-				const continent = rankingsData.continents[rankings.continentIDToIndex[country.continent]];
+				const person = rankingsData.persons[rankings.personIdToIndex[rank.id]];
+				const country = rankingsData.countries[rankings.countryIdToIndex[person.country]];
+				const continent = rankingsData.continents[rankings.continentIdToIndex[country.continent]];
 
 				// First ranking for each continent is the top ranking for the region
 				const continentRegion = toRegionParam(continent.id, true);
 				if (!regions.has(continentRegion)) {
 					regions.add(continentRegion);
 					topRanks.push({
-						eventID: event.id,
+						eventId: event.id,
 						type: eventRanking.type,
 						age: age,
 						region: continentRegion,
@@ -74,7 +74,7 @@ export function buildTopRanks(rankings: ExtendedRankingsData): TopRank[] {
 				if (!regions.has(countryRegion)) {
 					regions.add(countryRegion);
 					topRanks.push({
-						eventID: event.id,
+						eventId: event.id,
 						type: eventRanking.type,
 						age: age,
 						region: countryRegion,

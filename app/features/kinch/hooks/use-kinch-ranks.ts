@@ -16,7 +16,7 @@ import {useData} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
 	age: string;
-	region: string; // Prefixed region ID (e.g. "CNA" or "NNA")
+	region: string; // Prefixed region id (e.g. "CNA" or "NNA")
 }
 
 // Outside component - persists across component unmounts
@@ -62,23 +62,23 @@ function getRanksForPerson(
 	rankings: ExtendedRankingsData,
 	topRanks: TopRank[],
 	filters: KinchFilters,
-	personID: string,
+	personId: string,
 ): KinchRank {
 	const rankingsData = rankings.data;
-	const person = rankingsData.persons[rankings.personIDToIndex[personID]];
+	const person = rankingsData.persons[rankings.personIdToIndex[personId]];
 	if (!person) {
-		throw new Error(`We were looking for someone's rankings but WCA ID "${personID}" was not found.`);
+		throw new Error(`We were looking for someone's rankings but WCA ID "${personId}" was not found.`);
 	}
 
 	const kinchRank: KinchRank = {
-		personID: personID,
+		personId: personId,
 		personName: person.name,
 		overall: 0,
 		events: [] as KinchEvent[]
 	};
 
-	const country = rankingsData.countries[rankings.countryIDToIndex[person.country]];
-	const continent = rankingsData.continents[rankings.continentIDToIndex[country.continent]];
+	const country = rankingsData.countries[rankings.countryIdToIndex[person.country]];
+	const continent = rankingsData.continents[rankings.continentIdToIndex[country.continent]];
 
 	// Check if person belongs to the selected region
 	if (filters.region !== "world" &&
@@ -92,7 +92,7 @@ function getRanksForPerson(
 		if (!person.events.includes(event.id)) {
 			// They've never competed in this event at all
 			kinchRank.events.push({
-				eventID: event.id,
+				eventId: event.id,
 				eventName: event.name,
 				score: 0,
 				result: "",
@@ -100,13 +100,13 @@ function getRanksForPerson(
 			});
 		} else if (event.id === "333mbf") {
 			// Multi blind is a special case
-			kinchRank.events.push(getPersonMultiScore(topRanks, personID, event, filters));
+			kinchRank.events.push(getPersonMultiScore(topRanks, personId, event, filters));
 		} else if (scoreAverageOnly[event.id]) {
 			// Use the average
-			kinchRank.events.push(getPersonAverageScore(topRanks, personID, event, filters));
+			kinchRank.events.push(getPersonAverageScore(topRanks, personId, event, filters));
 		} else {
 			// best of single or average
-			kinchRank.events.push(getPersonSingeleOrAverageScore(topRanks, personID, event, filters));
+			kinchRank.events.push(getPersonSingeleOrAverageScore(topRanks, personId, event, filters));
 		}
 	}
 
@@ -116,12 +116,12 @@ function getRanksForPerson(
 
 function getTopRank(
 	topRanks: TopRank[],
-	eventID: string,
+	eventId: string,
 	type: EventRanking["type"],
 	filters: KinchFilters
 ): TopRank | undefined {
 	const topRank = topRanks.find(r =>
-		r.eventID === eventID &&
+		r.eventId === eventId &&
 		r.type === type &&
 		r.age === Number(filters.age) &&
 		r.region === filters.region // filters.region is already prefixed
@@ -133,7 +133,7 @@ function getTopRank(
 function getPersonResult(
 	event: WCAEvent,
 	type: EventRanking["type"],
-	personID: string,
+	personId: string,
 	filters: KinchFilters
 ): string | undefined {
 	const eventRanking = event.rankings.find(
@@ -145,7 +145,7 @@ function getPersonResult(
 		return undefined;
 	}
 
-	const rank = eventRanking.ranks.find(r => r.id === personID);
+	const rank = eventRanking.ranks.find(r => r.id === personId);
 	if (!rank) {
 		return undefined;
 	}
@@ -155,16 +155,16 @@ function getPersonResult(
 
 function getPersonAverageScore(
 	topRanks: TopRank[],
-	personID: string,
+	personId: string,
 	event: WCAEvent,
 	filters: KinchFilters
 ): KinchEvent {
 	const topRank = getTopRank(topRanks, event.id, "average", filters);
-	const result = getPersonResult(event, "average", personID, filters);
+	const result = getPersonResult(event, "average", personId, filters);
 
 	if (!result || !topRank) {
 		return {
-			eventID: event.id,
+			eventId: event.id,
 			eventName: event.name,
 			score: 0,
 			result: "",
@@ -173,7 +173,7 @@ function getPersonAverageScore(
 	}
 
 	return {
-		eventID: event.id,
+		eventId: event.id,
 		eventName: event.name,
 		score: getPersonScore(event.format, topRank, result),
 		result: result,
@@ -183,19 +183,19 @@ function getPersonAverageScore(
 
 function getPersonSingeleOrAverageScore(
 	topRanks: TopRank[],
-	personID: string,
+	personId: string,
 	event: WCAEvent,
 	filters: KinchFilters
 ): KinchEvent {
 	const singleTopRank = getTopRank(topRanks, event.id, "single", filters);
 	const averageTopRank = getTopRank(topRanks, event.id, "average", filters);
-	const singleResult = getPersonResult(event, "single", personID, filters);
-	const averageResult = getPersonResult(event, "average", personID, filters);
+	const singleResult = getPersonResult(event, "single", personId, filters);
+	const averageResult = getPersonResult(event, "average", personId, filters);
 
 	if (!singleResult || !singleTopRank) {
 		// We can end up here if they've competed in the event but not in this age bracket
 		return {
-			eventID: event.id,
+			eventId: event.id,
 			eventName: event.name,
 			score: 0,
 			result: "",
@@ -227,7 +227,7 @@ function getPersonSingeleOrAverageScore(
 	}
 
 	return {
-		eventID: event.id,
+		eventId: event.id,
 		eventName: event.name,
 		score: score,
 		result: result,
@@ -249,16 +249,16 @@ function getPersonScore(
 
 function getPersonMultiScore(
 	topRanks: TopRank[],
-	personID: string,
+	personId: string,
 	event: WCAEvent,
 	filters: KinchFilters
 ): KinchEvent {
 	const topRank = getTopRank(topRanks, event.id, "single", filters); // We just use single for mbld
-	const result = getPersonResult(event, "single", personID, filters);
+	const result = getPersonResult(event, "single", personId, filters);
 
 	if (!result || !topRank) {
 		return {
-			eventID: event.id,
+			eventId: event.id,
 			eventName: event.name,
 			score: 0,
 			result: "",
@@ -268,7 +268,7 @@ function getPersonMultiScore(
 
 	// Bigger result is better for mbld, so the division is reversed
 	return {
-		eventID: event.id,
+		eventId: event.id,
 		eventName: event.name,
 		score: (getKinchMultiScore(result) / getKinchMultiScore(topRank.result)) * 100,
 		result: result,

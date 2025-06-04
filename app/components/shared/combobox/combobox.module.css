@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.results {
+.list {
     position: absolute;
     top: 100%;
     left: 0;
@@ -17,15 +17,16 @@
     z-index: 10;
 }
 
-.results li {
+.list li {
+	margin: 0;
     padding: var(--spacing-sm);
     cursor: pointer;
 }
 
-.results li:hover {
+.list li:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.results li.highlighted {
+.list li.highlighted {
     background: rgba(255, 255, 255, 0.2);
 }

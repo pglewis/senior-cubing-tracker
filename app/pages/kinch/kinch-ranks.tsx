@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {Link, useLocation, useSearchParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {Pagination} from "@repo/app/components/shared/pagination";
 import {ButtonTabs} from "@repo/app/components/shared/button-tabs";
@@ -7,12 +7,13 @@ import {DataLastUpdated} from "@repo/app/components/data-last-updated";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
-import {PersonSearch} from "@repo/app/features/kinch/components/person-search/person-search";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
+import {Combobox, type ComboboxItem} from "../../components/shared/combobox/combobox";
 import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
+	const ROWS_PER_PAGE = 25;
 	const {rankings, topRanks} = useData();
 	const {
 		age,
@@ -24,7 +25,9 @@ export function KinchRanks() {
 	} = useKinchContext();
 	const {state} = useLocation();
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const kinchRanks = useKinchRanks({age, region});
+	const totalPages = Math.ceil(kinchRanks.length / ROWS_PER_PAGE);
 
 	const ageOptions = useMemo(() => {
 		if (!topRanks) return [];
@@ -37,18 +40,36 @@ export function KinchRanks() {
 			.map(age => ({value: age.toString(), label: `${age}+`}));
 	}, [topRanks, region]);
 
+	const handleSelect = (item: ComboboxItem) => {
+		// Build the return URL with current params
+		const currentUrl = `${location.pathname}${location.search}`;
 
-	const totalPages = Math.ceil(kinchRanks.length / 25);
+		// Navigate with state instead of using onSelect
+		navigate(`/kinch-ranks?wcaid=${item.value}&age=${age}&region=world`, {
+			state: {from: currentUrl}
+		});
+
+		setParams({wcaid: item.value, age, region, page: 1});
+	};
+
+	const filterName = (item: ComboboxItem, searchTerm: string) => {
+		return [item.label, item.value].some(field =>
+			field.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+	};
 
 	return (
 		<div className={styles.container}>
 			<h2>Senior Kinch Ranks</h2>
 
 			<DataLastUpdated text={rankings.lastUpdated} />
+
 			<div className={styles.filters}>
-				<PersonSearch
-					age={age}
-					region={region} // Prefixed with continent/country prefix
+				<Combobox
+					items={kinchRanks.map(kr => ({value: kr.personID, label: kr.personName}))}
+					placeholder="Search by name or WCA ID"
+					onSelect={handleSelect}
+					filterFn={filterName}
 				/>
 				<RegionFilter
 					value={region}

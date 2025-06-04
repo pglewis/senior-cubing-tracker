@@ -2,8 +2,8 @@ import clsx from "clsx";
 import styles from "./button-tabs.module.css";
 
 export interface ButtonTabOption {
-	label: string,
 	value: string,
+	label: string,
 };
 
 interface ButtonTabsProps {

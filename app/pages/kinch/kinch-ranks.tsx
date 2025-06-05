@@ -56,6 +56,16 @@ export function KinchRanks() {
 		setParams({page: newPage});
 	};
 
+	const handleNameClick = (personId: string) => {
+		// Build the return URL with current params
+		const currentUrl = `${location.pathname}${location.search}`;
+
+		// Navigate to person view with state
+		navigate(`/kinch-ranks?wcaid=${personId}&age=${age}&region=${region}`, {
+			state: {from: currentUrl, highlight: personId}
+		});
+	};
+
 	const handleSelect = (item: ComboboxItem) => {
 		// Build the return URL with current params
 		const currentUrl = `${location.pathname}${location.search}`;
@@ -118,8 +128,9 @@ export function KinchRanks() {
 				/>
 			) : (
 				<KinchLeaderboard
-					age={age}
-					region={region}
+					displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
+					startIdx={(page - 1) * ROWS_PER_PAGE}
+					onNameClick={handleNameClick}
 					highlightId={state?.highlight}
 				/>
 			)}

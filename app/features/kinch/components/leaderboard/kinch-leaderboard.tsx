@@ -1,14 +1,17 @@
 import {useEffect, useRef} from "react";
+import {Link} from "react-router-dom";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
 	startIdx: number,
 	onNameClick: (personId: string) => void,
+	age: string,
+	region: string,
 	highlightId?: string,
 };
 
-export function KinchLeaderboard({displayRanks, startIdx, onNameClick, highlightId}: KinchLeaderboardProps) {
+export function KinchLeaderboard({displayRanks, startIdx, onNameClick, age, region, highlightId}: KinchLeaderboardProps) {
 	const highlightRef = useRef<HTMLTableRowElement>(null);
 
 	useEffect(() => {
@@ -35,16 +38,13 @@ export function KinchLeaderboard({displayRanks, startIdx, onNameClick, highlight
 					>
 						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
 						<td className={styles.nameColumn}>
-							<a
-								href="#"
+							<Link
+								to={`/kinch-ranks?wcaid=${rank.personId}&age=${age}&region=${region}`}
 								className={styles.link}
-								onClick={(e) => {
-									e.preventDefault();
-									onNameClick(rank.personId);
-								}}
+								onClick={() => onNameClick(rank.personId)}
 							>
 								{rank.personName}
-							</a>
+							</Link>
 						</td>
 						<td className={styles.scoreColumn}>{rank.overall.toFixed(2)}</td>
 					</tr>

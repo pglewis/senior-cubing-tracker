@@ -66,7 +66,7 @@ export function KinchRanks() {
 		});
 	};
 
-	const handleSelect = (item: ComboboxItem) => {
+	const handleNameSearchSelect = (item: ComboboxItem) => {
 		// Build the return URL with current params
 		const currentUrl = `${location.pathname}${location.search}`;
 
@@ -94,7 +94,7 @@ export function KinchRanks() {
 				<Combobox
 					items={kinchRanks.map(kr => ({value: kr.personId, label: kr.personName}))}
 					placeholder="Search by name or WCA ID"
-					onSelect={handleSelect}
+					onSelect={handleNameSearchSelect}
 					filterFn={filterName}
 				/>
 				<RegionFilter
@@ -131,6 +131,8 @@ export function KinchRanks() {
 					displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
 					startIdx={(page - 1) * ROWS_PER_PAGE}
 					onNameClick={handleNameClick}
+					age={age}
+					region={region}
 					highlightId={state?.highlight}
 				/>
 			)}

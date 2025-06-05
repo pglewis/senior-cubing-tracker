@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
-import {KofiButton} from "../layout/kofi-button";
+import {KofiButton} from "../kofi-button/kofi-button";
 import styles from "./main-nav.module.css";
 
 export function MainNav() {

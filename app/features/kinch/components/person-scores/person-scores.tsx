@@ -4,7 +4,7 @@ import {Link, useLocation} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
-import {Card} from "@repo/app/components/shared/card";
+import {Card} from "@repo/app/components/card/card";
 import styles from "./person-scores.module.css";
 import type {RegionInfo} from "@repo/app/features/kinch/context/kinch-types";
 

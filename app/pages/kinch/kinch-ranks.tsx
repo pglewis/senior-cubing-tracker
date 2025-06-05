@@ -1,15 +1,15 @@
 import {useMemo, useRef, useEffect} from "react";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
-import {Pagination} from "@repo/app/components/shared/pagination";
-import {ButtonTabs} from "@repo/app/components/shared/button-tabs";
-import {DataLastUpdated} from "@repo/app/components/data-last-updated";
+import {Pagination} from "@repo/app/components/pagination/pagination";
+import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
+import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
-import {Combobox, type ComboboxItem} from "../../components/shared/combobox/combobox";
+import {Combobox, type ComboboxItem} from "../../components/combobox/combobox";
 import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {

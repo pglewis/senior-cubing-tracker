@@ -1,4 +1,4 @@
-import {useMemo} from "react";
+import {useMemo, useRef, useEffect} from "react";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useData} from "@repo/app/hooks/use-data";
 import {Pagination} from "@repo/app/components/shared/pagination";
@@ -14,6 +14,7 @@ import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
 	const ROWS_PER_PAGE = 25;
+	const topPaginationRef = useRef<HTMLDivElement>(null);
 	const {rankings, topRanks} = useData();
 	const {
 		age,
@@ -39,6 +40,21 @@ export function KinchRanks() {
 			.sort((a, b) => a - b)
 			.map(age => ({value: age.toString(), label: `${age}+`}));
 	}, [topRanks, region]);
+
+	useEffect(() => {
+		const isElementVisible = (element: HTMLElement): boolean => {
+			const rect = element.getBoundingClientRect();
+			return rect.bottom > 0 && rect.top < window.innerHeight;
+		};
+
+		if (topPaginationRef.current && !isElementVisible(topPaginationRef.current)) {
+			window.scrollTo({top: 0, behavior: "smooth"});
+		}
+	}, [page]);
+
+	const handlePageChange = (newPage: number) => {
+		setParams({page: newPage});
+	};
 
 	const handleSelect = (item: ComboboxItem) => {
 		// Build the return URL with current params
@@ -83,11 +99,13 @@ export function KinchRanks() {
 					options={ageOptions}
 				/>
 				{totalPages > 1 && !wcaid && (
-					<Pagination
-						currentPage={page}
-						totalPages={totalPages}
-						onPageChange={(newPage) => setParams({page: newPage})}
-					/>
+					<div ref={topPaginationRef}>
+						<Pagination
+							currentPage={page}
+							totalPages={totalPages}
+							onPageChange={handlePageChange}
+						/>
+					</div>
 				)}
 			</div>
 
@@ -110,7 +128,7 @@ export function KinchRanks() {
 				<Pagination
 					currentPage={page}
 					totalPages={totalPages}
-					onPageChange={(newPage) => setParams({page: newPage})}
+					onPageChange={handlePageChange}
 				/>
 			)}
 

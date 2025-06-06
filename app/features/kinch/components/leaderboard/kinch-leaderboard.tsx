@@ -6,12 +6,11 @@ interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
 	startIdx: number,
 	onNameClick: (personId: string) => void,
-	age: string,
-	region: string,
+	getPersonUrl: (personId: string) => string,
 	highlightId?: string,
 };
 
-export function KinchLeaderboard({displayRanks, startIdx, onNameClick, age, region, highlightId}: KinchLeaderboardProps) {
+export function KinchLeaderboard({displayRanks, startIdx, onNameClick, getPersonUrl, highlightId}: KinchLeaderboardProps) {
 	const highlightRef = useRef<HTMLTableRowElement>(null);
 
 	useEffect(() => {
@@ -39,7 +38,7 @@ export function KinchLeaderboard({displayRanks, startIdx, onNameClick, age, regi
 						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
 						<td className={styles.nameColumn}>
 							<Link
-								to={`/kinch-ranks?wcaid=${rank.personId}&age=${age}&region=${region}`}
+								to={getPersonUrl(rank.personId)}
 								className={styles.link}
 								onClick={() => onNameClick(rank.personId)}
 							>

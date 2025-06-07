@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import {ExternalLinks} from "../components/external-links/external-links";
 
 export function Home() {

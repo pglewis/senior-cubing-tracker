@@ -1,5 +1,5 @@
 import {useMemo, type ReactNode} from "react";
-import {useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router";
 import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";

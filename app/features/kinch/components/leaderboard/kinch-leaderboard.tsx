@@ -1,5 +1,5 @@
 import {useEffect, useRef} from "react";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {

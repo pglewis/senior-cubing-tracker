@@ -1,5 +1,5 @@
 import {useRef, useEffect} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation} from "react-router";
 import {Pagination} from "@repo/app/components/pagination/pagination";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";

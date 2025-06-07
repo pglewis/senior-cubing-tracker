@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {Link, useNavigate, useSearchParams} from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router";
 import {ROUTES, buildKinchPersonRoute} from "@repo/app/routes";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";

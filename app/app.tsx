@@ -1,4 +1,4 @@
-import {createBrowserRouter, RouterProvider, Outlet} from "react-router-dom";
+import {createBrowserRouter, RouterProvider, Outlet} from "react-router";
 import {PageLayout} from "@repo/app/components/layout/page-layout";
 import {Home} from "@repo/app/pages/home";
 import {Recent} from "@repo/app/pages/recent";

@@ -20,7 +20,6 @@
 }
 
 .buttonTab:hover:not(.active) {
-	box-sizing: border-box;
 	background-color: var(--color-background-highlight);
 }
 
@@ -28,4 +27,7 @@
 	background: var(--color-active);
 	color: white;
 	opacity: 1;
+
+	/* kludge to try to avoid edge gaps due to rounding */
+	transform: scaleX(1.001);
 }

@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {DataContext} from "@repo/app/contexts/data-instance";
+import {DataContext} from "@repo/app/contexts/data-context";
 import type {DataContextType} from "@repo/app/contexts/data-types";
 
 interface InitializedData extends DataContextType {

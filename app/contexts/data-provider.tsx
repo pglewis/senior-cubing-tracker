@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import type {ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 import type {TopRank} from "@repo/common/types/kinch-types";
-import {DataContext} from "./data-instance";
+import {DataContext} from "./data-context";
 
 export function DataProvider({children}: {children: React.ReactNode;}) {
 	const [rankings, setRankings] = useState<ExtendedRankingsData | null>(null);

@@ -5,17 +5,16 @@ import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
 	startIdx: number,
-	onNameClick: (personId: string) => void,
 	getPersonUrl: (personId: string) => string,
 	highlightId?: string,
 };
 
-export function KinchLeaderboard({displayRanks, startIdx, onNameClick, getPersonUrl, highlightId}: KinchLeaderboardProps) {
+export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highlightId}: KinchLeaderboardProps) {
 	const highlightRef = useRef<HTMLTableRowElement>(null);
 
 	useEffect(() => {
 		if (highlightId && highlightRef.current) {
-			highlightRef.current.scrollIntoView();
+			//	highlightRef.current.scrollIntoView();
 		}
 	}, [highlightId]);
 
@@ -40,7 +39,6 @@ export function KinchLeaderboard({displayRanks, startIdx, onNameClick, getPerson
 							<Link
 								to={getPersonUrl(rank.personId)}
 								className={styles.link}
-								onClick={() => onNameClick(rank.personId)}
 							>
 								{rank.personName}
 							</Link>

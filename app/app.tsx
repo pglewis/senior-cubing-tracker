@@ -4,6 +4,7 @@ import {Home} from "@repo/app/pages/home";
 import {Recent} from "@repo/app/pages/recent";
 import {KinchRanks} from "./pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
+import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Results} from "@repo/app/pages/results";
 import {KinchProvider} from "@repo/app/features/kinch/context/kinch-context";
 
@@ -27,7 +28,12 @@ const router = createBrowserRouter([
 					{
 						index: true,
 						element: <KinchRanks />
-					}, {
+					},
+					{
+						path: ":wcaid",
+						element: <PersonScoresPage />
+					},
+					{
 						path: "faq",
 						element: <KinchRanksFaq />
 					}

@@ -7,9 +7,9 @@ import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
-import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
 import {Combobox, type ComboboxItem} from "../../components/combobox/combobox";
+import {ROUTES, buildKinchPersonRoute} from "../../routes";
 import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
@@ -18,7 +18,6 @@ export function KinchRanks() {
 	const {rankings, topRanks} = useData();
 	const {
 		age,
-		wcaid,
 		region,
 		regionInfo,
 		page,
@@ -47,35 +46,30 @@ export function KinchRanks() {
 			return rect.bottom > 0 && rect.top < window.innerHeight;
 		};
 
-		if (topPaginationRef.current && !isElementVisible(topPaginationRef.current)) {
-			window.scrollTo({top: 0, behavior: "smooth"});
+		// Don't scroll to top if we have a highlight to show
+		if (state?.highlight) {
+			return;
 		}
-	}, [page]);
 
+		if (topPaginationRef.current && !isElementVisible(topPaginationRef.current)) {
+			// 	window.scrollTo({top: 0, behavior: "smooth"});
+		}
+	}, [page, state?.highlight]);
+
+	// Pagination
 	const handlePageChange = (newPage: number) => {
 		setParams({page: newPage});
 	};
 
-	const handleNameClick = (personId: string) => {
-		// Build the return URL with current params
-		const currentUrl = `${location.pathname}${location.search}`;
-
-		// Navigate to person view with state
-		navigate(`/kinch-ranks?wcaid=${personId}&age=${age}&region=${region}`, {
-			state: {from: currentUrl, highlight: personId}
-		});
+	// Leaderboard
+	const getPersonUrl = (personId: string) => {
+		return buildKinchPersonRoute(personId) + `?age=${age}&region=${region}`;
 	};
 
+	// Name search
 	const handleNameSearchSelect = (item: ComboboxItem) => {
-		// Build the return URL with current params
-		const currentUrl = `${location.pathname}${location.search}`;
-
-		// Navigate with state instead of using onSelect
-		navigate(`/kinch-ranks?wcaid=${item.value}&age=${age}&region=world`, {
-			state: {from: currentUrl}
-		});
-
-		setParams({wcaid: item.value, age, region, page: 1});
+		navigate(buildKinchPersonRoute(item.value) + `?age=${age}&region=world`);
+		setParams({age, region, page: 1});
 	};
 
 	const filterName = (item: ComboboxItem, searchTerm: string) => {
@@ -108,7 +102,7 @@ export function KinchRanks() {
 					onChange={(value) => setParams({age: value, page: 1})}
 					options={ageOptions}
 				/>
-				{totalPages > 1 && !wcaid && (
+				{totalPages > 1 && (
 					<div ref={topPaginationRef}>
 						<Pagination
 							currentPage={page}
@@ -119,25 +113,14 @@ export function KinchRanks() {
 				)}
 			</div>
 
-			{wcaid ? (
-				<PersonScores
-					wcaId={wcaid}
-					age={age}
-					region={region}
-					regionInfo={regionInfo}
-				/>
-			) : (
-				<KinchLeaderboard
-					displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
-					startIdx={(page - 1) * ROWS_PER_PAGE}
-					onNameClick={handleNameClick}
-					age={age}
-					region={region}
-					highlightId={state?.highlight}
-				/>
-			)}
+			<KinchLeaderboard
+				displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
+				startIdx={(page - 1) * ROWS_PER_PAGE}
+				getPersonUrl={getPersonUrl}
+				highlightId={state?.highlight}
+			/>
 
-			{totalPages > 1 && !wcaid && (
+			{totalPages > 1 && (
 				<Pagination
 					currentPage={page}
 					totalPages={totalPages}
@@ -146,7 +129,7 @@ export function KinchRanks() {
 			)}
 
 			<h3>
-				<Link to="/kinch-ranks/faq" state={{from: `/kinch-ranks?${searchParams.toString()}`}}>
+				<Link to={`${ROUTES.KINCH_FAQ}`} state={{from: `${ROUTES.KINCH_RANKS}?${searchParams.toString()}`}}>
 					What are Kinch Ranks?
 				</Link>
 			</h3>

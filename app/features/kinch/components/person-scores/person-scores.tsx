@@ -1,77 +1,66 @@
-import {useState, type JSX} from "react";
-import {Link, useLocation} from "react-router-dom";
+import {useState} from "react";
+import {Link} from "react-router-dom";
 import clsx from "clsx";
-import {useData} from "@repo/app/hooks/use-data";
-import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
-import {scoreAverageOnly, type KinchEvent} from "@repo/common/types/kinch-types";
+import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
 import {Card} from "@repo/app/components/card/card";
 import styles from "./person-scores.module.css";
-import type {RegionInfo} from "@repo/app/features/kinch/context/kinch-context-types";
-
-const ROWS_PER_PAGE = 25; // Match the leaderboard constant
 
 interface PersonScoresProps {
-	wcaId: string,
+	// Pre-processed person data
+	personKinchRank: KinchRank,
+	kinchRanking: number,
+	regionName: string,
 	age: string,
-	region: string, // Prefixed with continent/country prefix
-	regionInfo: RegionInfo,
-}
+	returnPath: string,
+	getRankingUrl: (event: KinchEvent) => string,
+	getShowInRankingsUrl: (targetPage: number) => string,
+	rowsPerPage: number,
+};
 
-export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps) {
-	const {rankings} = useData();
-	const kinchRanks = useKinchRanks({age, region});
-	const {state} = useLocation();
-	const returnPath = state?.from || "/kinch-ranks";
-
+export function PersonScores(props: PersonScoresProps) {
+	const {
+		personKinchRank,
+		kinchRanking,
+		regionName,
+		age,
+		returnPath,
+		getRankingUrl,
+		getShowInRankingsUrl,
+		rowsPerPage,
+	} = props;
 	const [sortBy, setSortBy] = useState<"event" | "score">("event");
 
-	const rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaId);
-	if (rankIndex < 0) {
-		// This could be because the person has no kinch ranks data ()
-		const person = rankings.data.persons[rankings.personIdToIndex[wcaId]];
-		if (!person) {
-			return <div>WCA ID <b>{wcaId}</b> was not found.</div>;
-		}
-		return <div><h3>{person.name}</h3><p>No Kinch ranks available for this age group.</p></div>;
-	}
-
-	const kinchRank = kinchRanks[rankIndex];
-	const ranking = rankIndex + 1;
-	const targetPage = Math.ceil(ranking / ROWS_PER_PAGE);
-	const competitorURL = `https://www.worldcubeassociation.org/persons/${wcaId}`;
-
 	// Default: sort by WCA event sort order (kinchRank events are already in this order)
-	const sortedEvents = [...kinchRank.events];
+	const sortedEvents = [...personKinchRank.events];
 	if (sortBy === "score") {
 		sortedEvents.sort((a, b) => b.score - a.score);
 	}
 
-	// Extract the display name for the selected region ("World", "Europe", "Italy")
-	let regionName: string;
-	if (regionInfo.type === "world") {
-		regionName = "World";
-	} else if (regionInfo.type === "continent") {
-		regionName = rankings.data.continents[rankings.continentIdToIndex[regionInfo.id]].name;
-	} else {
-		regionName = rankings.data.countries[rankings.countryIdToIndex[regionInfo.id]].name;
-	}
+	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
+	const competitorURL = `https://www.worldcubeassociation.org/persons/${personKinchRank.personId}`;
 
 	return (
 		<div className={styles.personScores}>
 			<Card>
 				<h3 className={styles.personName}>
 					<a className={styles.link} href={competitorURL} target="_blank">
-						{kinchRank.personName}
+						{personKinchRank.personName}
 					</a>
 				</h3>
 				<div>
 					{regionName}, {age}+
 				</div>
 				<div>
-					Rank: #{ranking} (<ShowInRankingsListLink targetPage={targetPage} wcaId={wcaId} age={age} region={region} />)
+					Rank: #{kinchRanking} (
+					<ShowInRankingsListLink
+						targetPage={targetPage}
+						wcaId={personKinchRank.personId}
+						getShowInRankingsUrl={getShowInRankingsUrl}
+					/>
+					)
 				</div>
 				<div>
-					Overall score: {kinchRank.overall.toFixed(2)}
+					Overall score: {personKinchRank.overall.toFixed(2)}
 				</div>
 				<Link className={styles.returnLink} to={returnPath}>
 					← Return to previous view
@@ -110,8 +99,7 @@ export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps
 						<EventRow
 							key={event.eventId}
 							event={event}
-							regionInfo={regionInfo}
-							age={age}
+							getRankingUrl={getRankingUrl}
 						/>
 					))}
 				</tbody>
@@ -122,30 +110,23 @@ export function PersonScores({wcaId, age, region, regionInfo}: PersonScoresProps
 
 interface ShowInRankingsListLinkProps {
 	targetPage: number,
-	age: string,
-	region: string,
 	wcaId: string,
+	getShowInRankingsUrl: (targetPage: number) => string,
 };
 
-function ShowInRankingsListLink({targetPage, age, region, wcaId}: ShowInRankingsListLinkProps) {
+function ShowInRankingsListLink({targetPage, wcaId, getShowInRankingsUrl}: ShowInRankingsListLinkProps) {
 	return (
-		<Link
-			to={`/kinch-ranks?page=${targetPage}&age=${age}&region=${region}`}
-			state={{highlight: wcaId}}
-			className={styles.link}
-		>
+		<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: wcaId}}>
 			Show in rankings list
 		</Link>
 	);
 }
-
 interface EventRowProps {
 	event: KinchEvent,
-	age: string,
-	regionInfo: RegionInfo,
-};
+	getRankingUrl: (event: KinchEvent) => string,
+}
 
-function EventRow({event, age, regionInfo}: EventRowProps) {
+function EventRow({event, getRankingUrl}: EventRowProps) {
 	const {eventName, score, result, type} = event;
 
 	let scoreClass;
@@ -160,17 +141,9 @@ function EventRow({event, age, regionInfo}: EventRowProps) {
 		scoreDisplay = "--";
 	}
 
-	let resultText: string | JSX.Element = "--";
+	let resultText: string | React.ReactNode = "--";
 	if (result) {
-		// Build the URL to the correct event/type/age/region listing
-		const baseRankingURL = "https://wca-seniors.org/Senior_Rankings.html";
-		let regionParam = "";
-		if (regionInfo.type === "continent") {
-			regionParam = "-" + regionInfo.id.toLowerCase();
-		} else if (regionInfo.type === "country") {
-			regionParam = "-xx-" + regionInfo.id.toLowerCase();
-		}
-		const rankingURL = `${baseRankingURL}#${event.eventId}-${type}-${age}${regionParam}`;
+		const rankingURL = getRankingUrl(event);
 
 		let resultType = "";
 		if (event.eventId !== "333mbf" && !scoreAverageOnly[event.eventId]) {

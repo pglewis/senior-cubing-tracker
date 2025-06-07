@@ -1,13 +1,13 @@
 import {useEffect, useState, useCallback, type ReactNode} from "react";
 import type {ResolvedTheme, ThemeOption} from "./theme-types";
-import {ThemeContext} from "./theme-instance";
+import {ThemeContext} from "./theme-context";
 
 interface ThemeProviderProps {
 	children: ReactNode;
 }
 
 export function ThemeProvider({children}: ThemeProviderProps) {
-	const [theme, setThemeState] = useState<ThemeOption>("dark"); // Default fallback
+	const [theme, setTheme] = useState<ThemeOption>("system"); // Default fallback
 	const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("dark");
 
 	const getSystemTheme = useCallback((): ResolvedTheme => {
@@ -25,8 +25,8 @@ export function ThemeProvider({children}: ThemeProviderProps) {
 		document.documentElement.setAttribute("data-theme", resolvedTheme);
 	}, []);
 
-	const setTheme = (newTheme: ThemeOption) => {
-		setThemeState(newTheme);
+	const updateTheme = (newTheme: ThemeOption) => {
+		setTheme(newTheme);
 		localStorage.setItem("theme", newTheme);
 
 		const resolved = resolveTheme(newTheme);
@@ -42,7 +42,7 @@ export function ThemeProvider({children}: ThemeProviderProps) {
 
 		const resolved = resolveTheme(initialTheme);
 
-		setThemeState(initialTheme);
+		setTheme(initialTheme);
 		setResolvedTheme(resolved);
 		applyTheme(resolved);
 	}, [resolveTheme, applyTheme]);
@@ -64,7 +64,7 @@ export function ThemeProvider({children}: ThemeProviderProps) {
 	}, [theme, getSystemTheme, applyTheme]);
 
 	return (
-		<ThemeContext.Provider value={{theme, resolvedTheme, setTheme}}>
+		<ThemeContext.Provider value={{theme, resolvedTheme, setTheme: updateTheme}}>
 			{children}
 		</ThemeContext.Provider>
 	);

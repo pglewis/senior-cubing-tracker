@@ -2,8 +2,8 @@ import {useTheme} from "@repo/app/hooks/use-theme";
 import styles from "./theme-toggle.module.css";
 
 export function ThemeToggle() {
-	const {theme, setTheme} = useTheme();
-	const isDark = theme === "dark";
+	const {resolvedTheme, setTheme} = useTheme();
+	const isDark = resolvedTheme === "dark";
 
 	const handleToggle = (): void => {
 		setTheme(isDark ? "light" : "dark");

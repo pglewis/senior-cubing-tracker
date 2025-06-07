@@ -1,4 +1,3 @@
-import {useMemo} from "react";
 import {Link, useNavigate, useSearchParams} from "react-router";
 import {ROUTES, buildKinchPersonRoute} from "@repo/app/routes";
 import {useData} from "@repo/app/hooks/use-data";
@@ -12,10 +11,11 @@ import styles from "./kinch-layout.module.css";
 
 interface KinchLayoutProps {
 	children: React.ReactNode;
+	availableAgeOptions: {value: string; label: string}[];
 }
 
-export function KinchLayout({children}: KinchLayoutProps) {
-	const {rankings, topRanks} = useData();
+export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
+	const {rankings} = useData();
 	const {
 		age,
 		region,
@@ -25,17 +25,6 @@ export function KinchLayout({children}: KinchLayoutProps) {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const kinchRanks = useKinchRanks({age, region});
-
-	const ageOptions = useMemo(() => {
-		if (!topRanks) return [];
-
-		return Array.from(new Set(topRanks
-			.filter(tr => tr.region === region)
-			.map(tr => tr.age)
-		))
-			.sort((a, b) => a - b)
-			.map(age => ({value: age.toString(), label: `${age}+`}));
-	}, [topRanks, region]);
 
 	// Name search
 	const handleNameSearchSelect = (item: ComboboxItem) => {
@@ -71,7 +60,7 @@ export function KinchLayout({children}: KinchLayoutProps) {
 				<ButtonTabs
 					selectedValue={age}
 					onChange={(value) => setParams({age: value, page: 1})}
-					options={ageOptions}
+					options={availableAgeOptions}
 				/>
 			</div>
 

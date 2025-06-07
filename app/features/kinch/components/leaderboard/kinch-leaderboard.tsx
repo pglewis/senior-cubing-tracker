@@ -14,7 +14,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 
 	useEffect(() => {
 		if (highlightId && highlightRef.current) {
-			//	highlightRef.current.scrollIntoView();
+			highlightRef.current.scrollIntoView();
 		}
 	}, [highlightId]);
 

@@ -4,8 +4,8 @@ import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
+import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
 import {ROUTES} from "@repo/app/routes";
-import styles from "./kinch-ranks.module.css";
 
 export function PersonScoresPage() {
 	const {wcaid} = useParams<{wcaid: string;}>();
@@ -17,7 +17,7 @@ export function PersonScoresPage() {
 		return <div>Person not found</div>;
 	}
 
-	// Person data logic (moved from KinchRanks)
+	// Person data logic
 	const getPersonData = () => {
 		const rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
 		if (rankIndex < 0) {
@@ -42,7 +42,7 @@ export function PersonScoresPage() {
 		return <div>Person not found in rankings</div>;
 	}
 
-	// Helper functions (moved from KinchRanks)
+	// Helper functions
 	const getRegionName = () => {
 		if (regionInfo.type === "world") return "World";
 		if (regionInfo.type === "continent") {
@@ -67,7 +67,7 @@ export function PersonScoresPage() {
 	};
 
 	return (
-		<div className={styles.container}>
+		<KinchLayout>
 			<PersonScores
 				regionName={getRegionName()}
 				personKinchRank={personData.personKinchRank}
@@ -78,6 +78,6 @@ export function PersonScoresPage() {
 				getRankingUrl={getRankingUrl}
 				getShowInRankingsUrl={getShowInRankingsUrl}
 			/>
-		</div>
+		</KinchLayout>
 	);
 }

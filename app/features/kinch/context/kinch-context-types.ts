@@ -1,3 +1,4 @@
+import type {NavigateOptions} from "react-router";
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 
 export interface KinchContextParams {
@@ -21,5 +22,5 @@ export interface KinchContextType extends Omit<KinchContextParams, "region"> {
 	/** Keep prefixed version for URL params */
     region: string,
     regionInfo: RegionInfo,
-    setParams: (params: Partial<KinchContextParams>) => void,
+    setParams: (params: Partial<KinchContextParams>, options?: NavigateOptions) => void,
 };

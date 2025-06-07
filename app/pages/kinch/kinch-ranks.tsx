@@ -1,4 +1,4 @@
-import {useRef, useEffect} from "react";
+import {useRef} from "react";
 import {useLocation} from "react-router";
 import {Pagination} from "@repo/app/components/pagination/pagination";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
@@ -21,26 +21,20 @@ export function KinchRanks() {
 	const kinchRanks = useKinchRanks({age, region});
 	const totalPages = Math.ceil(kinchRanks.length / ROWS_PER_PAGE);
 
-	useEffect(() => {
+	// Pagination
+	const handlePageChange = (newPage: number) => {
 		const isElementVisible = (element: HTMLElement): boolean => {
 			const rect = element.getBoundingClientRect();
 			return rect.bottom > 0 && rect.top < window.innerHeight;
 		};
 
-		// Don't scroll to top if we have a highlight to show
-		if (state?.highlight) {
-			return;
+		// Override the scroll to top behavior if the top pagination is visible and no highlight is set
+		let options = {};
+		if (!state?.highlight && topPaginationRef.current && isElementVisible(topPaginationRef.current)) {
+			options = {preventScrollReset: true};
 		}
 
-		if (topPaginationRef.current && !isElementVisible(topPaginationRef.current)) {
-			//--!! Something needs to be done here, our logic reversed with a new route + ScrollRestoration
-			// window.scrollTo({top: 0, behavior: "smooth"});
-		}
-	}, [page, state?.highlight]);
-
-	// Pagination
-	const handlePageChange = (newPage: number) => {
-		setParams({page: newPage});
+		setParams({page: newPage}, options);
 	};
 
 	// Leaderboard

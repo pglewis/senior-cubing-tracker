@@ -3,12 +3,13 @@ import clsx from "clsx";
 import styles from "./pagination.module.css";
 
 interface PaginationProps {
-	currentPage: number;
-	totalPages: number;
-	onPageChange: (page: number) => void;
-}
+	currentPage: number,
+	totalPages: number,
+	onPageChange: (page: number) => void,
+	className?: string,
+};
 
-export function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+export function Pagination({currentPage, totalPages, onPageChange, className}: PaginationProps) {
 	const [inputValue, setInputValue] = useState(String(currentPage));
 
 	// Update the input box whenever the currentPage prop changes
@@ -83,7 +84,7 @@ export function Pagination({currentPage, totalPages, onPageChange}: PaginationPr
 	}
 
 	return (
-		<div className={clsx(styles.pageSelector, styles.container)}>
+		<div className={clsx(styles.paginationContainer, className)}>
 			<button
 				className={clsx(styles.pageButton, styles.previous)}
 				onClick={handlePrevious}

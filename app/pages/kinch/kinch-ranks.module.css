@@ -1,3 +1,7 @@
-.pagination {
-    font-size: var(--font-size-sm);
+.topPagination {
+    margin-bottom: var(--spacing-md);
+}
+
+.bottomPagination {
+	margin-top: var(--spacing-md);
 }

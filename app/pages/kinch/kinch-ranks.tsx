@@ -6,7 +6,7 @@ import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {KinchLeaderboard} from "@repo/app/features/kinch/components/leaderboard/kinch-leaderboard";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
 import {buildKinchPersonRoute} from "@repo/app/routes";
-//import styles from "./kinch-ranks.module.css";
+import styles from "./kinch-ranks.module.css";
 
 export function KinchRanks() {
 	const ROWS_PER_PAGE = 25;
@@ -53,6 +53,7 @@ export function KinchRanks() {
 			{totalPages > 1 && (
 				<div ref={topPaginationRef}>
 					<Pagination
+						className={styles.topPagination}
 						currentPage={page}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
@@ -69,6 +70,7 @@ export function KinchRanks() {
 
 			{totalPages > 1 && (
 				<Pagination
+					className={styles.bottomPagination}
 					currentPage={page}
 					totalPages={totalPages}
 					onPageChange={handlePageChange}

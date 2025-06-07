@@ -1,35 +1,24 @@
 @import './variables.css';
-
-@font-face {
-	font-family: "Ubuntu Sans Variable";
-	src: url("../assets/fonts/ubuntu-sans-variable-wdth-wght.woff2") format('truetype');
-	font-weight: 300 800;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Ubuntu Sans Variable";
-	src: url("../assets/fonts/ubuntu-sans-italic-variable-wdth-wght.woff2") format('truetype');
-	font-weight: 300 800;
-	font-style: italic;
-	font-display: swap;
-}
+@import './fonts.css';
 
 * {
 	box-sizing: border-box;
 }
 
 body {
-	font-family: "Ubuntu Sans Variable", sans-serif;
+	font-family: var(--font-family-base);
 	background: var(--color-background);
 	color: var(--color-text);
+
+	/* Avoid scrollbar/no scrollbar jank */
+	overflow-y: scroll;
 }
 
 input,
 button,
 select {
 	font-family: inherit;
+	font-size: var(--font-size-form);
 	padding: var(--spacing-xs) var(--spacing-sm);
 	color: var(--color-text);
 	background: var(--color-background-header);
@@ -42,7 +31,7 @@ h1,
 h2,
 h3,
 h4 {
-	font-weight: 700;
+	font-weight: var(--font-weight-bold);
 }
 
 button {
@@ -59,10 +48,8 @@ button {
 	border-radius: 2px;
 }
 
-fieldset,
-select,
-input {
-	font-size: 16px;
+fieldset {
+	font-size: var(--font-size-form);
 }
 
 table {

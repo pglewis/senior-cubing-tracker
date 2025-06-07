@@ -1,0 +1,15 @@
+@font-face {
+	font-family: "Ubuntu Sans Variable";
+	src: url("../assets/fonts/ubuntu-sans-variable-wdth-wght.woff2") format('woff2');
+	font-weight: 300 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Ubuntu Sans Variable";
+	src: url("../assets/fonts/ubuntu-sans-italic-variable-wdth-wght.woff2") format('woff2');
+	font-weight: 300 800;
+	font-style: italic;
+	font-display: swap;
+}

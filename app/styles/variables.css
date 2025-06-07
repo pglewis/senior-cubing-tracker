@@ -27,9 +27,13 @@
 	--spacing-lg: 2rem;
 
 	/* Typography */
+	--font-family-base: "Ubuntu Sans Variable", sans-serif;
 	--font-size-sm: 0.9rem;
 	--font-size-md: 1rem;
 	--font-size-lg: 1.25rem;
+	--font-size-form: 16px; /* Prevents zoom on mobile */
+	--font-weight-normal: 400;
+	--font-weight-bold: 700;
 
 	/* Borders */
 	--border-radius-sm: 4px;

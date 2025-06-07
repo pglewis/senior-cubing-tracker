@@ -22,5 +22,6 @@ export interface KinchContextType extends Omit<KinchContextParams, "region"> {
 	/** Keep prefixed version for URL params */
     region: string,
     regionInfo: RegionInfo,
-    setParams: (params: Partial<KinchContextParams>, options?: NavigateOptions) => void,
+    // wcaid is no longer part of setParams since it's handled by routing
+    setParams: (params: Partial<Omit<KinchContextParams, "wcaid">>, options?: NavigateOptions) => void,
 };

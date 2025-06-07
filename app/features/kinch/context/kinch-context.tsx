@@ -1,5 +1,5 @@
 import {useMemo, type ReactNode} from "react";
-import {useSearchParams, type NavigateOptions} from "react-router";
+import {useParams, useSearchParams, type NavigateOptions} from "react-router";
 import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
@@ -11,31 +11,34 @@ const defaults = {
 	page: 1,
 	age: "40",
 	region: "world",
-	wcaid: ""
 } as const;
 
 export function KinchProvider({children}: {children: ReactNode;}) {
 	const {rankings, topRanks} = useData();
 	const [searchParams, setSearchParams] = useSearchParams();
+	const params = useParams();
 
 	const page = Number(searchParams.get("page")) || defaults.page;
 	const age = searchParams.get("age") || defaults.age;
-	const wcaid = searchParams.get("wcaid") || defaults.wcaid;
 
-	const setParams = (params: Partial<KinchContextParams>, options?: NavigateOptions) => {
-		const newParams = new URLSearchParams(searchParams);
+	// Get wcaid from route params instead of search params
+	const wcaid = params.wcaid || "";
 
-		for (const [key, value] of Object.entries(params)) {
+	// Remove wcaid from setParams since it's handled by routing
+	const setParams = (newParams: Partial<Omit<KinchContextParams, "wcaid">>, options?: NavigateOptions) => {
+		const updatedParams = new URLSearchParams(searchParams);
+
+		for (const [key, value] of Object.entries(newParams)) {
 			if (value && value !== defaults[key as keyof typeof defaults]) {
 				// Non empty, non default values are set
-				newParams.set(key, String(value));
+				updatedParams.set(key, String(value));
 			} else {
 				// Empty or default values are removed
-				newParams.delete(key);
+				updatedParams.delete(key);
 			}
 		}
 
-		setSearchParams(newParams, options);
+		setSearchParams(updatedParams, options);
 	};
 
 	const region = searchParams.get("region") || defaults.region;

@@ -1,6 +1,6 @@
 import {Outlet, ScrollRestoration} from "react-router";
 import {MainNav} from "@repo/app/components/navigation/main-nav";
-import {ThemeToggle} from "@repo/app/components/layout/theme-toggle";
+import {ThemeToggle} from "@repo/app/components/theme/theme-toggle";
 import styles from "./page-layout.module.css";
 
 export function PageLayout() {

@@ -35,6 +35,9 @@
 	--font-weight-normal: 400;
 	--font-weight-bold: 700;
 
+	/* Form controls */
+	--form-control-height: 31px;
+
 	/* Borders */
 	--border-radius-sm: 4px;
 	--border-radius-md: 8px;

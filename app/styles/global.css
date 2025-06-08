@@ -14,8 +14,8 @@ body {
 	overflow-y: scroll;
 }
 
+/* Form control base styles */
 input,
-button,
 select {
 	font-family: inherit;
 	font-size: var(--font-size-form);
@@ -24,7 +24,29 @@ select {
 	background: var(--color-background-header);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-sm);
-	height: 31px;
+	height: var(--form-control-height);
+}
+
+/* Button reset - remove all default styling */
+button {
+	padding: 0;
+	border: none;
+	outline: none;
+	font: inherit;
+	color: inherit;
+	background: none;
+	cursor: pointer;
+}
+
+/* Styled buttons - add this class when you want form-like button styling */
+button.form-control {
+	font-size: var(--font-size-form);
+	padding: var(--spacing-xs) var(--spacing-sm);
+	color: var(--color-text);
+	background: var(--color-background-header);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-sm);
+	height: var(--form-control-height);
 }
 
 h1,
@@ -34,18 +56,9 @@ h4 {
 	font-weight: var(--font-weight-bold);
 }
 
-button {
-	padding: 0;
-	border: none;
-	outline: none;
-	font: inherit;
-	color: inherit;
-	background: none;
-}
-
 :focus-visible {
 	outline: 2px solid var(--color-focus, currentcolor);
-	border-radius: 2px;
+	border-radius: var(--border-radius-sm);
 }
 
 fieldset {
@@ -61,25 +74,23 @@ td {
 	padding: var(--spacing-xs) 0;
 }
 
-table thead tr:nth-child(odd) {
+/* Header rows get distinct background */
+thead tr {
 	background-color: var(--color-background-highlight);
 }
 
-table tr:nth-child(odd) {
+/* Body rows get alternating colors */
+tbody tr:nth-child(odd) {
 	background-color: var(--color-table-row-odd);
 }
 
-table tr:nth-child(even) {
+tbody tr:nth-child(even) {
 	background-color: var(--color-table-row-even);
 }
 
 a:link,
 a:visited {
 	color: var(--color-link);
-	text-decoration: underline;
-}
-
-a:hover {
 	text-decoration: underline;
 }
 
@@ -92,7 +103,6 @@ ul.disc li {
 }
 
 ul {
-	margin: 0 0 10px 0;
 	list-style-type: none;
 }
 

@@ -1,5 +1,6 @@
-import {createBrowserRouter, RouterProvider, Outlet} from "react-router";
+import {createBrowserRouter, RouterProvider, Outlet, Navigate} from "react-router";
 import {ROUTES} from "@repo/app/routes";
+import {ErrorHandler} from "./components/error/error-handler";
 import {PageLayout} from "@repo/app/components/layout/page-layout";
 import {Home} from "@repo/app/pages/home";
 import {Recent} from "@repo/app/pages/recent";
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
 	{
 		path: ROUTES.HOME,
 		element: <PageLayout />,
+		errorElement: <ErrorHandler />,
 		children: [
 			{
 				index: true,
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
 				element: <Profile />
 			}
 		]
+	}, {
+		// Catch-all route for any undefined paths
+		path: "*",
+		element: <Navigate to={ROUTES.HOME} replace />
 	}
 ]);
 

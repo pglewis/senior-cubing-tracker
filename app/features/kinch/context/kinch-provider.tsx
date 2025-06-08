@@ -4,8 +4,8 @@ import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {useData} from "@repo/app/hooks/use-data";
-import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-context-types";
-import {KinchContext} from "./kinch-instance";
+import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-context";
+import {KinchContext} from "./kinch-context";
 
 const defaults = {
 	page: 1,

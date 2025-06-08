@@ -1,3 +1,4 @@
+import {createContext} from "react";
 import type {NavigateOptions} from "react-router";
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 
@@ -25,3 +26,5 @@ export interface KinchContextType extends Omit<KinchContextParams, "region"> {
     // wcaid is no longer part of setParams since it's handled by routing
     setParams: (params: Partial<Omit<KinchContextParams, "wcaid">>, options?: NavigateOptions) => void,
 };
+
+export const KinchContext = createContext<KinchContextType | null>(null);

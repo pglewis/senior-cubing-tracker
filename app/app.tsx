@@ -7,7 +7,7 @@ import {KinchRanks} from "./pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Profile} from "@repo/app/pages/profile";
-import {KinchProvider} from "@repo/app/features/kinch/context/kinch-context";
+import {KinchProvider} from "@repo/app/features/kinch/context/kinch-provider";
 
 const router = createBrowserRouter([
 	{
@@ -22,9 +22,10 @@ const router = createBrowserRouter([
 				element: <Recent />
 			}, {
 				path: ROUTES.KINCH_RANKS,
-				element: <KinchProvider>
-					<Outlet />
-				</KinchProvider>,
+				element:
+					<KinchProvider>
+						<Outlet />
+					</KinchProvider>,
 				children: [
 					{
 						index: true,

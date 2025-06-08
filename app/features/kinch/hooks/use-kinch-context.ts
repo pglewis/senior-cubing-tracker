@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import type {KinchContextType} from "../context/kinch-context-types";
-import {KinchContext} from "../context/kinch-instance";
+import type {KinchContextType} from "@repo/app/features/kinch/context/kinch-context";
+import {KinchContext} from "@repo/app/features/kinch/context/kinch-context";
 
 export function useKinchContext(): KinchContextType {
 	const context = useContext(KinchContext);

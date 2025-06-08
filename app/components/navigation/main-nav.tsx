@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Link} from "react-router";
+import {ROUTES} from "@repo/app/routes";
 import {KofiButton} from "../kofi-button/kofi-button";
 import styles from "./main-nav.module.css";
 
@@ -21,10 +22,10 @@ export function MainNav() {
 			</button>
 			<nav className={`${styles.menu} ${isOpen ? styles.open : ""}`}>
 				<div className={styles.links}>
-					<Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
-					<Link to="/recent" onClick={() => setIsOpen(false)}>Recent Senior Records</Link>
-					<Link to="/kinch-ranks" onClick={() => setIsOpen(false)}>Senior Kinch Ranks</Link>
-					<Link to="/results" onClick={() => setIsOpen(false)}>Senior Profiles</Link>
+					<Link to={ROUTES.HOME} onClick={() => setIsOpen(false)}>Home</Link>
+					<Link to={ROUTES.RECENT} onClick={() => setIsOpen(false)}>Recent Senior Records</Link>
+					<Link to={ROUTES.KINCH_RANKS} onClick={() => setIsOpen(false)}>Senior Kinch Ranks</Link>
+					<Link to={ROUTES.PROFILE} onClick={() => setIsOpen(false)}>Senior Profiles</Link>
 				</div>
 				<div className={styles.menuFooter}>
 					<KofiButton />

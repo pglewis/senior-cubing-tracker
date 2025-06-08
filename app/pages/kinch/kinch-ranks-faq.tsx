@@ -1,8 +1,9 @@
 import {Link, useLocation} from "react-router";
+import {ROUTES} from "@repo/app/routes";
 
 export function KinchRanksFaq() {
 	const {state} = useLocation();
-	const returnPath = state?.from || "/kinch-ranks";
+	const returnPath = state?.from || ROUTES.KINCH_RANKS;
 
 	return (
 		<div>

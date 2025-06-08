@@ -4,7 +4,7 @@ export const ROUTES = {
 	KINCH_RANKS: "/kinch-ranks",
 	KINCH_PERSON: "/kinch-ranks/:wcaid",
 	KINCH_FAQ: "/kinch-ranks/faq",
-	RESULTS: "/results",
+	PROFILE: "/profile",
 } as const;
 
 export const buildKinchPersonRoute = (wcaid: string) => `/kinch-ranks/${wcaid}`;

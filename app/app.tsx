@@ -1,26 +1,27 @@
 import {createBrowserRouter, RouterProvider, Outlet} from "react-router";
+import {ROUTES} from "@repo/app/routes";
 import {PageLayout} from "@repo/app/components/layout/page-layout";
 import {Home} from "@repo/app/pages/home";
 import {Recent} from "@repo/app/pages/recent";
 import {KinchRanks} from "./pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
-import {Results} from "@repo/app/pages/results";
+import {Profile} from "@repo/app/pages/profile";
 import {KinchProvider} from "@repo/app/features/kinch/context/kinch-context";
 
 const router = createBrowserRouter([
 	{
-		path: "/",
+		path: ROUTES.HOME,
 		element: <PageLayout />,
 		children: [
 			{
 				index: true,
 				element: <Home />
 			}, {
-				path: "recent",
+				path: ROUTES.RECENT,
 				element: <Recent />
 			}, {
-				path: "kinch-ranks",
+				path: ROUTES.KINCH_RANKS,
 				element: <KinchProvider>
 					<Outlet />
 				</KinchProvider>,
@@ -39,8 +40,8 @@ const router = createBrowserRouter([
 					}
 				]
 			}, {
-				path: "results",
-				element: <Results />
+				path: ROUTES.PROFILE,
+				element: <Profile />
 			}
 		]
 	}

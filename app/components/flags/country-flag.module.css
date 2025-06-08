@@ -1,0 +1,17 @@
+.countryFlag {
+	line-height: 1;
+	flex-shrink: 0;
+	display: inline-block;
+}
+
+.small {
+	font-size: var(--font-size-sm); /* 0.9rem */
+}
+
+.medium {
+	font-size: var(--font-size-lg); /* 1.25rem */
+}
+
+.large {
+	font-size: 1.5rem; /* Custom size for large flags */
+}

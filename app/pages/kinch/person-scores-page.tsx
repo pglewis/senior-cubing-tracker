@@ -1,12 +1,12 @@
 import {useMemo} from "react";
 import {useParams} from "react-router";
+import {ROUTES} from "@repo/app/routes";
 import type {KinchEvent} from "@repo/common/types/kinch-types";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
-import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
-import {ROUTES} from "@repo/app/routes";
+import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
 
 export function PersonScoresPage() {
 	const {wcaid} = useParams<{wcaid: string;}>();
@@ -107,6 +107,7 @@ export function PersonScoresPage() {
 	return (
 		<KinchLayout availableAgeOptions={ageOptions}>
 			<PersonScores
+				countryCode={rankings.data.persons[rankings.personIdToIndex[wcaid as string]]?.country || ""}
 				regionName={getRegionName()}
 				personKinchRank={personData.personKinchRank}
 				kinchRanking={personData.ranking}

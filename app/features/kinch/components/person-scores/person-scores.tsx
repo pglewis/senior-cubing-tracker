@@ -3,12 +3,14 @@ import {Link} from "react-router";
 import clsx from "clsx";
 import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
 import {Card} from "@repo/app/components/card/card";
+import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./person-scores.module.css";
 
 interface PersonScoresProps {
 	// Pre-processed person data
 	personKinchRank: KinchRank,
 	kinchRanking: number,
+	countryCode: string,
 	regionName: string,
 	age: string,
 	returnPath: string,
@@ -21,6 +23,7 @@ export function PersonScores(props: PersonScoresProps) {
 	const {
 		personKinchRank,
 		kinchRanking,
+		countryCode,
 		regionName,
 		age,
 		returnPath,
@@ -42,11 +45,14 @@ export function PersonScores(props: PersonScoresProps) {
 	return (
 		<div className={styles.personScores}>
 			<Card>
-				<h3 className={styles.personName}>
-					<a className={styles.link} href={competitorURL} target="_blank">
-						{personKinchRank.personName}
-					</a>
-				</h3>
+				<div className={styles.personHeader}>
+					<CountryFlag countryCode={countryCode} />
+					<h3 className={styles.personName}>
+						<a className={styles.link} href={competitorURL} target="_blank">
+							{personKinchRank.personName}
+						</a>
+					</h3>
+				</div>
 				<div>
 					{regionName}, {age}+
 				</div>

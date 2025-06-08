@@ -1,5 +1,5 @@
 import {useEffect, useState, useCallback, type ReactNode} from "react";
-import type {ResolvedTheme, ThemeOption} from "./theme-types";
+import type {ResolvedTheme, ThemeOption} from "./theme-context";
 import {ThemeContext} from "./theme-context";
 
 interface ThemeProviderProps {

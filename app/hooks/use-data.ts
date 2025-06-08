@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import {DataContext} from "../context/data-context";
-import type {DataContextType} from "../context/data-types";
+import {DataContext} from "@repo/app/context/data-context";
+import type {DataContextType} from "@repo/app/context/data-context";
 
 interface InitializedData extends DataContextType {
 	rankings: NonNullable<DataContextType["rankings"]>;

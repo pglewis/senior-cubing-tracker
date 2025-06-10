@@ -123,7 +123,7 @@ interface ShowInRankingsListLinkProps {
 function ShowInRankingsListLink({targetPage, wcaId, getShowInRankingsUrl}: ShowInRankingsListLinkProps) {
 	return (
 		<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: wcaId}}>
-			Show in rankings list
+			Show on leaderboard
 		</Link>
 	);
 }

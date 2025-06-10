@@ -1,3 +1,4 @@
+//--!! Deprecated and can be removed once we refactor
 export interface ExtendedRankingsData {
 	/** date/time string of the data snapshot in UTC */
 	lastUpdated: string,

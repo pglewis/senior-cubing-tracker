@@ -13,6 +13,8 @@ export function MainNav() {
 				className={styles.hamburger}
 				onClick={() => setIsOpen(!isOpen)}
 				aria-label="Toggle navigation menu"
+				aria-expanded={isOpen}
+				aria-controls="main-navigation"
 			>
 				<div className={styles.icon}>
 					<span></span>
@@ -20,7 +22,10 @@ export function MainNav() {
 					<span></span>
 				</div>
 			</button>
-			<nav className={`${styles.menu} ${isOpen ? styles.open : ""}`}>
+			<nav
+				id="main-navigation"
+				className={`${styles.menu} ${isOpen ? styles.open : ""}`}
+			>
 				<div className={styles.links}>
 					<Link to={ROUTES.HOME} onClick={() => setIsOpen(false)}>Home</Link>
 					<Link to={ROUTES.RECENT} onClick={() => setIsOpen(false)}>Recent Senior Records</Link>

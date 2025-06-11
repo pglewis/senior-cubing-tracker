@@ -77,7 +77,13 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 		);
 
 		pageButtons.push(
-			<button key={page} className={className} onClick={() => onPageChange(page)}>
+			<button
+				key={page}
+				className={className}
+				onClick={() => onPageChange(page)}
+				aria-label={`Go to page ${page}`}
+				aria-current={page === currentPage ? "page" : undefined}
+			>
 				{page}
 			</button>
 		);
@@ -89,6 +95,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 				className={clsx(styles.pageButton, styles.previous)}
 				onClick={handlePrevious}
 				disabled={currentPage === 1}
+				aria-label="Go to previous page"
 			>
 				◀
 			</button>
@@ -97,6 +104,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 				className={clsx(styles.pageButton, styles.next)}
 				onClick={handleNext}
 				disabled={currentPage === totalPages}
+				aria-label="Go to next page"
 			>
 				▶
 			</button>
@@ -110,6 +118,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 					onChange={handleInputChange}
 					onBlur={handleInputBlur}
 					onKeyDown={handleKeyDown}
+					aria-label="Enter page number"
 				/>
 				{" of "}{totalPages}
 			</span>

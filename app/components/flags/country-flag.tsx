@@ -16,9 +16,16 @@ interface CountryFlagProps {
 	size?: "small" | "medium" | "large";
 	className?: string;
 	title?: string;
+	decorative?: boolean;
 }
 
-export function CountryFlag({countryCode, size = "medium", className = "", title}: CountryFlagProps) {
+export function CountryFlag({
+	countryCode,
+	size = "medium",
+	className = "",
+	title,
+	decorative = false
+}: CountryFlagProps) {
 	const flagEmoji = getFlagEmoji(countryCode);
 
 	if (!flagEmoji) return null;
@@ -26,7 +33,9 @@ export function CountryFlag({countryCode, size = "medium", className = "", title
 	return (
 		<span
 			className={clsx(styles.countryFlag, styles[size], className)}
-			title={title || countryCode}
+			title={decorative ? undefined : (title || countryCode)}
+			aria-hidden={decorative ? "true" : undefined}
+			role={decorative ? "presentation" : undefined}
 		>
 			{flagEmoji}
 		</span>

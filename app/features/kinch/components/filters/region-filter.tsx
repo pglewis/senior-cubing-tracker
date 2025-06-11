@@ -14,6 +14,7 @@ export function RegionFilter({value, onChange, continents, countries}: RegionFil
 			<select
 				value={value}
 				onChange={e => onChange(e.target.value)}
+				aria-label="Select region to filter results"
 			>
 				<option value="world">World</option>
 

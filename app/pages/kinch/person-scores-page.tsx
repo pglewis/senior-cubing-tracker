@@ -1,5 +1,4 @@
-import {useMemo} from "react";
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {ROUTES} from "@repo/app/routes";
 import type {KinchEvent} from "@repo/common/types/kinch-types";
 import {useData} from "@repo/app/hooks/use-data";
@@ -7,78 +6,41 @@ import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context"
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
 import {PersonScores} from "@repo/app/features/kinch/components/person-scores/person-scores";
+import styles from "./person-scores-page.module.css";
 
 export function PersonScoresPage() {
 	const {wcaid} = useParams<{wcaid: string;}>();
 	const {age, region, regionInfo} = useKinchContext();
-	const {rankings, topRanks} = useData();
+	const {rankings} = useData();
 	const kinchRanks = useKinchRanks({age, region});
 
-	// Calculate available age options for this specific person
-	const ageOptions = useMemo(() => {
-		if (!rankings || !topRanks || !wcaid) return [];
+	const personId = wcaid || "";
+	const person = rankings?.persons[personId];
+	let rankIndex = -1;
 
-		// Find all age groups where this person has results
-		const personAges = new Set<number>();
-
-		// Search through enhanced rankings results to find where this person appears
-		const personResults = rankings.results.filter(result => result.personId === wcaid);
-		for (const result of personResults) {
-			personAges.add(result.age);
-		}
-
-		// Get person's country and continent for region filtering
-		const person = rankings.persons[wcaid];
-		const personCountry = person?.countryId;
-		const personContinent = person?.continentId;
-
-		// Person scores page only shows: World, person's country, and person's continent
-		const allowedRegions = new Set(["world"]);
-		if (personCountry) allowedRegions.add(personCountry);
-		if (personContinent) allowedRegions.add(personContinent);
-
-		// Filter topRanks ages by allowed regions and person's available ages
-		return Array.from(new Set(topRanks
-			.filter(tr => allowedRegions.has(tr.region))
-			.map(tr => tr.age)
-			.filter(age => personAges.has(age))
-		))
-			.sort((a, b) => a - b)
-			.map(age => ({value: age.toString(), label: `${age}+`}));
-	}, [rankings, topRanks, wcaid]);
-
-	// Person data logic
-	const getPersonData = () => {
-		if (!wcaid) {
-			return {
-				type: "not-found" as const,
-				person: null,
-				wcaId: wcaid
-			};
-		}
-
-		const rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
-		if (rankIndex < 0) {
-			const person = rankings?.persons[wcaid];
-			return {
-				type: "not-found" as const,
-				person,
-				wcaId: wcaid
-			};
-		}
-
-		return {
-			type: "found" as const,
-			personKinchRank: kinchRanks[rankIndex],
-			ranking: rankIndex + 1,
-		};
-	};
-
-	const personData = getPersonData();
-
-	if (personData.type === "not-found") {
-		return <div>Person not found in rankings</div>;
+	if (person) {
+		rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
 	}
+	if (!person || rankIndex < 0) {
+		return (
+			<>
+				<div className={styles.notFound}>
+					<h2>Senior Kinch Ranks</h2>
+					<p>We were looking for someone's rankings but WCA ID <code className={styles.invalidId}>{personId}</code> was not found.</p>
+					<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
+						View the Leaderboard
+					</Link>
+				</div>
+			</>
+		);
+	}
+
+	const ageOptions = person.availableAges
+		.sort((a, b) => a - b)
+		.map(age => ({value: age.toString(), label: `${age}+`}));
+
+	const personKinchRank = kinchRanks[rankIndex];
+	const ranking = rankIndex + 1;
 
 	// Helper functions
 	const getRegionName = () => {
@@ -104,15 +66,13 @@ export function PersonScoresPage() {
 		return `${ROUTES.KINCH_RANKS}?page=${targetPage}&age=${age}&region=${region}`;
 	};
 
-	const person = rankings?.persons[wcaid as string];
-
 	return (
 		<KinchLayout availableAgeOptions={ageOptions}>
 			<PersonScores
-				countryCode={person?.countryId || ""}
+				countryCode={person.countryId || ""}
 				regionName={getRegionName()}
-				personKinchRank={personData.personKinchRank}
-				kinchRanking={personData.ranking}
+				personKinchRank={personKinchRank}
+				kinchRanking={ranking}
 				rowsPerPage={25}
 				returnPath={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}
 				age={age}

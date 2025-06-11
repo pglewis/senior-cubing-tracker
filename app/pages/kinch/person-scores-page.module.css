@@ -1,0 +1,15 @@
+.notFound {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.notFound p {
+  margin-bottom: var(--spacing-md);
+}
+
+.invalidId {
+  background-color: rgba(255, 243, 204, 0.15); /* subtle yellow tint based on --color-link */
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  font-family: monospace;
+}

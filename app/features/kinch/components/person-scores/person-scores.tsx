@@ -19,6 +19,8 @@ interface PersonScoresProps {
 	rowsPerPage: number,
 };
 
+type SortColumn = "event" | "score";
+
 export function PersonScores(props: PersonScoresProps) {
 	const {
 		personKinchRank,
@@ -31,7 +33,7 @@ export function PersonScores(props: PersonScoresProps) {
 		getShowInRankingsUrl,
 		rowsPerPage,
 	} = props;
-	const [sortBy, setSortBy] = useState<"event" | "score">("event");
+	const [sortBy, setSortBy] = useState<SortColumn>("event");
 
 	// Default: sort by WCA event sort order (kinchRank events are already in this order)
 	const sortedEvents = [...personKinchRank.events];
@@ -42,13 +44,24 @@ export function PersonScores(props: PersonScoresProps) {
 	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
 	const competitorURL = `https://www.worldcubeassociation.org/persons/${personKinchRank.personId}`;
 
+	const handleSort = (column: SortColumn) => {
+		setSortBy(column);
+	};
+
+	const handleKeyDown = (event: React.KeyboardEvent, column: SortColumn) => {
+		if (event.key === "Enter" || event.key === " ") {
+			event.preventDefault();
+			handleSort(column);
+		}
+	};
+
 	return (
 		<div className={styles.personScores}>
 			<Card>
 				<div className={styles.personHeader}>
 					<CountryFlag countryCode={countryCode} />
 					<h3 className={styles.personName}>
-						<a className={styles.link} href={competitorURL} target="_blank">
+						<a className={styles.link} href={competitorURL} target="_blank" rel="noopener noreferrer">
 							{personKinchRank.personName}
 						</a>
 					</h3>
@@ -73,15 +86,23 @@ export function PersonScores(props: PersonScoresProps) {
 				</Link>
 			</Card>
 			<table className={styles.table}>
+				<caption className="sr-only">
+					Event scores for {personKinchRank.personName}. Use the column headers to sort the table.
+				</caption>
 				<thead>
 					<tr>
 						<th
 							className={clsx(
 								styles.tableHeader,
 								styles.eventColumn,
-								(sortBy === "event") && styles.sortedAsc
+								sortBy === "event" && styles.sortedAsc
 							)}
-							onClick={() => setSortBy("event")}
+							role="button"
+							tabIndex={0}
+							onClick={() => handleSort("event")}
+							onKeyDown={(e) => handleKeyDown(e, "event")}
+							aria-sort={sortBy === "event" ? "ascending" : "none"}
+							aria-label="Event name, sortable column"
 						>
 							Event
 						</th>
@@ -89,9 +110,14 @@ export function PersonScores(props: PersonScoresProps) {
 							className={clsx(
 								styles.tableHeader,
 								styles.scoreColumn,
-								(sortBy === "score") && styles.sortedDesc,
+								sortBy === "score" && styles.sortedDesc,
 							)}
-							onClick={() => setSortBy("score")}
+							role="button"
+							tabIndex={0}
+							onClick={() => handleSort("score")}
+							onKeyDown={(e) => handleKeyDown(e, "score")}
+							aria-sort={sortBy === "score" ? "descending" : "none"}
+							aria-label="Score, sortable column"
 						>
 							Score
 						</th>
@@ -115,10 +141,10 @@ export function PersonScores(props: PersonScoresProps) {
 }
 
 interface ShowInRankingsListLinkProps {
-	targetPage: number,
-	wcaId: string,
-	getShowInRankingsUrl: (targetPage: number) => string,
-};
+	targetPage: number;
+	wcaId: string;
+	getShowInRankingsUrl: (targetPage: number) => string;
+}
 
 function ShowInRankingsListLink({targetPage, wcaId, getShowInRankingsUrl}: ShowInRankingsListLinkProps) {
 	return (
@@ -127,9 +153,10 @@ function ShowInRankingsListLink({targetPage, wcaId, getShowInRankingsUrl}: ShowI
 		</Link>
 	);
 }
+
 interface EventRowProps {
-	event: KinchEvent,
-	getRankingUrl: (event: KinchEvent) => string,
+	event: KinchEvent;
+	getRankingUrl: (event: KinchEvent) => string;
 }
 
 function EventRow({event, getRankingUrl}: EventRowProps) {

@@ -97,7 +97,6 @@ export function PersonScores(props: PersonScoresProps) {
 								styles.eventColumn,
 								sortBy === "event" && styles.sortedAsc
 							)}
-							role="button"
 							tabIndex={0}
 							onClick={() => handleSort("event")}
 							onKeyDown={(e) => handleKeyDown(e, "event")}
@@ -112,7 +111,6 @@ export function PersonScores(props: PersonScoresProps) {
 								styles.scoreColumn,
 								sortBy === "score" && styles.sortedDesc,
 							)}
-							role="button"
 							tabIndex={0}
 							onClick={() => handleSort("score")}
 							onKeyDown={(e) => handleKeyDown(e, "score")}

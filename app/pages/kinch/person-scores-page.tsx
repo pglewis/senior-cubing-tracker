@@ -26,9 +26,16 @@ export function PersonScoresPage() {
 			<>
 				<div className={styles.notFound}>
 					<h2>Senior Kinch Ranks</h2>
-					<p>We were looking for someone's rankings but WCA ID <code className={styles.invalidId}>{personId}</code> was not found.</p>
+					<p>
+						We were looking for someone's rankings but couldn't locate any results:
+					</p>
+					<p>
+						WCA ID: <code className={styles.highlightedData}>{personId}</code><br />
+						Age cateory: <code className={styles.highlightedData}>{age}</code><br />
+						Region: <code className={styles.highlightedData}>{region}</code><br />
+					</p>
 					<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
-						View the Leaderboard
+						View the main Leaderboard
 					</Link>
 				</div>
 			</>

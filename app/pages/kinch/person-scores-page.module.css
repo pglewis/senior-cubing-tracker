@@ -1,15 +1,16 @@
 .notFound {
-  padding: var(--spacing-lg);
-  text-align: center;
+	text-align: center;
 }
 
 .notFound p {
-  margin-bottom: var(--spacing-md);
+	line-height: 1.6em;
+	text-align: left;
+	margin-bottom: var(--spacing-md);
 }
 
-.invalidId {
-  background-color: rgba(255, 243, 204, 0.15); /* subtle yellow tint based on --color-link */
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-sm);
-  font-family: monospace;
+.highlightedData {
+	background-color: rgba(255, 243, 204, 0.15);
+	padding: var(--spacing-xs);
+	border-radius: var(--border-radius-sm);
+	font-family: monospace;
 }

@@ -1,22 +1,15 @@
 import {useMemo} from "react";
-import {
-	scoreAverageOnly,
-	type KinchRank,
-	type KinchEvent,
-	type TopRank,
-} from "@repo/common/types/kinch-types";
-import type {
-	ExtendedRankingsData,
-	WCAEvent,
-	EventRanking,
-} from "@repo/common/types/rankings-snapshot";
+import {scoreAverageOnly, type KinchRank, type KinchEvent, type TopRank} from "@repo/common/types/kinch-types";
+import type {EnhancedRankingsData, FlatResult} from "@repo/common/types/enhanced-rankings";
+import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {useData} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
 	age: string;
-	region: string; // Prefixed region id (e.g. "CNA" or "NNA")
+	// Prefixed region id (e.g. "CNA" or "NNA")
+	region: string;
 }
 
 // Outside component - persists across component unmounts
@@ -36,14 +29,24 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 			return kinchCache.get(cacheKey);
 		}
 
-		let ranks = rankings.data.persons.map(p =>
-			getRanksForPerson(rankings, topRanks, {
-				age: filters.age,
-				region: filters.region
-			}, p.id)
-		);
+		// Get events in canonical order from the enhanced rankings data
+		const allEvents = rankings.eventOrder;
 
-		ranks = ranks.filter(r => r.overall > 0);
+		// Filter results by age and region upfront
+		const relevantResults = getRelevantResults(rankings, filters);
+
+		// Group results by person for easy access
+		const resultsByPerson = groupResultsByPerson(relevantResults);
+
+		// Calculate kinch ranks for each person
+		const ranks: KinchRank[] = [];
+		for (const [personId, personResults] of resultsByPerson) {
+			const kinchRank = getRanksForPerson(rankings, topRanks, filters, personId, personResults, allEvents);
+			if (kinchRank.overall > 0) {
+				ranks.push(kinchRank);
+			}
+		}
+
 		ranks.sort((a, b) => b.overall - a.overall);
 
 		kinchCache.set(cacheKey, ranks);
@@ -55,58 +58,81 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 		}
 
 		return ranks;
-	}, [rankings, topRanks, filters.age, filters.region]);
+	}, [rankings, topRanks, filters]);
+}
+
+function getRelevantResults(rankings: EnhancedRankingsData, filters: KinchFilters): FlatResult[] {
+	const targetAge = parseInt(filters.age);
+
+	return rankings.results.filter(result => {
+		// Filter by age
+		if (result.age !== targetAge) {
+			return false;
+		}
+
+		// Filter by region
+		if (filters.region === "world") {
+			return true;
+		}
+
+		const countryRegion = toRegionParam(result.countryId, false);
+		const continentRegion = toRegionParam(result.continentId, true);
+
+		return filters.region === countryRegion || filters.region === continentRegion;
+	});
+}
+
+function groupResultsByPerson(results: FlatResult[]): Map<string, FlatResult[]> {
+	const grouped = new Map<string, FlatResult[]>();
+
+	for (const result of results) {
+		if (!grouped.has(result.personId)) {
+			grouped.set(result.personId, []);
+		}
+		grouped.get(result.personId)!.push(result);
+	}
+
+	return grouped;
 }
 
 function getRanksForPerson(
-	rankings: ExtendedRankingsData,
+	rankings: EnhancedRankingsData,
 	topRanks: TopRank[],
 	filters: KinchFilters,
 	personId: string,
+	personResults: FlatResult[],
+	allEvents: WCAEventId[]
 ): KinchRank {
-	const rankingsData = rankings.data;
-	const person = rankingsData.persons[rankings.personIdToIndex[personId]];
+	const person = rankings.persons[personId];
 	if (!person) {
-		throw new Error(`We were looking for someone's rankings but WCA ID "${personId}" was not found.`);
+		throw new Error(`Person with ID "${personId}" not found.`);
 	}
 
 	const kinchRank: KinchRank = {
 		personId: personId,
 		personName: person.name,
 		overall: 0,
-		events: [] as KinchEvent[]
+		events: []
 	};
 
-	const country = rankingsData.countries[rankings.countryIdToIndex[person.country]];
-	const continent = rankingsData.continents[rankings.continentIdToIndex[country.continent]];
-
-	// Check if person belongs to the selected region
-	if (filters.region !== "world" &&
-		filters.region !== toRegionParam(country.id, false) &&
-		filters.region !== toRegionParam(continent.id, true)
-	) {
-		return kinchRank;
+	// Group person's results by event and type for quick lookup
+	const resultsByEventType = new Map<string, FlatResult>();
+	for (const result of personResults) {
+		const key = `${result.eventId}-${result.type}`;
+		resultsByEventType.set(key, result);
 	}
 
-	for (const event of rankingsData.events) {
-		if (!person.events.includes(event.id)) {
-			// They've never competed in this event at all
-			kinchRank.events.push({
-				eventId: event.id,
-				eventName: event.name,
-				score: 0,
-				result: "",
-				type: null,
-			});
-		} else if (event.id === "333mbf") {
+	// Calculate score for each event using the dynamic events list
+	for (const eventId of allEvents) {
+		if (eventId === "333mbf") {
 			// Multi blind is a special case
-			kinchRank.events.push(getPersonMultiScore(topRanks, personId, event, filters));
-		} else if (scoreAverageOnly[event.id]) {
-			// Use the average
-			kinchRank.events.push(getPersonAverageScore(topRanks, personId, event, filters));
+			kinchRank.events.push(getPersonMultiScore(topRanks, eventId, resultsByEventType, filters, rankings));
+		} else if (scoreAverageOnly[eventId]) {
+			// Use the average only
+			kinchRank.events.push(getPersonAverageScore(topRanks, eventId, resultsByEventType, filters, rankings));
 		} else {
-			// best of single or average
-			kinchRank.events.push(getPersonSingeleOrAverageScore(topRanks, personId, event, filters));
+			// Best of single or average
+			kinchRank.events.push(getPersonSingleOrAverageScore(topRanks, eventId, resultsByEventType, filters, rankings));
 		}
 	}
 
@@ -116,56 +142,32 @@ function getRanksForPerson(
 
 function getTopRank(
 	topRanks: TopRank[],
-	eventId: string,
-	type: EventRanking["type"],
+	eventId: WCAEventId,
+	type: "single" | "average",
 	filters: KinchFilters
 ): TopRank | undefined {
-	const topRank = topRanks.find(r =>
+	return topRanks.find(r =>
 		r.eventId === eventId &&
 		r.type === type &&
 		r.age === Number(filters.age) &&
-		r.region === filters.region // filters.region is already prefixed
+		r.region === filters.region
 	);
-
-	return topRank;
-}
-
-function getPersonResult(
-	event: WCAEvent,
-	type: EventRanking["type"],
-	personId: string,
-	filters: KinchFilters
-): string | undefined {
-	const eventRanking = event.rankings.find(
-		r => r.type === type
-			&& r.age === Number(filters.age)
-	);
-
-	if (!eventRanking) {
-		return undefined;
-	}
-
-	const rank = eventRanking.ranks.find(r => r.id === personId);
-	if (!rank) {
-		return undefined;
-	}
-
-	return rank.best;
 }
 
 function getPersonAverageScore(
 	topRanks: TopRank[],
-	personId: string,
-	event: WCAEvent,
-	filters: KinchFilters
+	eventId: WCAEventId,
+	resultsByEventType: Map<string, FlatResult>,
+	filters: KinchFilters,
+	rankings: EnhancedRankingsData
 ): KinchEvent {
-	const topRank = getTopRank(topRanks, event.id, "average", filters);
-	const result = getPersonResult(event, "average", personId, filters);
+	const topRank = getTopRank(topRanks, eventId, "average", filters);
+	const result = resultsByEventType.get(`${eventId}-average`);
 
 	if (!result || !topRank) {
 		return {
-			eventId: event.id,
-			eventName: event.name,
+			eventId: eventId,
+			eventName: rankings.events[eventId].name,
 			score: 0,
 			result: "",
 			type: null,
@@ -173,30 +175,30 @@ function getPersonAverageScore(
 	}
 
 	return {
-		eventId: event.id,
-		eventName: event.name,
-		score: getPersonScore(event.format, topRank, result),
-		result: result,
+		eventId: eventId,
+		eventName: rankings.events[eventId].name,
+		score: getPersonScore("time", topRank, result.result), // Most average events are time-based
+		result: result.result,
 		type: "average",
 	};
 }
 
-function getPersonSingeleOrAverageScore(
+function getPersonSingleOrAverageScore(
 	topRanks: TopRank[],
-	personId: string,
-	event: WCAEvent,
-	filters: KinchFilters
+	eventId: WCAEventId,
+	resultsByEventType: Map<string, FlatResult>,
+	filters: KinchFilters,
+	rankings: EnhancedRankingsData
 ): KinchEvent {
-	const singleTopRank = getTopRank(topRanks, event.id, "single", filters);
-	const averageTopRank = getTopRank(topRanks, event.id, "average", filters);
-	const singleResult = getPersonResult(event, "single", personId, filters);
-	const averageResult = getPersonResult(event, "average", personId, filters);
+	const singleTopRank = getTopRank(topRanks, eventId, "single", filters);
+	const averageTopRank = getTopRank(topRanks, eventId, "average", filters);
+	const singleResult = resultsByEventType.get(`${eventId}-single`);
+	const averageResult = resultsByEventType.get(`${eventId}-average`);
 
 	if (!singleResult || !singleTopRank) {
-		// We can end up here if they've competed in the event but not in this age bracket
 		return {
-			eventId: event.id,
-			eventName: event.name,
+			eventId: eventId,
+			eventName: rankings.events[eventId].name,
 			score: 0,
 			result: "",
 			type: null,
@@ -206,29 +208,34 @@ function getPersonSingeleOrAverageScore(
 	let result: string;
 	let score = 0;
 	let type: KinchEvent["type"];
-	const singleScore = getPersonScore(event.format, singleTopRank, singleResult);
-	if (averageResult && averageTopRank) {
-		const averageScore = getPersonScore(event.format, averageTopRank, averageResult);
 
-		// They have both a single and average, pick the best score of the two
+	// Get event format from enhanced data
+	const format = rankings.events[eventId].format;
+
+	const singleScore = getPersonScore(format, singleTopRank, singleResult.result);
+
+	if (averageResult && averageTopRank) {
+		const averageScore = getPersonScore(format, averageTopRank, averageResult.result);
+
+		// Pick the best score of the two
 		if (singleScore > averageScore) {
 			score = singleScore;
-			result = singleResult;
+			result = singleResult.result;
 			type = "single";
 		} else {
 			score = averageScore;
-			result = averageResult;
+			result = averageResult.result;
 			type = "average";
 		}
 	} else {
 		score = singleScore;
-		result = singleResult;
+		result = singleResult.result;
 		type = "single";
 	}
 
 	return {
-		eventId: event.id,
-		eventName: event.name,
+		eventId: eventId,
+		eventName: rankings.events[eventId].name,
 		score: score,
 		result: result,
 		type: type,
@@ -236,7 +243,7 @@ function getPersonSingeleOrAverageScore(
 }
 
 function getPersonScore(
-	format: WCAEvent["format"],
+	format: "time" | "number" | "multi",
 	topRank: TopRank,
 	result: string
 ) {
@@ -249,17 +256,18 @@ function getPersonScore(
 
 function getPersonMultiScore(
 	topRanks: TopRank[],
-	personId: string,
-	event: WCAEvent,
-	filters: KinchFilters
+	eventId: WCAEventId,
+	resultsByEventType: Map<string, FlatResult>,
+	filters: KinchFilters,
+	rankings: EnhancedRankingsData
 ): KinchEvent {
-	const topRank = getTopRank(topRanks, event.id, "single", filters); // We just use single for mbld
-	const result = getPersonResult(event, "single", personId, filters);
+	const topRank = getTopRank(topRanks, eventId, "single", filters);
+	const result = resultsByEventType.get(`${eventId}-single`);
 
 	if (!result || !topRank) {
 		return {
-			eventId: event.id,
-			eventName: event.name,
+			eventId: eventId,
+			eventName: rankings.events[eventId].name,
 			score: 0,
 			result: "",
 			type: null,
@@ -268,10 +276,10 @@ function getPersonMultiScore(
 
 	// Bigger result is better for mbld, so the division is reversed
 	return {
-		eventId: event.id,
-		eventName: event.name,
-		score: (getKinchMultiScore(result) / getKinchMultiScore(topRank.result)) * 100,
-		result: result,
+		eventId: eventId,
+		eventName: rankings.events[eventId].name,
+		score: (getKinchMultiScore(result.result) / getKinchMultiScore(topRank.result)) * 100,
+		result: result.result,
 		type: "single",
 	};
 }

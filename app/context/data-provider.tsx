@@ -1,10 +1,10 @@
 import {useState, useEffect} from "react";
-import type {ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
+import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {DataContext} from "./data-context";
 
 export function DataProvider({children}: {children: React.ReactNode;}) {
-	const [rankings, setRankings] = useState<ExtendedRankingsData | null>(null);
+	const [rankings, setRankings] = useState<EnhancedRankingsData | null>(null);
 	const [topRanks, setTopRanks] = useState<TopRank[] | null>(null);
 	const [isInitializing, setIsInitializing] = useState(true);
 	const [error, setError] = useState<Error | null>(null);
@@ -13,7 +13,7 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 		async function loadData() {
 			try {
 				const [rankingsRes, topRanksRes] = await Promise.all([
-					fetch("/data/senior-rankings.json"),
+					fetch("/data/enhanced-rankings.json"), // Updated endpoint
 					fetch("/data/topranks.json")
 				]);
 

@@ -54,6 +54,10 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 	const competitions: {[id: number]: {id: number; webId: string; name: string; country: string; startDate: string;};} = {};
 	const continents: {[id: string]: {id: string; name: string;};} = {};
 	const countries: {[id: string]: {id: string; name: string; continent: string;};} = {};
+	const events: {[id: string]: {id: WCAEventId; name: string; format: "time" | "number" | "multi";};} = {};
+
+	// Preserve canonical event order from source data
+	const eventOrder: WCAEventId[] = rankings.events.map(event => event.id);
 
 	// Build O(1) lookup tables first
 	const personIdToIndex: {[key: string]: number} = {};
@@ -90,6 +94,15 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 			id: country.id,
 			name: country.name,
 			continent: country.continent
+		};
+	}
+
+	// Build events lookup table
+	for (const event of rankings.events) {
+		events[event.id] = {
+			id: event.id,
+			name: event.name,
+			format: event.format
 		};
 	}
 
@@ -186,11 +199,13 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 
 	return {
 		lastUpdated: rankings.refreshed,
+		eventOrder,
 		results,
 		persons,
 		competitions,
 		continents,
-		countries
+		countries,
+		events
 	};
 }
 

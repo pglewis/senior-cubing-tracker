@@ -14,31 +14,23 @@ export function PersonScoresPage() {
 	const {rankings, topRanks} = useData();
 	const kinchRanks = useKinchRanks({age, region});
 
-	// if (!wcaid) {
-	// return <div>Person not found</div>;
-	// }
-
 	// Calculate available age options for this specific person
 	const ageOptions = useMemo(() => {
-		if (!rankings || !topRanks) return [];
+		if (!rankings || !topRanks || !wcaid) return [];
 
 		// Find all age groups where this person has results
 		const personAges = new Set<number>();
 
-		// Search through all events and rankings to find where this person appears
-		for (const event of rankings.data.events) {
-			for (const ranking of event.rankings) {
-				const hasResult = ranking.ranks.some(rank => rank.id === wcaid);
-				if (hasResult) {
-					personAges.add(ranking.age);
-				}
-			}
+		// Search through enhanced rankings results to find where this person appears
+		const personResults = rankings.results.filter(result => result.personId === wcaid);
+		for (const result of personResults) {
+			personAges.add(result.age);
 		}
 
 		// Get person's country and continent for region filtering
-		const person = rankings.data.persons[rankings.personIdToIndex[wcaid as string]];
-		const personCountry = person?.country;
-		const personContinent = personCountry ? rankings.data.countries[rankings.countryIdToIndex[personCountry]]?.continent : null;
+		const person = rankings.persons[wcaid];
+		const personCountry = person?.countryId;
+		const personContinent = person?.continentId;
 
 		// Person scores page only shows: World, person's country, and person's continent
 		const allowedRegions = new Set(["world"]);
@@ -57,9 +49,17 @@ export function PersonScoresPage() {
 
 	// Person data logic
 	const getPersonData = () => {
+		if (!wcaid) {
+			return {
+				type: "not-found" as const,
+				person: null,
+				wcaId: wcaid
+			};
+		}
+
 		const rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
 		if (rankIndex < 0) {
-			const person = rankings.data.persons[rankings.personIdToIndex[wcaid as string]];
+			const person = rankings?.persons[wcaid];
 			return {
 				type: "not-found" as const,
 				person,
@@ -84,9 +84,9 @@ export function PersonScoresPage() {
 	const getRegionName = () => {
 		if (regionInfo.type === "world") return "World";
 		if (regionInfo.type === "continent") {
-			return rankings.data.continents[rankings.continentIdToIndex[regionInfo.id]].name;
+			return rankings?.continents[regionInfo.id]?.name || regionInfo.id;
 		}
-		return rankings.data.countries[rankings.countryIdToIndex[regionInfo.id]].name;
+		return rankings?.countries[regionInfo.id]?.name || regionInfo.id;
 	};
 
 	const getRankingUrl = (event: KinchEvent) => {
@@ -104,10 +104,12 @@ export function PersonScoresPage() {
 		return `${ROUTES.KINCH_RANKS}?page=${targetPage}&age=${age}&region=${region}`;
 	};
 
+	const person = rankings?.persons[wcaid as string];
+
 	return (
 		<KinchLayout availableAgeOptions={ageOptions}>
 			<PersonScores
-				countryCode={rankings.data.persons[rankings.personIdToIndex[wcaid as string]]?.country || ""}
+				countryCode={person?.countryId || ""}
 				regionName={getRegionName()}
 				personKinchRank={personData.personKinchRank}
 				kinchRanking={personData.ranking}

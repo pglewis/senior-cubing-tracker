@@ -1,6 +1,7 @@
 import {useMemo, type ReactNode} from "react";
 import {useParams, useSearchParams, type NavigateOptions} from "react-router";
-import type {Continent, Country, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
+import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
+import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {useData} from "@repo/app/hooks/use-data";
@@ -91,21 +92,31 @@ interface FilteredRegions {
 }
 
 function getFilteredRegions(
-	rankings: ExtendedRankingsData,
+	rankings: EnhancedRankingsData | null,
 	wcaId: string | undefined,
 	age: string,
-	topRanks: TopRank[]
+	topRanks: TopRank[] | null
 ): FilteredRegions {
-	const {continents, countries} = rankings.data;
+	if (!rankings || !topRanks) {
+		return {continents: [], countries: []};
+	}
+
+	// Convert enhanced rankings structure to arrays for compatibility
+	const continents = Object.values(rankings.continents);
+	const countries = Object.values(rankings.countries);
 
 	if (wcaId) {
-		const person = rankings.data.persons[rankings.personIdToIndex[wcaId]];
-		const country = rankings.data.countries[rankings.countryIdToIndex[person.country]];
-		const continent = continents.find(c => c.id === country.continent);
+		const person = rankings.persons[wcaId];
+		if (!person) {
+			return {continents: [], countries: []};
+		}
+
+		const country = rankings.countries[person.countryId];
+		const continent = rankings.continents[person.continentId];
 
 		return {
 			continents: continent ? [continent] : [],
-			countries: [country]
+			countries: country ? [country] : []
 		};
 	}
 

@@ -45,8 +45,20 @@ export interface EnhancedRankingsData {
 	// Metadata
 	lastUpdated: string;
 
+	// Canonical event order from source data
+	eventOrder: WCAEventId[];
+
 	// Flattened results - single source of truth, pre-sorted by date (newest first)
 	results: FlatResult[];
+
+	// Event data as ID-indexed objects for O(1) lookups
+	events: {
+		[id: string]: {
+			id: WCAEventId;
+			name: string;
+			format: "time" | "number" | "multi";
+		};
+	};
 
 	// Person lookup and profiles
 	persons: {

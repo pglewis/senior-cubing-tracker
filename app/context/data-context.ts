@@ -1,9 +1,9 @@
 import {createContext} from "react";
-import type {ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
+import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import type {TopRank} from "@repo/common/types/kinch-types";
 
 export interface DataContextType {
-	rankings: ExtendedRankingsData | null;
+	rankings: EnhancedRankingsData | null;
 	topRanks: TopRank[] | null;
 	isInitializing: boolean;
 	error: Error | null;

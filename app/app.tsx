@@ -43,7 +43,7 @@ const router = createBrowserRouter([
 					}
 				]
 			}, {
-				path: "/profile/:wcaid",
+				path: "/profile/:wcaid?",
 				element: <Profile />
 			}
 		]

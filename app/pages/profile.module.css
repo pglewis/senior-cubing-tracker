@@ -1,0 +1,116 @@
+.container {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.searchCard {
+    margin: var(--spacing-lg) 0;
+    text-align: left;
+}
+
+.profileCard {
+    margin-bottom: var(--spacing-lg);
+    text-align: left;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.profileName {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xs);
+}
+
+.profileDetails {
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+.ageTabsContainer {
+    margin-bottom: var(--spacing-lg);
+}
+
+.kinchScoresTitle {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-md);
+    text-align: left;
+}
+
+.kinchScoresGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.kinchScoreItem {
+    text-align: center;
+}
+
+.kinchScoreLabel {
+    opacity: 0.7;
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+}
+
+.kinchScoreValue {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+}
+
+.table {
+    width: 100%;
+}
+
+.tableHeader {
+    background: var(--color-background-highlight);
+}
+
+.tableHeaderCell {
+    padding: var(--spacing-sm);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    font-size: var(--font-size-sm);
+}
+
+.tableHeaderCell:first-child {
+    text-align: left;
+}
+
+.tableRow {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+.tableCell {
+    padding: var(--spacing-sm);
+    text-align: center;
+    font-size: var(--font-size-sm);
+}
+
+.tableCell:first-child {
+    text-align: left;
+}
+
+.eventName {
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xs);
+}
+
+.eventType {
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+.resultValue {
+    font-family: monospace;
+    font-weight: var(--font-weight-bold);
+}

@@ -43,7 +43,7 @@ const router = createBrowserRouter([
 					}
 				]
 			}, {
-				path: ROUTES.PROFILE,
+				path: "/profile/:wcaid",
 				element: <Profile />
 			}
 		]

@@ -47,7 +47,7 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 	}
 
 	return (
-		<DataContext.Provider value={{rankings, topRanks, isInitializing, error}}>
+		<DataContext.Provider value={{rankings, topRanks, isInitializing}}>
 			{children}
 		</DataContext.Provider>
 	);

@@ -6,7 +6,6 @@ export interface DataContextType {
 	rankings: EnhancedRankingsData | null;
 	topRanks: TopRank[] | null;
 	isInitializing: boolean;
-	error: Error | null;
 }
 
 // Fast Refresh requires files with React components to only export components

@@ -1,7 +1,7 @@
 .personHeader {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
 }
 
 .personName {
@@ -11,32 +11,31 @@
 /* Table styles */
 .table {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: var(--spacing-md);
 }
 
 /* Table header styles */
 .tableHeader {
-    cursor: pointer;
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
     text-align: left;
 }
 
-.eventHeader,
-.scoreHeader {
+.eventColumn,
+.scoreColumn {
     cursor: pointer;
 }
 
 /* Add arrow indicator for sorted column */
 .sortedAsc::after {
     content: "▲";
-    padding-left: 0.4em;
-    font-size: 0.8em;
+    padding-left: var(--spacing-xs);
+    font-size: var(--font-size-xs);
 }
 
 .sortedDesc::after {
     content: "▼";
-    padding-left: 0.4em;
-    font-size: 0.8em;
+    padding-left: var(--spacing-xs);
+    font-size: var(--font-size-xs);
 }
 
 /* Table column widths and alignment */

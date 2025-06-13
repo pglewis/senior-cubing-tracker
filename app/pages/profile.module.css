@@ -4,13 +4,12 @@
     text-align: center;
 }
 
-.searchCard {
-    margin: var(--spacing-lg) 0;
-    text-align: left;
+.nameSearch {
+	margin: var(--spacing-md) 0;
 }
 
 .profileCard {
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
     text-align: left;
 }
 
@@ -21,54 +20,76 @@
 }
 
 .profileName {
-    font-size: 2rem;
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-xs);
+	padding: 0;
+	margin: 0;
 }
 
 .profileDetails {
-    opacity: 0.7;
     font-size: var(--font-size-sm);
 }
 
 .ageTabsContainer {
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.kinchRankCard {
+	margin: var(--spacing-md) 0;
 }
 
 .kinchScoresTitle {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-md);
-    text-align: left;
+	margin: 0;
+    text-align: center;
 }
 
 .kinchScoresGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
+    grid-template-rows: auto auto auto; /* Three rows: labels, ranks, scores */
+    gap: var(--spacing-xs) var(--spacing-sm);
 }
 
 .kinchScoreItem {
-    text-align: center;
+    display: contents; /* This makes the children participate directly in the grid */
 }
 
 .kinchScoreLabel {
-    opacity: 0.7;
-    margin-bottom: var(--spacing-xs);
     font-size: var(--font-size-sm);
+    text-align: center;
+    grid-row: 1; /* All labels go in the first row */
+    align-self: end; /* Align to bottom of the grid row */
+}
+
+.kinchRankValue {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-active);
+    text-align: center;
+    grid-row: 2; /* All ranks go in the second row */
 }
 
 .kinchScoreValue {
-    font-size: 1.5rem;
-    font-weight: var(--font-weight-bold);
+    font-size: 1rem;
+    font-weight: var(--font-weight-normal);
+    opacity: 0.8;
+    text-align: center;
+    grid-row: 3; /* All scores go in the third row */
 }
 
 .table {
     width: 100%;
+	border-collapse: separate;
+    border-spacing: 0;
 }
 
 .tableHeader {
     background: var(--color-background-highlight);
+}
+
+.table th:first-child {
+    border-top-left-radius: var(--border-radius-sm);
+}
+.table th:last-child {
+    border-top-right-radius: var(--border-radius-sm);
 }
 
 .tableHeaderCell {

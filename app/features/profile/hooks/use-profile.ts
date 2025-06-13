@@ -14,6 +14,9 @@ interface ProfileData {
     world: number;
     continent: number;
     country: number;
+    worldRank: number;
+    continentRank: number;
+    countryRank: number;
   };
 
   // Individual event breakdown from kinch calculation
@@ -21,10 +24,6 @@ interface ProfileData {
 
   // Available age categories for this person
   availableAges: string[];
-
-  // Loading/error states
-  isLoading: boolean;
-  error: string | null;
 }
 
 interface UseProfileParams {
@@ -33,7 +32,7 @@ interface UseProfileParams {
 }
 
 export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
-	const {rankings, topRanks, isInitializing} = useData();
+	const {rankings} = useData();
 
 	// Get person data
 	const person = useMemo(() => {
@@ -65,39 +64,49 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 		region: person ? toRegionParam(person.countryId, false) : "world"
 	});
 
-	// Extract this person's scores from each ranking
+	// Extract this person's scores and rankings from each ranking list
 	const profileData = useMemo(() => {
-		if (!person || !rankings) {
+		if (!person) {
 			return {
-				kinchScores: {world: 0, continent: 0, country: 0},
+				kinchScores: {
+					world: 0,
+					continent: 0,
+					country: 0,
+					worldRank: 0,
+					continentRank: 0,
+					countryRank: 0
+				},
 				eventResults: [],
 			};
 		}
 
-		const worldRank = worldKinchRanks.find(rank => rank.personId === wcaId);
-		const continentRank = continentKinchRanks.find(rank => rank.personId === wcaId);
-		const countryRank = countryKinchRanks.find(rank => rank.personId === wcaId);
+		// Find the person's entry in each ranking list and get their position
+		const worldRankIndex = worldKinchRanks.findIndex(rank => rank.personId === wcaId);
+		const continentRankIndex = continentKinchRanks.findIndex(rank => rank.personId === wcaId);
+		const countryRankIndex = countryKinchRanks.findIndex(rank => rank.personId === wcaId);
+
+		const worldRank = worldKinchRanks[worldRankIndex];
+		const continentRank = continentKinchRanks[continentRankIndex];
+		const countryRank = countryKinchRanks[countryRankIndex];
 
 		return {
 			kinchScores: {
 				world: worldRank?.overall || 0,
 				continent: continentRank?.overall || 0,
 				country: countryRank?.overall || 0,
+				// Ranking positions are 1-indexed (add 1 to array index)
+				worldRank: worldRankIndex >= 0 ? worldRankIndex + 1 : 0,
+				continentRank: continentRankIndex >= 0 ? continentRankIndex + 1 : 0,
+				countryRank: countryRankIndex >= 0 ? countryRankIndex + 1 : 0,
 			},
 			eventResults: worldRank?.events || [],
 		};
-	}, [person, rankings, wcaId, worldKinchRanks, continentKinchRanks, countryKinchRanks]);
-
-	// Handle loading and error states
-	const isLoading = isInitializing || !rankings || !topRanks;
-	const error = (!person && !isLoading && wcaId) ? `Person with ID "${wcaId}" not found` : null;
+	}, [person, wcaId, worldKinchRanks, continentKinchRanks, countryKinchRanks]);
 
 	return {
 		person,
 		kinchScores: profileData.kinchScores,
 		eventResults: profileData.eventResults,
 		availableAges,
-		isLoading,
-		error,
 	};
 }

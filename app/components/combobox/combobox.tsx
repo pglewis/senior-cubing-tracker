@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState, type ChangeEvent} from "react";
+import {useMemo, useRef, useState, useEffect, type ChangeEvent} from "react";
 import styles from "./combobox.module.css";
 
 export interface ComboboxItem {
@@ -35,6 +35,20 @@ export function Combobox({items, placeholder, onSelect, filterFn}: ComboboxProps
 
 	}, [items, searchTerm, filterFn]);
 
+	// Auto-highlight when there's only one item
+	useEffect(() => {
+		if (filteredItems.length === 1) {
+			setHighlightedIndex(0);
+		} else if (filteredItems.length === 0) {
+			setHighlightedIndex(undefined);
+		} else {
+			// When multiple items are available, only clear highlight if it's out of bounds
+			setHighlightedIndex(prev =>
+				prev !== undefined && prev >= filteredItems.length ? undefined : prev
+			);
+		}
+	}, [filteredItems]);
+
 	const handleSelect = (item: ComboboxItem) => {
 		setSearchTerm("");
 		setIsOpen(false);
@@ -62,7 +76,7 @@ export function Combobox({items, placeholder, onSelect, filterFn}: ComboboxProps
 			}
 			case "Enter": {
 				e.preventDefault();
-				if (highlightedIndex !== undefined) {
+				if (highlightedIndex !== undefined && filteredItems[highlightedIndex]) {
 					handleSelect(filteredItems[highlightedIndex]);
 				}
 				break;
@@ -80,10 +94,11 @@ export function Combobox({items, placeholder, onSelect, filterFn}: ComboboxProps
 		const newValue = e.target.value;
 
 		setSearchTerm(newValue);
-		setHighlightedIndex(undefined);
+		// Don't reset highlightedIndex here - let the useEffect handle it based on filtered results
 
 		if (!newValue) {
 			setIsOpen(false);
+			setHighlightedIndex(undefined);
 		} else {
 			setIsOpen(true);
 		}
@@ -107,7 +122,7 @@ export function Combobox({items, placeholder, onSelect, filterFn}: ComboboxProps
 				aria-expanded={isOpen}
 				aria-controls="search-listbox"
 				aria-activedescendant={
-					highlightedIndex !== undefined
+					highlightedIndex !== undefined && filteredItems[highlightedIndex]
 						? `option-${filteredItems[highlightedIndex].value}`
 						: undefined
 				}

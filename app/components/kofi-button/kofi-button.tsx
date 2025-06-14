@@ -8,7 +8,7 @@ export function KofiButton() {
 				className={styles.button}
 				href="https://ko-fi.com/J3J217WVE9"
 				target="_blank"
-				rel="noopener"
+				rel="noopener noreferrer"
 			>
 				<span className={styles.text}>
 					<img

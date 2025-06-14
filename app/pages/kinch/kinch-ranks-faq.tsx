@@ -15,7 +15,7 @@ export function KinchRanksFaq() {
 			</div>
 			<div id="content">
 				<p>
-					Kinch Ranks is a system designed to measure competitors' overall performance across all official WCA
+					Kinch Ranks is a system designed to measure competitors&apos; overall performance across all official WCA
 					events. The details of how the ranks are calculated can be found in the
 					<a href="https://www.speedsolving.com/threads/all-round-rankings-kinchranks.53353/" target="_blank" rel="noreferrer">
 						original forum discussion from SpeedSolving.com

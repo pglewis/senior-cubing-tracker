@@ -27,7 +27,7 @@ export function PersonScoresPage() {
 				<div className={styles.notFound}>
 					<h2>Senior Kinch Ranks</h2>
 					<p>
-						We were looking for someone's rankings but couldn't locate any results:
+						We were looking for someone&apos;s rankings but couldn&apos;t locate any results:
 					</p>
 					<p>
 						WCA ID: <code className={styles.highlightedData}>{personId}</code><br />

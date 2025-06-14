@@ -16,7 +16,7 @@ export function Home() {
 				<dl>
 					<dt><Link to={ROUTES.KINCH_RANKS}>Senior Kinch Ranks</Link></dt>
 					<dd>
-						Kinch Ranks are designed to measure a cuber's overall performance across all official WCA events.
+						Kinch Ranks are designed to measure a cuber&apos;s overall performance across all official WCA events.
 					</dd>
 				</dl>
 			</nav>

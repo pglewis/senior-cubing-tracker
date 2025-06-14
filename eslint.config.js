@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import globals from 'globals';
+import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
@@ -13,18 +14,34 @@ export default tseslint.config(
 		languageOptions: {
 			ecmaVersion: 2020,
 			globals: globals.browser,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
 		},
 		plugins: {
+			'react': react,
 			'react-hooks': reactHooks,
 			'react-refresh': reactRefresh,
 			"@stylistic": stylisticJs,
 		},
+		settings: {
+			react: {
+				version: 'detect',
+			},
+		},
 		rules: {
+			...react.configs.recommended.rules,
 			...reactHooks.configs.recommended.rules,
 			'react-refresh/only-export-components': [
 				'warn',
 				{allowConstantExport: true},
 			],
+			// React-specific rules you might want to customize
+			'react/react-in-jsx-scope': 'off', // Not needed with React 17+
+			'react/jsx-uses-react': 'off',     // Not needed with React 17+
+
 			"no-console": ["error", {allow: ["error"]}],
 			"@typescript-eslint/consistent-type-imports": "error",
 			"@stylistic/linebreak-style": ["error", "unix"],

@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Link} from "react-router";
 import clsx from "clsx";
 import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
+import {buildProfileRoute} from "@repo/app/routes";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./person-scores.module.css";
@@ -42,7 +43,7 @@ export function PersonScores(props: PersonScoresProps) {
 	}
 
 	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
-	const competitorURL = `https://www.worldcubeassociation.org/persons/${personKinchRank.personId}`;
+	const competitorURL = `${buildProfileRoute(personKinchRank.personId)}?age=${age}`;
 
 	const handleSort = (column: SortColumn) => {
 		setSortBy(column);
@@ -61,9 +62,9 @@ export function PersonScores(props: PersonScoresProps) {
 				<div className={styles.personHeader}>
 					<CountryFlag countryCode={countryCode} />
 					<h3 className={styles.personName}>
-						<a className={styles.link} href={competitorURL} target="_blank" rel="noopener noreferrer">
+						<Link className={styles.link} to={competitorURL}>
 							{personKinchRank.personName}
-						</a>
+						</Link>
 					</h3>
 				</div>
 				<div>

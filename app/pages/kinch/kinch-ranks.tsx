@@ -1,5 +1,6 @@
 import {useRef, useMemo} from "react";
 import {useLocation} from "react-router";
+import {buildKinchPersonRoute} from "@repo/app/routes";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
@@ -51,6 +52,10 @@ export function KinchRanks() {
 		setParams({page: newPage}, options);
 	};
 
+	const getPersonUrl = (personId: string) => {
+		return buildKinchPersonRoute(personId) + `?age=${age}&region=${region}`;
+	};
+
 	return (
 		<KinchLayout availableAgeOptions={ageOptions}>
 			{totalPages > 1 && (
@@ -67,6 +72,7 @@ export function KinchRanks() {
 			<KinchLeaderboard
 				displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
 				startIdx={(page - 1) * ROWS_PER_PAGE}
+				getPersonUrl={getPersonUrl}
 				highlightId={state?.highlight}
 			/>
 

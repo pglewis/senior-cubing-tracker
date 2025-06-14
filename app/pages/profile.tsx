@@ -13,7 +13,20 @@ export function Profile() {
 	const navigate = useNavigate();
 	const {rankings} = useData();
 
-	const age = searchParams.get("age") || "40";
+	// Get available ages to determine the default
+	const {availableAges} = useProfile({
+		wcaId: wcaid || "",
+		age: "40" // temporary value for initial call
+	});
+
+	// Use the oldest available age as default, or "40" as fallback
+	const defaultAge = availableAges.length > 0 ? availableAges[availableAges.length - 1] : "40";
+	const age = searchParams.get("age") || defaultAge;
+
+	const {person, kinchScores, eventResults} = useProfile({
+		wcaId: wcaid || "",
+		age
+	});
 
 	// Prepare combobox items from rankings
 	const comboboxItems: ComboboxItem[] = rankings ?
@@ -33,11 +46,6 @@ export function Profile() {
 			return params;
 		});
 	};
-
-	const {person, kinchScores, eventResults, availableAges} = useProfile({
-		wcaId: wcaid || "",
-		age
-	});
 
 	return (
 		<div className={styles.container}>

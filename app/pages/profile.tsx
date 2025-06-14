@@ -121,38 +121,6 @@ function ProfileContent(props: ProfileContentProps) {
 		return `${ROUTES.KINCH_RANKS}?page=${targetPage}&age=${age}&region=${region}`;
 	};
 
-	// Create table rows for events that have results
-	const tableRows = [];
-	for (const event of eventResults) {
-		// Add single result row if it exists
-		if (event.single) {
-			tableRows.push({
-				eventId: event.eventId,
-				eventName: event.eventName,
-				type: "single",
-				result: event.single.result,
-				worldRank: event.single.worldRank,
-				continentRank: event.single.continentRank,
-				countryRank: event.single.countryRank,
-				kinchScores: event.kinchScores
-			});
-		}
-
-		// Add average result row if it exists
-		if (event.average) {
-			tableRows.push({
-				eventId: event.eventId,
-				eventName: event.eventName,
-				type: "average",
-				result: event.average.result,
-				worldRank: event.average.worldRank,
-				continentRank: event.average.continentRank,
-				countryRank: event.average.countryRank,
-				kinchScores: event.kinchScores
-			});
-		}
-	}
-
 	return (
 		<>
 			{/* Profile Header */}
@@ -236,53 +204,96 @@ function ProfileContent(props: ProfileContentProps) {
 				</div>
 			</Card>
 
-			{/* Event Results Table */}
-			{tableRows.length > 0 && (
-				<table className={styles.table}>
-					<thead className={styles.tableHeader}>
-						<tr>
-							<th className={styles.tableHeaderCell}>Event</th>
-							<th className={styles.tableHeaderCell}>Result</th>
-							<th className={styles.tableHeaderCell}>WR</th>
-							<th className={styles.tableHeaderCell}>CR</th>
-							<th className={styles.tableHeaderCell}>NR</th>
-							<th className={styles.tableHeaderCell}>WK</th>
-							<th className={styles.tableHeaderCell}>CK</th>
-							<th className={styles.tableHeaderCell}>NK</th>
-						</tr>
-					</thead>
-					<tbody>
-						{tableRows.map((row, index) => (
-							<tr key={`${row.eventId}-${row.type}-${index}`} className={styles.tableRow}>
-								<td className={styles.tableCell}>
-									<div className={styles.eventName}>{row.eventName}</div>
-									<div className={styles.eventType}>
-										({row.type})
+			{/* Event Results - New Card-based Layout */}
+			{eventResults.length > 0 && (
+				<div className={styles.eventResultsContainer}>
+					{eventResults.map((event) => (
+						<Card key={event.eventId} className={styles.eventCard}>
+							<div className={styles.eventHeader}>
+								<div className={styles.eventName}>{event.eventName}</div>
+								{event.kinchScores && (
+									<div className={styles.eventKinch}>
+										<div className={styles.kinchLabel}>Kinch Scores</div>
+										<div className={styles.kinchValues}>
+											<div className={styles.kinchValue}>
+												<div className={styles.kinchValueLabel}>🌍</div>
+												<div className={styles.kinchValueScore}>
+													{event.kinchScores.world.toFixed(1)}
+												</div>
+											</div>
+											<div className={styles.kinchValue}>
+												<div className={styles.kinchValueLabel}>🌎</div>
+												<div className={styles.kinchValueScore}>
+													{event.kinchScores.continent.toFixed(1)}
+												</div>
+											</div>
+											<div className={styles.kinchValue}>
+												<div className={styles.kinchValueLabel}>
+													<CountryFlag
+														countryCode={person.countryId}
+														size="small"
+														decorative
+													/>
+												</div>
+												<div className={styles.kinchValueScore}>
+													{event.kinchScores.country.toFixed(1)}
+												</div>
+											</div>
+										</div>
 									</div>
-								</td>
-								<td className={`${styles.tableCell} ${styles.resultValue}`}>
-									{row.result}
-								</td>
-								<td className={styles.tableCell}>#{row.worldRank}</td>
-								<td className={styles.tableCell}>#{row.continentRank}</td>
-								<td className={styles.tableCell}>#{row.countryRank}</td>
-								<td className={styles.tableCell}>
-									{row.kinchScores?.world ? row.kinchScores.world.toFixed(1) : "--"}
-								</td>
-								<td className={styles.tableCell}>
-									{row.kinchScores?.continent ? row.kinchScores.continent.toFixed(1) : "--"}
-								</td>
-								<td className={styles.tableCell}>
-									{row.kinchScores?.country ? row.kinchScores.country.toFixed(1) : "--"}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+								)}
+							</div>
+							<div className={styles.resultsContainer}>
+								<div className={`${styles.resultsGrid} ${event.single && event.average ? styles.twoColumn : ""}`}>
+									{event.single && (
+										<div className={styles.resultItem}>
+											<div className={styles.resultType}>Single</div>
+											<div className={styles.resultValue}>{event.single.result}</div>
+											<div className={styles.resultRanks}>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>WR</div>
+													<div className={styles.rankValue}>#{event.single.worldRank}</div>
+												</div>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>CR</div>
+													<div className={styles.rankValue}>#{event.single.continentRank}</div>
+												</div>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>NR</div>
+													<div className={styles.rankValue}>#{event.single.countryRank}</div>
+												</div>
+											</div>
+										</div>
+									)}
+									{event.average && (
+										<div className={styles.resultItem}>
+											<div className={styles.resultType}>Average</div>
+											<div className={styles.resultValue}>{event.average.result}</div>
+											<div className={styles.resultRanks}>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>WR</div>
+													<div className={styles.rankValue}>#{event.average.worldRank}</div>
+												</div>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>CR</div>
+													<div className={styles.rankValue}>#{event.average.continentRank}</div>
+												</div>
+												<div className={styles.rankItem}>
+													<div className={styles.rankLabel}>NR</div>
+													<div className={styles.rankValue}>#{event.average.countryRank}</div>
+												</div>
+											</div>
+										</div>
+									)}
+								</div>
+							</div>
+						</Card>
+					))}
+				</div>
 			)}
 
 			{/* Show message if no results for this age category */}
-			{tableRows.length === 0 && (
+			{eventResults.length === 0 && (
 				<Card className={styles.notFoundCard}>
 					<div>No results found for {age}+ age category</div>
 				</Card>

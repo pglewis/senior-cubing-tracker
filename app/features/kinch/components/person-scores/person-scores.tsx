@@ -72,11 +72,9 @@ export function PersonScores(props: PersonScoresProps) {
 				</div>
 				<div>
 					Rank: #{kinchRanking} (
-					<ShowInRankingsListLink
-						targetPage={targetPage}
-						wcaId={personKinchRank.personId}
-						getShowInRankingsUrl={getShowInRankingsUrl}
-					/>
+					<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: personKinchRank.personId}}>
+						Show on leaderboard
+					</Link>
 					)
 				</div>
 				<div>
@@ -136,20 +134,6 @@ export function PersonScores(props: PersonScoresProps) {
 				</tbody>
 			</table>
 		</div>
-	);
-}
-
-interface ShowInRankingsListLinkProps {
-	targetPage: number;
-	wcaId: string;
-	getShowInRankingsUrl: (targetPage: number) => string;
-}
-
-function ShowInRankingsListLink({targetPage, wcaId, getShowInRankingsUrl}: ShowInRankingsListLinkProps) {
-	return (
-		<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: wcaId}}>
-			Show on leaderboard
-		</Link>
 	);
 }
 

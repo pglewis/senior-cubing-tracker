@@ -92,6 +92,8 @@ function ProfileContent(props: ProfileContentProps) {
 		onAgeChange
 	} = props;
 
+	const wcaProfileUrl = `https://www.worldcubeassociation.org/persons/${person.personId}`;
+
 	return (
 		<>
 			{/* Profile Header */}
@@ -106,7 +108,12 @@ function ProfileContent(props: ProfileContentProps) {
 						<h2 className={styles.profileName}>{person.name}</h2>
 						<div className={styles.profileDetails}>
 							<div>Country: {rankings?.countries[person.countryId]?.name || person.countryId}</div>
-							<div>WCA ID: {person.personId}</div>
+							<div>
+								WCA ID: {" "}
+								<a href={wcaProfileUrl} target="_blank" rel="noopener noreferrer">
+									{person.personId}
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>

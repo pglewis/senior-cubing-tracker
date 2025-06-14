@@ -1,16 +1,19 @@
 import {useEffect, useRef} from "react";
 import {Link} from "react-router";
+import {buildProfileRoute} from "@repo/app/routes";
+import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import styles from "./kinch-leaderboard.module.css";
+
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
 	startIdx: number,
-	getPersonUrl: (personId: string) => string,
 	highlightId?: string,
 };
 
-export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highlightId}: KinchLeaderboardProps) {
+export function KinchLeaderboard({displayRanks, startIdx, highlightId}: KinchLeaderboardProps) {
 	const highlightRef = useRef<HTMLTableRowElement>(null);
+	const {age} = useKinchContext();
 
 	useEffect(() => {
 		if (highlightId && highlightRef.current) {
@@ -37,7 +40,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
 						<td className={styles.nameColumn}>
 							<Link
-								to={getPersonUrl(rank.personId)}
+								to={`${buildProfileRoute(rank.personId)}?age=${age}`}
 								className={styles.link}
 							>
 								{rank.personName}

@@ -5,6 +5,7 @@ import {ROUTES} from "@repo/app/routes";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {Card} from "@repo/app/components/card/card";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
+import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
 import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobox";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./profile.module.css";
@@ -52,6 +53,8 @@ export function Profile() {
 	return (
 		<div className={styles.container}>
 			<h2>Senior Profiles</h2>
+
+			<DataLastUpdated text={rankings.lastUpdated} />
 
 			{/* Always show search */}
 			<div className={styles.nameSearch}>

@@ -6,17 +6,17 @@
     <script>
         // Store the current path and redirect to index.html
         // This preserves the intended route for React Router to handle
-        const path = window.location.pathname + window.location.search + window.location.hash;
+        const fullPath = window.location.pathname + window.location.search + window.location.hash;
 
-        // For GitHub Pages, we need to handle the base path
-        // Store the full path including the base
-        sessionStorage.setItem('redirect', path);
-
-        // Get the base path from the current URL
+        // For GitHub Pages, extract the base path from the URL
         const segments = window.location.pathname.split('/');
         const basePath = segments.length > 1 && segments[1] ? `/${segments[1]}/` : '/';
 
-        // Redirect to the base path (repo root)
+        // Store the full path including base path info
+        sessionStorage.setItem('redirect', fullPath);
+        sessionStorage.setItem('basePath', basePath);
+
+        // Redirect to the index.html at the base path
         window.location.replace(window.location.origin + basePath);
     </script>
 </head>

@@ -1,0 +1,42 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+
+  # schedule:
+  #   - cron: "20 2 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+
+      - name: Set node version (we need 23.6.0 for native type stripping)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.6.0
+
+      - name: npm install
+        run: npm install
+
+      - name: Vite Build
+        run: npm run build
+
+      - name: Copy and process the senior rankings data
+        run: npm run process-data
+
+      - name: Create .nojekyll
+        run: touch ./dist/.nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ./dist

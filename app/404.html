@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+        // Store the current path and redirect to index.html
+        // This preserves the intended route for React Router to handle
+        const path = window.location.pathname + window.location.search + window.location.hash;
+
+        // For GitHub Pages, we need to redirect to the root with the path as a parameter
+        // or use sessionStorage to preserve the route
+        sessionStorage.setItem('redirect', path);
+
+        // Redirect to the root
+        window.location.replace(window.location.origin + '/');
+    </script>
+</head>
+<body>
+    <p>Redirecting to app...</p>
+</body>
+</html>

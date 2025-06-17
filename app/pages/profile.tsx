@@ -9,6 +9,7 @@ import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-
 import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobox";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./profile.module.css";
+import {RankingLink} from "../components/urls/ranking-link";
 
 export function Profile() {
 	const {wcaid} = useParams<{wcaid?: string;}>();
@@ -207,7 +208,7 @@ function ProfileContent(props: ProfileContentProps) {
 				</div>
 			</Card>
 
-			{/* Event Results - New Card-based Layout */}
+			{/* Event Results */}
 			{eventResults.length > 0 && (
 				<div className={styles.eventResultsContainer}>
 					{eventResults.map((event) => (
@@ -251,7 +252,11 @@ function ProfileContent(props: ProfileContentProps) {
 									{event.single && (
 										<div className={styles.resultItem}>
 											<div className={styles.resultType}>Single</div>
-											<div className={styles.resultValue}>{event.single.result}</div>
+											<div className={styles.resultValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="single">
+													{event.single.result}
+												</RankingLink>
+											</div>
 											<div className={styles.resultRanks}>
 												<div className={styles.rankItem}>
 													<div className={styles.rankLabel}>WR</div>
@@ -271,7 +276,11 @@ function ProfileContent(props: ProfileContentProps) {
 									{event.average && (
 										<div className={styles.resultItem}>
 											<div className={styles.resultType}>Average</div>
-											<div className={styles.resultValue}>{event.average.result}</div>
+											<div className={styles.resultValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="average">
+													{event.average.result}
+												</RankingLink>
+											</div>
 											<div className={styles.resultRanks}>
 												<div className={styles.rankItem}>
 													<div className={styles.rankLabel}>WR</div>

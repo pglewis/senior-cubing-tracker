@@ -13,7 +13,7 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 		async function loadData() {
 			try {
 				const [rankingsRes, topRanksRes] = await Promise.all([
-					fetch("/data/enhanced-rankings.json"), // Updated endpoint
+					fetch("/data/enhanced-rankings.json"),
 					fetch("/data/topranks.json")
 				]);
 

@@ -1,12 +1,18 @@
 import {useContext} from "react";
 import {DataContext} from "@repo/app/context/data-context";
-import type {DataContextType} from "@repo/app/context/data-context";
+import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
+import type {TopRank} from "@repo/common/types/kinch-types";
+
+export interface DataContextType {
+	rankings: EnhancedRankingsData | null;
+	topRanks: TopRank[] | null;
+	isInitializing: boolean;
+}
 
 interface InitializedData extends DataContextType {
 	rankings: NonNullable<DataContextType["rankings"]>;
 	topRanks: NonNullable<DataContextType["topRanks"]>;
 	isInitializing: false;
-	error: null;
 }
 
 export function useData(): InitializedData {
@@ -17,9 +23,6 @@ export function useData(): InitializedData {
 	}
 	if (context.isInitializing) { // Changed condition
 		throw new Error("Data is still initializing");
-	}
-	if (context.error) {
-		throw new Error("Data failed to load");
 	}
 	if (!context.rankings || !context.topRanks) {
 		throw new Error("Rankings data not available");

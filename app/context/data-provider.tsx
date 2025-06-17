@@ -14,8 +14,8 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 			try {
 				const [rankingsRes, topRanksRes] = await Promise.all([
 					//--!! We can't reference from the root on gh-pages, find a better way
-					fetch("../../data/enhanced-rankings.json"),
-					fetch("../../data/topranks.json")
+					fetch("../data/enhanced-rankings.json"),
+					fetch("../data/topranks.json")
 				]);
 
 				if (!rankingsRes.ok || !topRanksRes.ok) {

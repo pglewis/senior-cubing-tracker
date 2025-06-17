@@ -1,6 +1,6 @@
 import {writeFile, mkdir} from "node:fs/promises";
 import {createContext, runInContext} from "node:vm";
-import type {RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
+import type {Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData, FlatResult, PersonProfile} from "@repo/common/types/enhanced-rankings";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
@@ -127,7 +127,7 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 				const competition = rankings.competitions[competitionIdToIndex[rank.competition]];
 
 				// Calculate ranks
-				const worldRank = i + 1;
+				const worldRank = rank.rank;
 				const continentRank = regionalRankings.continents[continent.id]?.[person.id] || 0;
 				const countryRank = regionalRankings.countries[country.id]?.[person.id] || 0;
 
@@ -210,7 +210,7 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 }
 
 function buildRegionalRankings(
-	ranks: RankingsSnapshot["events"][0]["rankings"][0]["ranks"],
+	ranks: Rank[],
 	rankings: RankingsSnapshot,
 	personIdToIndex: {[key: string]: number},
 	countryIdToIndex: {[key: string]: number},

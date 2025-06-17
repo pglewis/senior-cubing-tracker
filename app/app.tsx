@@ -10,6 +10,13 @@ import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Profile} from "@repo/app/pages/profile";
 import {KinchProvider} from "@repo/app/features/kinch/context/kinch-provider";
 
+// Get the basename from Vite's BASE_URL
+// Remove trailing slash if present for React Router
+const getBasename = () => {
+	const base = import.meta.env.BASE_URL || "/";
+	return base === "/" ? "" : base.replace(/\/$/, "");
+};
+
 const router = createBrowserRouter([
 	{
 		path: ROUTES.HOME,
@@ -52,7 +59,9 @@ const router = createBrowserRouter([
 		path: "*",
 		element: <Navigate to={ROUTES.HOME} replace />
 	}
-]);
+], {
+	basename: getBasename()
+});
 
 export function App() {
 	return <RouterProvider router={router} />;

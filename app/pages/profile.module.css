@@ -4,6 +4,10 @@
 	text-align: center;
 }
 
+.container input {
+	width: 100%;
+}
+
 .nameSearch {
 	margin: var(--spacing-md) 0;
 }

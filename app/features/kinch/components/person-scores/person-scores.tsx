@@ -29,7 +29,7 @@ export function PersonScores(props: PersonScoresProps) {
 		countryCode,
 		regionName,
 		age,
-		returnPath,
+		// returnPath,
 		getRankingUrl,
 		getShowInRankingsUrl,
 		rowsPerPage,
@@ -80,9 +80,9 @@ export function PersonScores(props: PersonScoresProps) {
 				<div>
 					Overall score: {personKinchRank.overall.toFixed(2)}
 				</div>
-				<Link className={styles.returnLink} to={returnPath}>
+				{/* <Link className={styles.returnLink} to={returnPath}>
 					← Return to previous view
-				</Link>
+				</Link> */}
 			</Card>
 			<table className={styles.table}>
 				<caption className="sr-only">

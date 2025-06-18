@@ -5,7 +5,7 @@ import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import type {PersonProfile, FlatResult} from "@repo/common/types/enhanced-rankings";
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 
-interface EventResult {
+export interface EventResult {
   eventId: WCAEventId;
   eventName: string;
   single?: {
@@ -27,7 +27,7 @@ interface EventResult {
   };
 }
 
-interface ProfileData {
+export interface ProfileData {
   // Person details
   person: PersonProfile | null;
 

@@ -1,15 +1,31 @@
 :root {
 	color-scheme: dark;
 
+	/* Typography */
+	--font-family-base: "Ubuntu Sans Variable", sans-serif;
+	--font-size-xs: 0.75rem;
+	--font-size-sm: 0.9rem;
+	--font-size-md: 1rem;
+	--font-size-lg: 1.25rem;
+	--font-size-form: 16px;
+	/* Prevents zoom on mobile */
+	--font-weight-normal: 400;
+	--font-weight-bold: 700;
+
 	/* Dark theme (default/fallback) */
 	--color-background: #222;
 	--color-background-header: #2a2a2a;
 	--color-background-highlight: #404040;
 
+	--color-cube-yellow: #eab308;
+	--color-cube-yellow-light: #fefce8;
+	--color-cube-blue-light: #eff6ff;
+
 	--color-text: gainsboro;
 	--color-link: #fff3cc;
 
 	--color-border: #ccc;
+	--color-border-subtle: #cccccc60;
 
 	--color-active: #e64503;
 	--color-focus: #4a9eff;
@@ -18,7 +34,7 @@
 	--color-table-row-even: var(--color-background-header);
 
 	/* Layout */
-	--header-height: 4rem; /* Fixed header */
+	--header-height: 4rem; 	/* Fixed header */
 	--content-max-width: 320px;
 
 	--spacing-xs: 0.25rem;
@@ -26,22 +42,14 @@
 	--spacing-md: 1rem;
 	--spacing-lg: 2rem;
 
-	/* Typography */
-	--font-family-base: "Ubuntu Sans Variable", sans-serif;
-	--font-size-xs: 0.75rem;
-	--font-size-sm: 0.9rem;
-	--font-size-md: 1rem;
-	--font-size-lg: 1.25rem;
-	--font-size-form: 16px; /* Prevents zoom on mobile */
-	--font-weight-normal: 400;
-	--font-weight-bold: 700;
-
 	/* Form controls */
 	--form-control-height: 31px;
 
 	/* Borders */
 	--border-radius-sm: 4px;
 	--border-radius-md: 8px;
+	--border-default: 1px solid var(--color-border);
+	--border-subtle: 1px solid var(--color-border-subtle);
 }
 
 /* Light theme overrides */
@@ -49,12 +57,14 @@
 	color-scheme: light;
 
 	--color-background: #ffffff;
-	--color-background-header: #f4f4f4;
-	--color-background-highlight: rgb(214, 213, 190);
-	--color-text: #212529;
-	--color-link: #e64503;
-	--color-border: #dee2e6;
-	--color-focus: #0066cc;
+	--color-background-header: #f8fafc;
+	--color-background-highlight: #eceef0;
+	--color-text: #1e293b;
+	--color-link: #1976d2;
+	--color-border: #dadce0;
+	--color-border-subtle: var(--color-border);
+	--color-focus: #1976d2;
+
 	--color-table-row-odd: var(--color-background);
 	--color-table-row-even: var(--color-background-header);
 }

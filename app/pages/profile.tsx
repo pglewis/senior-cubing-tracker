@@ -211,7 +211,7 @@ function ProfileContent(props: ProfileContentProps) {
 
 			{/* Event Results */}
 			{eventResults.length > 0 && (
-				<EventResults eventResults={eventResults} person={person} age={age}/>
+				<EventResults eventResults={eventResults} person={person} age={age} />
 			)}
 
 			{/* Show message if no results for this age category */}
@@ -282,15 +282,27 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 									<div className={styles.resultRanks}>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>WR</div>
-											<div className={styles.rankValue}>#{event.single.worldRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="single">
+													#{event.single.worldRank}
+												</RankingLink>
+											</div>
 										</div>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>CR</div>
-											<div className={styles.rankValue}>#{event.single.continentRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="single" region={{type: "continent", id: person.continentId}}>
+													#{event.single.continentRank}
+												</RankingLink>
+											</div>
 										</div>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>NR</div>
-											<div className={styles.rankValue}>#{event.single.countryRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="single" region={{type: "country", id: person.countryId}}>
+													#{event.single.countryRank}
+												</RankingLink>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -306,15 +318,27 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 									<div className={styles.resultRanks}>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>WR</div>
-											<div className={styles.rankValue}>#{event.average.worldRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="average">
+													#{event.average.worldRank}
+												</RankingLink>
+											</div>
 										</div>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>CR</div>
-											<div className={styles.rankValue}>#{event.average.continentRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="average" region={{type: "continent", id: person.continentId}}>
+													#{event.average.continentRank}
+												</RankingLink>
+											</div>
 										</div>
 										<div className={styles.rankItem}>
 											<div className={styles.rankLabel}>NR</div>
-											<div className={styles.rankValue}>#{event.average.countryRank}</div>
+											<div className={styles.rankValue}>
+												<RankingLink age={age} eventId={event.eventId} eventType="average" region={{type: "country", id: person.countryId}}>
+													#{event.average.countryRank}
+												</RankingLink>
+											</div>
 										</div>
 									</div>
 								</div>

@@ -5,19 +5,22 @@ export interface RankingLinkProps {
 	eventId: WCAEventId;
 	eventType: EventRanking["type"];
 	age: string;
-	regionInfo?: RegionInfo;
+	region?: {
+		type: RegionInfo["type"];
+		id: RegionInfo["id"];
+	};
 	children: React.ReactNode;
 	className?: string;
 };
 
-export function RankingLink({eventId, eventType, age, regionInfo, children, className}: RankingLinkProps) {
+export function RankingLink({eventId, eventType, age, region, children, className}: RankingLinkProps) {
 	const baseRankingURL = "https://wca-seniors.org/Senior_Rankings.html";
 
 	let regionParam = "";
-	if (regionInfo && regionInfo.type === "continent") {
-		regionParam = `-${regionInfo.id.toLowerCase()}`;
-	} else if (regionInfo && regionInfo.type === "country") {
-		regionParam = `-xx-${regionInfo.id.toLowerCase()}`;
+	if (region && region.type === "continent") {
+		regionParam = `-${region.id.toLowerCase()}`;
+	} else if (region && region.type === "country") {
+		regionParam = `-xx-${region.id.toLowerCase()}`;
 	}
 
 	const rankingURL = `${baseRankingURL}#${eventId}-${eventType}-${age}${regionParam}`;

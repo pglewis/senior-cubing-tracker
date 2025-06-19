@@ -17,7 +17,7 @@
 
 .pageButtonActive {
 	background: var(--color-active);
-	color: var(--color-text);
+	color: var(--color-active-fg);
 }
 
 .pageButton:disabled {

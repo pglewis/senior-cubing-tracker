@@ -2,7 +2,7 @@ import {useParams, useSearchParams, useNavigate, Link} from "react-router";
 import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import {useProfile, type ProfileData} from "@repo/app/features/profile/hooks/use-profile";
 import {useData} from "@repo/app/hooks/use-data";
-import {ROUTES} from "@repo/app/routes";
+import {buildKinchPersonRoute} from "@repo/app/routes";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {Card} from "@repo/app/components/card/card";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
@@ -109,23 +109,6 @@ function ProfileContent(props: ProfileContentProps) {
 
 	const wcaProfileUrl = `https://www.worldcubeassociation.org/persons/${person.personId}`;
 
-	// Helper function to build kinch ranking URLs with highlighting
-	const buildKinchRankingUrl = (regionType: "world" | "continent" | "country", rank: number) => {
-		let region = "world";
-
-		if (regionType === "continent") {
-			region = toRegionParam(person.continentId, true);
-		} else if (regionType === "country") {
-			region = toRegionParam(person.countryId, false);
-		}
-
-		// Calculate target page (assuming 25 rows per page like in person-scores-page)
-		const rowsPerPage = 25;
-		const targetPage = Math.ceil(rank / rowsPerPage);
-
-		return `${ROUTES.KINCH_RANKS}?page=${targetPage}&age=${age}&region=${region}`;
-	};
-
 	return (
 		<>
 			{/* Profile Header */}
@@ -171,9 +154,8 @@ function ProfileContent(props: ProfileContentProps) {
 						<div className={styles.kinchScoreLabel}>World</div>
 						<div className={styles.kinchRankValue}>
 							<Link
-								to={buildKinchRankingUrl("world", kinchScores.worldRank)}
+								to={buildKinchPersonRoute(person.personId) + `?age=${age}`}
 								state={{highlight: person.personId}}
-								style={{textDecoration: "none", color: "inherit"}}
 							>
 								#{kinchScores.worldRank}
 							</Link>
@@ -184,9 +166,8 @@ function ProfileContent(props: ProfileContentProps) {
 						<div className={styles.kinchScoreLabel}>{rankings?.continents[person.continentId]?.name || person.continentId}</div>
 						<div className={styles.kinchRankValue}>
 							<Link
-								to={buildKinchRankingUrl("continent", kinchScores.continentRank)}
+								to={buildKinchPersonRoute(person.personId) + `?age=${age}&region=${toRegionParam(person.continentId, true)}`}
 								state={{highlight: person.personId}}
-								style={{textDecoration: "none", color: "inherit"}}
 							>
 								#{kinchScores.continentRank}
 							</Link>
@@ -197,9 +178,8 @@ function ProfileContent(props: ProfileContentProps) {
 						<div className={styles.kinchScoreLabel}>{rankings?.countries[person.countryId]?.name || person.countryId}</div>
 						<div className={styles.kinchRankValue}>
 							<Link
-								to={buildKinchRankingUrl("country", kinchScores.countryRank)}
+								to={buildKinchPersonRoute(person.personId) + `?age=${age}&region=${toRegionParam(person.countryId, false)}`}
 								state={{highlight: person.personId}}
-								style={{textDecoration: "none", color: "inherit"}}
 							>
 								#{kinchScores.countryRank}
 							</Link>
@@ -232,6 +212,7 @@ export interface EventResultsProps {
 
 function EventResults({person, age, eventResults}: EventResultsProps) {
 	return (
+		// Event Kinch scores
 		<div className={styles.eventResultsContainer}>
 			{eventResults.map((event) => (
 				<Card key={event.eventId} className={styles.eventCard}>
@@ -269,6 +250,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 							</div>
 						)}
 					</div>
+					{/* Event results */}
 					<div className={styles.resultsContainer}>
 						<div className={`${styles.resultsGrid} ${event.single && event.average ? styles.twoColumn : ""}`}>
 							{event.single && (

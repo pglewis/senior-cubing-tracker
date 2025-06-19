@@ -7,7 +7,7 @@
 }
 
 .row:hover {
-    background: #454545;
+    background: var(--color-cube-yellow-light);
 }
 
 .rankColumn {
@@ -30,11 +30,7 @@
     text-decoration: none;
 }
 
-.link:hover {
-    text-decoration: underline;
-}
-
 .table tr.highlighted {
     background-color: var(--color-background-highlight);
-    transition: background-color 0.5s ease-out;
+    transition: background-color 0.3s ease-out;
 }

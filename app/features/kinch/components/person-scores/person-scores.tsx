@@ -58,7 +58,7 @@ export function PersonScores(props: PersonScoresProps) {
 
 	return (
 		<div className={styles.personScores}>
-			<Card>
+			<Card className="personCard">
 				<div className={styles.personHeader}>
 					<CountryFlag countryCode={countryCode} />
 					<h3 className={styles.personName}>
@@ -67,17 +67,16 @@ export function PersonScores(props: PersonScoresProps) {
 						</Link>
 					</h3>
 				</div>
-				<div>
+				<div className={styles.personRegionAge}>
 					{regionName}, {age}+
 				</div>
-				<div>
-					Rank: #{kinchRanking} (
+				<div className={styles.personRank}>
+					Rank:{" "}
 					<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: personKinchRank.personId}}>
-						Show on leaderboard
+						#{kinchRanking}
 					</Link>
-					)
 				</div>
-				<div>
+				<div className={styles.personOverallScore}>
 					Overall score: {personKinchRank.overall.toFixed(2)}
 				</div>
 				{/* <Link className={styles.returnLink} to={returnPath}>

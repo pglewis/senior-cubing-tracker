@@ -54,30 +54,27 @@
 }
 
 .kinchScoreItem {
-	display: contents;
 	/* This makes the children participate directly in the grid */
+	display: contents;
 }
 
 .kinchScoreLabel {
 	font-size: var(--font-size-sm);
 	text-align: center;
 	grid-row: 1;
-	/* All labels go in the first row */
-	align-self: end;
-	/* Align to bottom of the grid row */
+	align-self: end; /* Align to bottom of the grid row */
 }
 
 .kinchRankValue {
-	font-size: var(--font-size-lg);
+	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	color: var(--color-active);
 	text-align: center;
 	grid-row: 2;
-	/* All ranks go in the second row */
 }
 
 .kinchScoreValue {
-	font-size: 1rem;
+	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-normal);
 	opacity: 0.8;
 	text-align: center;

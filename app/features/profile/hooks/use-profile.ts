@@ -10,12 +10,14 @@ export interface EventResult {
   eventName: string;
   single?: {
     result: string;
+	date: string;
     worldRank: number;
     continentRank: number;
     countryRank: number;
-  };
-  average?: {
-    result: string;
+};
+average?: {
+	result: string;
+	date: string;
     worldRank: number;
     continentRank: number;
     countryRank: number;
@@ -130,6 +132,7 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 			if (results.single) {
 				eventResult.single = {
 					result: results.single.result,
+					date: rankings.competitions[results.single.competitionId].startDate,
 					worldRank: results.single.worldRank,
 					continentRank: results.single.continentRank,
 					countryRank: results.single.countryRank,
@@ -139,6 +142,7 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 			if (results.average) {
 				eventResult.average = {
 					result: results.average.result,
+					date: rankings.competitions[results.average.competitionId].startDate,
 					worldRank: results.average.worldRank,
 					continentRank: results.average.continentRank,
 					countryRank: results.average.countryRank,

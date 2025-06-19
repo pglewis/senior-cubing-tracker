@@ -29,7 +29,7 @@
 
 .active {
 	background: var(--color-active);
-	color: white;
+	color: var(--color-active-fg);
 	opacity: 1;
 
 	/* kludge to try to avoid edge gaps due to rounding */

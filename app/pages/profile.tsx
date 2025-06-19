@@ -49,7 +49,7 @@ export function Profile() {
 			const params = new URLSearchParams(prev);
 			params.set("age", newAge);
 			return params;
-		});
+		}, {preventScrollReset: true});
 	};
 
 	return (
@@ -236,7 +236,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 			{eventResults.map((event) => (
 				<Card key={event.eventId} className={styles.eventCard}>
 					<div className={styles.eventHeader}>
-						<div className={styles.eventName}>{event.eventName}</div>
+						<div className={styles.eventName}>{event.eventName} ({age}+)</div>
 						{event.kinchScores && (
 							<div className={styles.eventKinch}>
 								<div className={styles.kinchLabel}>Kinch Scores</div>

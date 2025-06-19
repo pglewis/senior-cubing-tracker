@@ -59,7 +59,7 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 				/>
 				<ButtonTabs
 					selectedValue={age}
-					onChange={(value) => setParams({age: value, page: 1})}
+					onChange={(value) => setParams({age: value, page: 1}, {preventScrollReset: true})}
 					options={availableAgeOptions}
 				/>
 			</div>

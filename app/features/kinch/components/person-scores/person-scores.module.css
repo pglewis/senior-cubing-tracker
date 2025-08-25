@@ -61,7 +61,7 @@
 }
 
 .row:hover {
-    background: var(--color-background-highlight);
+    background: var(--color-background-header);
 }
 
 .row.topScore {

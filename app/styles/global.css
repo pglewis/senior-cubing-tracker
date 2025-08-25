@@ -21,7 +21,7 @@ select {
 	font-size: var(--font-size-form);
 	padding: var(--spacing-xs) var(--spacing-sm);
 	color: var(--color-text);
-	background: var(--color-background-header);
+	background: var(--color-background-secondary);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-sm);
 	height: var(--form-control-height);
@@ -43,7 +43,7 @@ button.form-control {
 	font-size: var(--font-size-form);
 	padding: var(--spacing-xs) var(--spacing-sm);
 	color: var(--color-text);
-	background: var(--color-background-header);
+	background: var(--color-background-secondary);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-sm);
 	height: var(--form-control-height);
@@ -76,7 +76,7 @@ td {
 
 /* Header rows get distinct background */
 thead tr {
-	background-color: var(--color-background-highlight);
+	background-color: var(--color-background-header);
 }
 
 /* Body rows get alternating colors */

@@ -4,7 +4,7 @@
 	gap: var(--spacing-sm);
 	text-align: left;
 	padding: var(--spacing-md);
-	background-color: var(--color-background-header);
+	background-color: var(--color-background-secondary);
 	border-radius: var(--border-radius-md);
 	border: var(--border-subtle);
 }

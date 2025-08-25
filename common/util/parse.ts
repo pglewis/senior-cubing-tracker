@@ -3,7 +3,7 @@ export interface MultiResult {
 	/* solved minus unsolved */
 	score: number,
 	seconds: number,
-	unsolved: number
+	unsolved: number;
 }
 
 /**
@@ -37,4 +37,12 @@ export function timeResultToSeconds(result: string): number {
 	}
 
 	return seconds;
+}
+
+export function daysAgo(dateString: string): number {
+	// Calculate difference in milliseconds
+	const diffTime = new Date().getTime() - new Date(dateString).getTime();
+
+	// Convert to days (1000ms * 60s * 60m * 24h = milliseconds per day)
+	return Math.floor(diffTime / (1000 * 60 * 60 * 24));
 }

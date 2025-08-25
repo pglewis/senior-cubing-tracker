@@ -12,7 +12,7 @@
 }
 
 .pageButton:hover:not(.pageButtonActive) {
-	background: var(--color-background-highlight);
+	background: var(--color-background-header);
 }
 
 .pageButtonActive {

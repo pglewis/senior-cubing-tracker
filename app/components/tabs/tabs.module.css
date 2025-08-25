@@ -1,7 +1,7 @@
 .tabs {
 	display: flex;
 	background: var(--color-background);
-	border-bottom: 1px solid var(--color-background-highlight);
+	border-bottom: 1px solid var(--color-background-header);
 }
 
 .tab {
@@ -19,13 +19,13 @@
 }
 
 .tab:hover {
-	background: var(--color-background-highlight);
+	background: var(--color-background-header);
 }
 
 .tab.active {
 	color: var(--color-link);
 	border-bottom-color: var(--color-link);
-	background: var(--color-background-header);
+	background: var(--color-background-secondary);
 }
 
 .tab:focus-visible {
@@ -34,6 +34,6 @@
 }
 
 .content {
-	background: var(--color-background-header);
+	background: var(--color-background-secondary);
 	border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
 }

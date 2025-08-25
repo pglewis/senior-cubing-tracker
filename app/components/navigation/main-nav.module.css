@@ -41,7 +41,7 @@
     left: 0;
     width: 300px;
     height: calc(100vh - var(--header-height));
-    background: var(--color-background-header);
+    background: var(--color-background-secondary);
     padding: 2rem;
     z-index: 90;
     display: flex;

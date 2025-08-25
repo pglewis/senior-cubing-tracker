@@ -11,6 +11,7 @@ import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobo
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import {RankingLink} from "../components/urls/ranking-link";
 import styles from "./profile.module.css";
+import {daysAgo} from "@repo/common/util/parse";
 
 export function Profile() {
 	const {wcaid} = useParams<{wcaid?: string;}>();
@@ -253,12 +254,14 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 					{/* Event results */}
 					<div className={styles.resultsContainer}>
 						<div className={`${styles.resultsGrid} ${event.single && event.average ? styles.twoColumn : ""}`}>
+							{/* Single */}
 							{event.single && (
 								<div className={styles.resultItem}>
 									<div className={styles.resultType}>Single</div>
 									<div className={styles.resultValue}>
 										<RankingLink age={age} eventId={event.eventId} eventType="single">
-											{event.single.result}
+											{event.single.result} <br />
+											{daysAgo(event.single.date)} {event.single.date}
 										</RankingLink>
 									</div>
 									<div className={styles.resultRanks}>
@@ -289,6 +292,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 									</div>
 								</div>
 							)}
+							{/* Average */}
 							{event.average && (
 								<div className={styles.resultItem}>
 									<div className={styles.resultType}>Average</div>

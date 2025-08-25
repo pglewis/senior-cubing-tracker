@@ -1,6 +1,6 @@
 .buttonTabGroup {
 	display: flex;
-	background: var(--color-background-header);
+	background: var(--color-background-secondary);
 	border-radius: var(--border-radius-sm);
 	justify-content: center;
 	border: 1px solid var(--color-border);
@@ -24,7 +24,7 @@
 }
 
 .buttonTab:hover:not(.active) {
-	background-color: var(--color-background-highlight);
+	background-color: var(--color-background-header);
 }
 
 .active {

@@ -14,8 +14,8 @@
 
 	/* Dark theme (default/fallback) */
 	--color-background: #222;
-	--color-background-header: #2a2a2a;
-	--color-background-highlight: #404040;
+	--color-background-secondary: #2a2a2a; /* Card and input background */
+	--color-background-header: #404040;
 
 	--color-text: gainsboro;
 	--color-link: #fff3cc;
@@ -26,9 +26,10 @@
 	--color-active: #e64503;
 	--color-active-fg: white; /* FG color to use with --color-active as a FG */
 	--color-focus: #4a9eff;
+	--color-highlight: #fff68e;
 
 	--color-table-row-odd: var(--color-background);
-	--color-table-row-even: var(--color-background-header);
+	--color-table-row-even: var(--color-background-secondary);
 
 	/* Layout */
 	--header-height: 4rem; 	/* Fixed header */
@@ -55,9 +56,8 @@
 	color-scheme: light;
 
 	--color-background: #ffffff;
-	--color-background-header: #f8fafc;
-	--color-background-highlight: #e0e0e0;
-	--color-yellow-light: #fff68e;
+	--color-background-secondary: #f8fafc;
+	--color-background-header: #e0e0e0;
 
 	--color-text: black;
 	--color-link: #1071d1;
@@ -66,5 +66,5 @@
 	--color-focus: #1976d2;
 
 	--color-table-row-odd: var(--color-background);
-	--color-table-row-even: var(--color-background-header);
+	--color-table-row-even: var(--color-background-secondary);
 }

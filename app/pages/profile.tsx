@@ -11,7 +11,7 @@ import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobo
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import {RankingLink} from "../components/urls/ranking-link";
 import styles from "./profile.module.css";
-import {daysAgo} from "@repo/common/util/parse";
+//import {daysAgo} from "@repo/common/util/parse";
 
 export function Profile() {
 	const {wcaid} = useParams<{wcaid?: string;}>();
@@ -260,8 +260,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 									<div className={styles.resultType}>Single</div>
 									<div className={styles.resultValue}>
 										<RankingLink age={age} eventId={event.eventId} eventType="single">
-											{event.single.result} <br />
-											{daysAgo(event.single.date)} {event.single.date}
+											{event.single.result}
 										</RankingLink>
 									</div>
 									<div className={styles.resultRanks}>

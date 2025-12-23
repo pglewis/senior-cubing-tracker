@@ -24,15 +24,15 @@ export function PersonScoresPage() {
 	if (!person || rankIndex < 0) {
 		return (
 			<>
-				<div className={styles.notFound}>
+				<div className={styles["not-found"]}>
 					<h2>Senior Kinch Ranks</h2>
-					<p>
+					<p className={styles["not-found-text"]}>
 						We were looking for someone&apos;s rankings but couldn&apos;t locate any results:
 					</p>
-					<p>
-						WCA ID: <code className={styles.highlightedData}>{personId}</code><br />
-						Age cateory: <code className={styles.highlightedData}>{age}</code><br />
-						Region: <code className={styles.highlightedData}>{region}</code><br />
+					<p className={styles["not-found-text"]}>
+						WCA ID: <code className={styles["highlighted-data"]}>{personId}</code><br />
+						Age cateory: <code className={styles["highlighted-data"]}>{age}</code><br />
+						Region: <code className={styles["highlighted-data"]}>{region}</code><br />
 					</p>
 					<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
 						View the main Leaderboard

@@ -1,32 +1,36 @@
 .container {
-    position: relative;
-    width: 100%;
+	position: relative;
+	width: 100%;
+}
+
+.container input {
+	width: 100%;
 }
 
 .list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    background-color: var(--color-background);
-    z-index: 10;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 10;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-sm);
+	background-color: var(--color-background);
+	list-style: none;
 }
 
 .list li {
 	margin: 0;
-    padding: var(--spacing-sm);
-    cursor: pointer;
+	padding: var(--spacing-sm);
+	cursor: pointer;
 }
 
 .list li:hover {
-    background: rgba(255, 255, 255, 0.1);
+	background: var(--color-background-header);
 }
 
 .list li.highlighted {
-    background: rgba(255, 255, 255, 0.2);
+	background: var(--color-background-header);
 }

@@ -7,7 +7,8 @@ import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {Card} from "@repo/app/components/card/card";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
-import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobox";
+import {CompetitorCombobox} from "@repo/app/components/competitor-combobox/competitor-combobox";
+import type {ComboboxItem} from "@repo/app/components/combobox/combobox";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import {RankingLink} from "../components/urls/ranking-link";
 import styles from "./profile.module.css";
@@ -41,7 +42,7 @@ export function Profile() {
 			label: person.name
 		})) : [];
 
-	const handlePersonSelect = (item: ComboboxItem) => {
+	const handleCompetitorSelect = (item: ComboboxItem) => {
 		navigate(`/profile/${item.value}`);
 	};
 
@@ -60,11 +61,10 @@ export function Profile() {
 			<DataLastUpdated text={rankings.lastUpdated} />
 
 			{/* Always show search */}
-			<div className={styles.nameSearch}>
-				<Combobox
+			<div className={styles["name-search"]}>
+				<CompetitorCombobox
 					items={comboboxItems}
-					placeholder="Search by name or WCA ID..."
-					onSelect={handlePersonSelect}
+					onSelect={handleCompetitorSelect}
 				/>
 			</div>
 
@@ -113,16 +113,16 @@ function ProfileContent(props: ProfileContentProps) {
 	return (
 		<>
 			{/* Profile Header */}
-			<Card className={styles.profileCard}>
-				<div className={styles.profileHeader}>
+			<Card className={styles["profile-card"]}>
+				<div className={styles["profile-header"]}>
 					<CountryFlag
 						countryCode={person.countryId}
 						size="large"
 						title={rankings?.countries[person.countryId]?.name || person.countryId}
 					/>
 					<div>
-						<h2 className={styles.profileName}>{person.name}</h2>
-						<div className={styles.profileDetails}>
+						<h2 className={styles["profile-name"]}>{person.name}</h2>
+						<div className={styles["profile-details"]}>
 							<div>Country: {rankings?.countries[person.countryId]?.name || person.countryId}</div>
 							<div>
 								WCA ID: {" "}
@@ -136,7 +136,7 @@ function ProfileContent(props: ProfileContentProps) {
 			</Card>
 
 			{/* Age Tabs */}
-			<div className={styles.ageTabsContainer}>
+			<div className={styles["age-tabs-container"]}>
 				<ButtonTabs
 					options={availableAges.map(availableAge => ({
 						value: availableAge,
@@ -148,12 +148,12 @@ function ProfileContent(props: ProfileContentProps) {
 			</div>
 
 			{/* Kinch Rankings */}
-			<Card className={styles.kinchRankCard}>
-				<h3 className={styles.kinchScoresTitle}>{age}+ Kinch Rankings</h3>
-				<div className={styles.kinchScoresGrid}>
-					<div className={styles.kinchScoreItem}>
-						<div className={styles.kinchScoreLabel}>World</div>
-						<div className={styles.kinchRankValue}>
+			<Card className={styles["kinch-rank-card"]}>
+				<h3 className={styles["kinch-scores-title"]}>{age}+ Kinch Rankings</h3>
+				<div className={styles["kinch-scores-grid"]}>
+					<div className={styles["kinch-score-item"]}>
+						<div className={styles["kinch-score-label"]}>World</div>
+						<div className={styles["kinch-rank-value"]}>
 							<Link
 								to={buildKinchPersonRoute(person.personId) + `?age=${age}`}
 								state={{highlight: person.personId}}
@@ -161,11 +161,11 @@ function ProfileContent(props: ProfileContentProps) {
 								#{kinchScores.worldRank}
 							</Link>
 						</div>
-						<div className={styles.kinchScoreValue}>{kinchScores.world.toFixed(2)}</div>
+						<div className={styles["kinch-score-value"]}>{kinchScores.world.toFixed(2)}</div>
 					</div>
-					<div className={styles.kinchScoreItem}>
-						<div className={styles.kinchScoreLabel}>{rankings?.continents[person.continentId]?.name || person.continentId}</div>
-						<div className={styles.kinchRankValue}>
+					<div className={styles["kinch-score-item"]}>
+						<div className={styles["kinch-score-label"]}>{rankings?.continents[person.continentId]?.name || person.continentId}</div>
+						<div className={styles["kinch-rank-value"]}>
 							<Link
 								to={buildKinchPersonRoute(person.personId) + `?age=${age}&region=${toRegionParam(person.continentId, true)}`}
 								state={{highlight: person.personId}}
@@ -173,11 +173,11 @@ function ProfileContent(props: ProfileContentProps) {
 								#{kinchScores.continentRank}
 							</Link>
 						</div>
-						<div className={styles.kinchScoreValue}>{kinchScores.continent.toFixed(2)}</div>
+						<div className={styles["kinch-score-value"]}>{kinchScores.continent.toFixed(2)}</div>
 					</div>
-					<div className={styles.kinchScoreItem}>
-						<div className={styles.kinchScoreLabel}>{rankings?.countries[person.countryId]?.name || person.countryId}</div>
-						<div className={styles.kinchRankValue}>
+					<div className={styles["kinch-score-item"]}>
+						<div className={styles["kinch-score-label"]}>{rankings?.countries[person.countryId]?.name || person.countryId}</div>
+						<div className={styles["kinch-rank-value"]}>
 							<Link
 								to={buildKinchPersonRoute(person.personId) + `?age=${age}&region=${toRegionParam(person.countryId, false)}`}
 								state={{highlight: person.personId}}
@@ -185,7 +185,7 @@ function ProfileContent(props: ProfileContentProps) {
 								#{kinchScores.countryRank}
 							</Link>
 						</div>
-						<div className={styles.kinchScoreValue}>{kinchScores.country.toFixed(2)}</div>
+						<div className={styles["kinch-score-value"]}>{kinchScores.country.toFixed(2)}</div>
 					</div>
 				</div>
 			</Card>
@@ -197,7 +197,7 @@ function ProfileContent(props: ProfileContentProps) {
 
 			{/* Show message if no results for this age category */}
 			{eventResults.length === 0 && (
-				<Card className={styles.notFoundCard}>
+				<Card className={styles["not-found-card"]}>
 					<div>No results found for {age}+ age category</div>
 				</Card>
 			)}
@@ -214,36 +214,36 @@ export interface EventResultsProps {
 function EventResults({person, age, eventResults}: EventResultsProps) {
 	return (
 		// Event Kinch scores
-		<div className={styles.eventResultsContainer}>
+		<div className={styles["event-results-container"]}>
 			{eventResults.map((event) => (
-				<Card key={event.eventId} className={styles.eventCard}>
-					<div className={styles.eventHeader}>
-						<div className={styles.eventName}>{event.eventName} ({age}+)</div>
+				<Card key={event.eventId} className={styles["event-card"]}>
+					<div className={styles["event-header"]}>
+						<div className={styles["event-name"]}>{event.eventName} ({age}+)</div>
 						{event.kinchScores && (
-							<div className={styles.eventKinch}>
-								<div className={styles.kinchLabel}>Kinch Scores</div>
-								<div className={styles.kinchValues}>
-									<div className={styles.kinchValue}>
-										<div className={styles.kinchValueLabel}>🌍</div>
-										<div className={styles.kinchValueScore}>
+							<div className={styles["event-kinch"]}>
+								<div className={styles["kinch-label"]}>Kinch Scores</div>
+								<div className={styles["kinch-values"]}>
+									<div className={styles["kinch-value"]}>
+										<div className={styles["kinch-value-label"]}>🌍</div>
+										<div className={styles["kinch-value-score"]}>
 											{event.kinchScores.world.toFixed(1)}
 										</div>
 									</div>
-									<div className={styles.kinchValue}>
-										<div className={styles.kinchValueLabel}>🌎</div>
-										<div className={styles.kinchValueScore}>
+									<div className={styles["kinch-value"]}>
+										<div className={styles["kinch-value-label"]}>🌎</div>
+										<div className={styles["kinch-value-score"]}>
 											{event.kinchScores.continent.toFixed(1)}
 										</div>
 									</div>
-									<div className={styles.kinchValue}>
-										<div className={styles.kinchValueLabel}>
+									<div className={styles["kinch-value"]}>
+										<div className={styles["kinch-value-label"]}>
 											<CountryFlag
 												countryCode={person.countryId}
 												size="small"
 												decorative
 											/>
 										</div>
-										<div className={styles.kinchValueScore}>
+										<div className={styles["kinch-value-score"]}>
 											{event.kinchScores.country.toFixed(1)}
 										</div>
 									</div>
@@ -252,37 +252,37 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 						)}
 					</div>
 					{/* Event results */}
-					<div className={styles.resultsContainer}>
-						<div className={`${styles.resultsGrid} ${event.single && event.average ? styles.twoColumn : ""}`}>
+					<div className={styles["results-container"]}>
+						<div className={`${styles["results-grid"]} ${event.single && event.average ? styles["two-column"] : ""}`}>
 							{/* Single */}
 							{event.single && (
-								<div className={styles.resultItem}>
-									<div className={styles.resultType}>Single</div>
-									<div className={styles.resultValue}>
+								<div className={styles["result-item"]}>
+									<div className={styles["result-type"]}>Single</div>
+									<div className={styles["result-value"]}>
 										<RankingLink age={age} eventId={event.eventId} eventType="single">
 											{event.single.result}
 										</RankingLink>
 									</div>
-									<div className={styles.resultRanks}>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>WR</div>
-											<div className={styles.rankValue}>
+									<div className={styles["result-ranks"]}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>WR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="single">
 													#{event.single.worldRank}
 												</RankingLink>
 											</div>
 										</div>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>CR</div>
-											<div className={styles.rankValue}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>CR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="single" region={{type: "continent", id: person.continentId}}>
 													#{event.single.continentRank}
 												</RankingLink>
 											</div>
 										</div>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>NR</div>
-											<div className={styles.rankValue}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>NR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="single" region={{type: "country", id: person.countryId}}>
 													#{event.single.countryRank}
 												</RankingLink>
@@ -293,33 +293,33 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 							)}
 							{/* Average */}
 							{event.average && (
-								<div className={styles.resultItem}>
-									<div className={styles.resultType}>Average</div>
-									<div className={styles.resultValue}>
+								<div className={styles["result-item"]}>
+									<div className={styles["result-type"]}>Average</div>
+									<div className={styles["result-value"]}>
 										<RankingLink age={age} eventId={event.eventId} eventType="average">
 											{event.average.result}
 										</RankingLink>
 									</div>
-									<div className={styles.resultRanks}>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>WR</div>
-											<div className={styles.rankValue}>
+									<div className={styles["result-ranks"]}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>WR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="average">
 													#{event.average.worldRank}
 												</RankingLink>
 											</div>
 										</div>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>CR</div>
-											<div className={styles.rankValue}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>CR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="average" region={{type: "continent", id: person.continentId}}>
 													#{event.average.continentRank}
 												</RankingLink>
 											</div>
 										</div>
-										<div className={styles.rankItem}>
-											<div className={styles.rankLabel}>NR</div>
-											<div className={styles.rankValue}>
+										<div className={styles["rank-item"]}>
+											<div className={styles["rank-label"]}>NR</div>
+											<div className={styles["rank-value"]}>
 												<RankingLink age={age} eventId={event.eventId} eventType="average" region={{type: "country", id: person.countryId}}>
 													#{event.average.countryRank}
 												</RankingLink>
@@ -338,7 +338,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 
 function PersonNotFound() {
 	return (
-		<Card className={styles.notFoundCard}>
+		<Card className={styles["not-found-card"]}>
 			<div>Person not found</div>
 		</Card>
 	);

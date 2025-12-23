@@ -1,28 +1,35 @@
 .container {
-    display: inline-block;
+	display: inline-block;
 }
 
-.button {
-    background-color: #e64503;
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 15px;
-    border-radius: 4px;
-    color: white;
-    text-decoration: none;
+
+.container a.button:link,
+.container a.button:visited {
+	display: inline-flex;
+	padding: .5em 1.5em;
+	border-radius: 10px;
+	align-items: center;
+	background-color: #e64503;
+	color: white;
+	text-decoration: none;
+	transition: box-shadow 0.2s, transform 0.15s, filter 0.15s;
+	will-change: transform;
 }
 
-.button:hover {
-    background-color: #d13e02;
+.container a.button:hover,
+.container a.button:focus-visible {
+	background-color: #d13e02;
+	transform: scale(1.04);
+	filter: brightness(1.04);
 }
 
 .text {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
 }
 
 .img {
-    height: 15px;
-    width: auto;
+	width: auto;
+	height: 15px;
 }

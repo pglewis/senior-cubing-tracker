@@ -1,5 +1,6 @@
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
+import styles from "./region-filter.module.css";
 
 interface RegionFilterProps {
 	value: string;
@@ -10,7 +11,7 @@ interface RegionFilterProps {
 
 export function RegionFilter({value, onChange, continents, countries}: RegionFilterProps) {
 	return (
-		<div>
+		<div className={styles.container}>
 			<select
 				value={value}
 				onChange={e => onChange(e.target.value)}

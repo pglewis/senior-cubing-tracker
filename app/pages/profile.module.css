@@ -1,205 +1,217 @@
 .container {
-	max-width: var(--content-max-width);
+	max-width: var(--max-width-content);
 	margin: 0 auto;
 	text-align: center;
 }
 
 .container input {
 	width: 100%;
+	max-width: var(--max-width-controls);
 }
 
-.nameSearch {
+.name-search {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	margin: var(--spacing-md) 0;
+	gap: var(--spacing-md);
 }
 
-.profileCard {
+.name-search > * {
+	max-width: var(--max-width-controls);
+	width: 100%;
+}
+
+.profile-card {
 	margin-bottom: var(--spacing-md);
 	text-align: left;
 }
 
-.profileHeader {
+.profile-header {
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-md);
 }
 
-.profileName {
-	padding: 0;
+.profile-name {
 	margin: 0;
+	padding: 0;
 }
 
-.profileDetails {
+.profile-details {
 	font-size: var(--font-size-sm);
 }
 
-.ageTabsContainer {
+.age-tabs-container {
 	margin-bottom: var(--spacing-md);
 }
 
-.kinchRankCard {
+.kinch-rank-card {
 	margin: var(--spacing-md) 0;
 }
 
-.kinchScoresTitle {
+.kinch-scores-title {
 	margin: 0;
 	text-align: center;
 }
 
-.kinchScoresGrid {
+.kinch-scores-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: auto auto auto;
+
 	/* Three rows: labels, ranks, scores */
 	gap: var(--spacing-xs) var(--spacing-sm);
 }
 
-.kinchScoreItem {
+.kinch-score-item {
 	/* This makes the children participate directly in the grid */
 	display: contents;
 }
 
-.kinchScoreLabel {
-	font-size: var(--font-size-sm);
+.kinch-score-label {
 	text-align: center;
+	font-size: var(--font-size-sm);
 	grid-row: 1;
 	align-self: end; /* Align to bottom of the grid row */
 }
 
-.kinchRankValue {
-	font-size: var(--font-size-md);
-	font-weight: var(--font-weight-bold);
+.kinch-rank-value {
 	color: var(--color-active);
 	text-align: center;
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
 	grid-row: 2;
 }
 
-.kinchScoreValue {
+.kinch-score-value {
+	text-align: center;
 	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-normal);
 	opacity: 0.8;
-	text-align: center;
 	grid-row: 3;
+
 	/* All scores go in the third row */
 }
 
 /* New Event Card Styles */
-.eventResultsContainer {
+.event-results-container {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-md);
 }
 
-.eventCard {
+.event-card {
 	text-align: left;
 	overflow: hidden;
 }
 
-.eventHeader {
-	background: var(--color-background-header);
-	padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
+.event-header {
 	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	gap: var(--spacing-md);
-	border-bottom: 1px solid var(--color-border);
 	margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) 0;
+	padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
+	border-bottom: 1px solid var(--color-border);
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--spacing-md);
+	background: var(--color-background-header);
 }
 
-.eventName {
-	font-weight: var(--font-weight-bold);
+.event-name {
 	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-bold);
 }
 
-.eventKinch {
+.event-kinch {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-xs);
 	font-size: var(--font-size-sm);
 }
 
-.kinchLabel {
+.kinch-label {
+	text-align: center;
 	font-size: var(--font-size-xs);
 	opacity: 0.7;
-	text-align: center;
 }
 
-.kinchValues {
+.kinch-values {
 	display: flex;
 	gap: var(--spacing-md);
 }
 
-.kinchValue {
+.kinch-value {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 2px;
 }
 
-.kinchValueLabel {
+.kinch-value-label {
 	font-size: var(--font-size-xs);
 	opacity: 0.7;
 }
 
-.kinchValueScore {
-	font-weight: var(--font-weight-bold);
+.kinch-value-score {
 	color: var(--color-active);
+	font-weight: var(--font-weight-bold);
 }
 
-.resultsContainer {
+.results-container {
 	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
 }
 
-.resultsGrid {
+.results-grid {
 	display: grid;
 	gap: var(--spacing-md);
 }
 
-.resultsGrid.twoColumn {
+.results-grid.two-column {
 	grid-template-columns: 1fr 1fr;
 }
 
-.resultItem {
-	background: var(--color-background);
-	border-radius: var(--border-radius-sm);
+.result-item {
 	padding: var(--spacing-sm);
+	border-radius: var(--border-radius-sm);
+	background: var(--color-background);
 }
 
-.resultType {
+.result-type {
+	margin-bottom: var(--spacing-xs);
 	font-size: var(--font-size-xs);
-	text-transform: uppercase;
 	opacity: 0.7;
-	margin-bottom: var(--spacing-xs);
+	text-transform: uppercase;
 }
 
-.resultValue {
-	font-family: monospace;
-	font-weight: var(--font-weight-bold);
+.result-value {
+	margin-bottom: var(--spacing-xs);
 	font-size: var(--font-size-sm);
-	margin-bottom: var(--spacing-xs);
+	font-weight: var(--font-weight-bold);
+	font-family: monospace;
 }
 
-.resultRanks {
+.result-ranks {
 	display: flex;
 	justify-content: space-between;
 	font-size: var(--font-size-xs);
 	opacity: 0.8;
 }
 
-.rankItem {
+.rank-item {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 2px;
 }
 
-.rankLabel {
+.rank-label {
 	opacity: 0.6;
 }
 
-.rankValue {
+.rank-value {
 	font-weight: var(--font-weight-bold);
 }
 
-.notFoundCard {
+.not-found-card {
 	text-align: center;
 }

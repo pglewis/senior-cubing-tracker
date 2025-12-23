@@ -1,36 +1,36 @@
 .highlighted {
-  scroll-margin-top: calc(var(--header-height) + 3rem);
+	scroll-margin-top: calc(var(--header-height) + 3rem);
 }
 
 .table {
-    width: 100%;
+	width: 100%;
 }
 
 .row:hover {
-    background: var(--color-cube-yellow-light);
+	background: var(--color-cube-yellow-light);
 }
 
-.rankColumn {
-    width: 4em;
-    text-align: center;
+.rank-column {
+	width: 4em;
+	text-align: center;
 }
 
-.nameColumn {
-    width: 20em;
-    text-align: left;
+.name-column {
+	width: 20em;
+	text-align: left;
 }
 
-.scoreColumn {
-    width: 4em;
-    text-align: right;
+.score-column {
+	width: 4em;
+	text-align: right;
 }
 
 .link {
-    color: inherit;
-    text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 .table tr.highlighted {
-    background-color: var(--color-background-header);
-    transition: background-color 0.3s ease-out;
+	background-color: var(--color-background-header);
+	transition: background-color 0.3s ease-out;
 }

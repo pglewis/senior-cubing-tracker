@@ -1,22 +1,22 @@
 .strong {
-    font-weight: 600;
-    font-size: 90%;
+	font-size: 90%;
+	font-weight: 600;
 }
 
 .important {
-    color: #d00000;
-    font-weight: 600;
+	color: #d00000;
+	font-weight: 600;
 }
 
 .error {
-    margin: 10px 0;
-    padding: 0 10px 10px 10px;
-    border-radius: 5px;
-    color: #de222b;
-    background-color: #ffcccc;
-    border: 1px solid #f88888;
+	margin: 10px 0;
+	padding: 0 10px 10px;
+	border: 1px solid #f88888;
+	border-radius: 5px;
+	background-color: #fcc;
+	color: #de222b;
 }
 
 .error .message {
-    color: black;
+	color: black;
 }

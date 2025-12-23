@@ -1,0 +1,8 @@
+{
+	"extends": "stylelint-config-standard",
+	"plugins": ["stylelint-order", "@stylistic/stylelint-plugin"],
+	"rules": {
+		"@stylistic/indentation": "tab",
+		"order/properties-order": ["concentric-css"]
+	}
+}

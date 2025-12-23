@@ -1,9 +1,9 @@
 export const ROUTES = {
 	HOME: "/",
-	RECENT: "/recent",
 	KINCH_RANKS: "/kinch-ranks",
 	KINCH_PERSON: "/kinch-ranks/:wcaid",
 	KINCH_FAQ: "/kinch-ranks/faq",
+	COMPETITOR_DATA_FAQ: "/competitor-data-faq",
 	PROFILE: "/profile/",
 } as const;
 

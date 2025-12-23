@@ -1,7 +1,7 @@
-.topPagination {
-    margin-bottom: var(--spacing-md);
+.top-pagination {
+	margin-bottom: var(--spacing-md);
 }
 
-.bottomPagination {
+.bottom-pagination {
 	margin-top: var(--spacing-md);
 }

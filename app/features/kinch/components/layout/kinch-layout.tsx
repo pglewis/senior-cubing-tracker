@@ -6,7 +6,8 @@ import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
 import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
-import {Combobox, type ComboboxItem} from "@repo/app/components/combobox/combobox";
+import {CompetitorCombobox} from "@repo/app/components/competitor-combobox/competitor-combobox";
+import type {ComboboxItem} from "@repo/app/components/combobox/combobox";
 import styles from "./kinch-layout.module.css";
 
 interface KinchLayoutProps {
@@ -26,16 +27,9 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 	const navigate = useNavigate();
 	const kinchRanks = useKinchRanks({age, region});
 
-	// Name search
-	const handleNameSearchSelect = (item: ComboboxItem) => {
+	const handleCompetitorSelect = (item: ComboboxItem) => {
 		navigate(buildKinchPersonRoute(item.value) + `?age=${age}&region=world`);
 		setParams({age, region, page: 1});
-	};
-
-	const filterName = (item: ComboboxItem, searchTerm: string) => {
-		return [item.label, item.value].some(field =>
-			field.toLowerCase().includes(searchTerm.toLowerCase())
-		);
 	};
 
 	return (
@@ -45,23 +39,27 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 			<DataLastUpdated text={rankings.lastUpdated} />
 
 			<div className={styles.filters}>
-				<Combobox
-					items={kinchRanks.map(kr => ({value: kr.personId, label: kr.personName}))}
-					placeholder="Search by name or WCA ID"
-					onSelect={handleNameSearchSelect}
-					filterFn={filterName}
-				/>
-				<RegionFilter
-					value={region}
-					onChange={(value) => setParams({region: value, page: 1})}
-					continents={regionInfo.continents}
-					countries={regionInfo.countries}
-				/>
-				<ButtonTabs
-					selectedValue={age}
-					onChange={(value) => setParams({age: value, page: 1}, {preventScrollReset: true})}
-					options={availableAgeOptions}
-				/>
+				<div className={styles["filter-item"]}>
+					<CompetitorCombobox
+						items={kinchRanks.map(kr => ({value: kr.personId, label: kr.personName}))}
+						onSelect={handleCompetitorSelect}
+					/>
+				</div>
+				<div className={styles["filter-item"]}>
+					<RegionFilter
+						value={region}
+						onChange={(value) => setParams({region: value, page: 1})}
+						continents={regionInfo.continents}
+						countries={regionInfo.countries}
+					/>
+				</div>
+				<div className={styles["filter-item"]}>
+					<ButtonTabs
+						selectedValue={age}
+						onChange={(value) => setParams({age: value, page: 1}, {preventScrollReset: true})}
+						options={availableAgeOptions}
+					/>
+				</div>
 			</div>
 
 			{children}

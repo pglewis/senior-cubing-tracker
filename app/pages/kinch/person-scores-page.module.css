@@ -1,16 +1,16 @@
-.notFound {
+.not-found {
 	text-align: center;
 }
 
-.notFound p {
-	line-height: 1.6em;
-	text-align: left;
+.not-found-text {
 	margin-bottom: var(--spacing-md);
+	text-align: left;
+	line-height: 1.6em;
 }
 
-.highlightedData {
-	background-color: rgba(255, 243, 204, 0.15);
+.highlighted-data {
 	padding: var(--spacing-xs);
 	border-radius: var(--border-radius-sm);
+	background-color: rgb(255 243 204 / 15%);
 	font-family: monospace;
 }

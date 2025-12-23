@@ -1,0 +1,10 @@
+.link {
+	color: var(--color-link);
+	text-decoration: none;
+	transition: color 0.15s;
+}
+
+.link:hover, .link:focus-visible {
+	color: var(--color-link-hover);
+	filter: brightness(1.1);
+}

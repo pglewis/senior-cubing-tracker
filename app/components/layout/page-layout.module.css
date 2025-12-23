@@ -1,26 +1,57 @@
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--header-height);
-    background-color: var(--color-background-secondary);
-    z-index: 80;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 80;
+	height: var(--header-height);
+	background-color: var(--color-background-secondary);
+	box-shadow: 0 2px var(--header-shadow-depth) rgb(0 0 0 / 20%);
+	display: flex;
+	justify-content: center;
+}
+
+.header-content {
+	display: grid;
+	grid-template-columns: auto auto 1fr auto auto;
+	align-items: center;
+	width: 100%;
+	max-width: var(--max-width-content);
+	gap: 0.5rem;
+}
+
+.back-button,
+.forward-button {
+	display: flex;
+	height: 1.5rem;
+	padding: 20px 8px;
+	border: none;
+	border-radius: 4px;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	color: var(--color-text);
+	cursor: pointer;
+	transition: background-color 0.2s ease-out;
+}
+
+.back-button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.back-button:hover:not(:disabled),
+.forward-button:hover {
+	background: rgb(255 255 255 / 10%);
 }
 
 .header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    position: absolute; /* Take it out of flex flow */
-    left: 50%; /* Center it */
-    transform: translateX(-50%);  /* Perfect center */
+	margin: 0;
+	font-size: 17px;
+	text-align: center;
 }
 
 .container {
-    padding-top: var(--header-height);  /* Just enough to clear the fixed header */
+	padding-top: calc(var(--header-height) + var(--header-shadow-depth));
+	padding-bottom: 5em;
 }

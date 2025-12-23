@@ -15,7 +15,7 @@ export function ThemeToggle() {
 			className={`${styles.switcher} ${isDark ? styles.dark : styles.light}`}
 			aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
 		>
-			<div className={`${styles.slider} ${isDark ? styles.sliderDark : styles.sliderLight}`}>
+			<div className={`${styles.slider} ${isDark ? styles["slider-dark"] : styles["slider-light"]}`}>
 				{isDark ? (<MoonIcon />) : (<SunIcon />)}
 			</div>
 		</button>

@@ -1,91 +1,91 @@
-.personHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+.person-header {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
 }
 
-.personName {
+.person-name {
 	margin: 0;
 }
 
-.personRank a:link,
-.personRank a:visited {
+.person-rank-link:link,
+.person-rank-link:visited {
 	font-weight: bold;
 }
 
 
 /* Table styles */
 .table {
-    width: 100%;
-    margin-top: var(--spacing-md);
+	width: 100%;
+	margin-top: var(--spacing-md);
 }
 
 /* Table header styles */
-.tableHeader {
-    padding: var(--spacing-sm);
-    text-align: left;
+.table-header {
+	padding: var(--spacing-sm);
+	text-align: left;
 }
 
-.eventColumn,
-.scoreColumn {
-    cursor: pointer;
+.event-column-header,
+.score-column-header {
+	cursor: pointer;
 }
 
 /* Add arrow indicator for sorted column */
-.sortedAsc::after {
-    content: "▲";
-    padding-left: var(--spacing-xs);
-    font-size: var(--font-size-xs);
+.sorted-asc::after {
+	content: "▲";
+	padding-left: var(--spacing-xs);
+	font-size: var(--font-size-xs);
 }
 
-.sortedDesc::after {
-    content: "▼";
-    padding-left: var(--spacing-xs);
-    font-size: var(--font-size-xs);
+.sorted-desc::after {
+	content: "▼";
+	padding-left: var(--spacing-xs);
+	font-size: var(--font-size-xs);
 }
 
 /* Table column widths and alignment */
-.eventColumn {
-    width: 10em;
-    text-align: left;
+.event-column {
+	width: 10em;
+	text-align: left;
 }
 
-.scoreColumn {
-    width: 4em;
-    text-align: right;
+.score-column {
+	width: 4em;
+	text-align: right;
 }
 
-.resultColumn {
-    width: 8em;
-    text-align: right;
+.result-column {
+	width: 8em;
+	text-align: right;
 }
 
 .row:hover {
-    background: var(--color-background-header);
+	background: var(--color-background-header);
 }
 
-.row.topScore {
-    background-color: #00ff0080 !important;
+.row.top-score {
+	background-color: #00ff0080 !important;
 }
 
-.row.highScore {
-    background-color: #00ff0050 !important;
+.row.high-score {
+	background-color: #00ff0050 !important;
 }
 
-.row.goodScore {
-    background-color: #00ff0020 !important;
+.row.good-score {
+	background-color: #00ff0020 !important;
 }
 
 /* Links */
 .link {
-    color: inherit;
-    text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 .link:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
-.returnLink {
+.return-link {
 	margin-top: var(--spacing-md);
 }

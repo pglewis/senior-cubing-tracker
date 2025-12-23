@@ -1,0 +1,67 @@
+.container {
+	display: flex;
+	margin: .5rem auto;
+	flex-direction: column;
+	gap: 2rem;
+	max-width: var(--max-width-content);
+}
+
+.card {
+	padding: 2rem 2.5rem;
+	border-radius: 1rem;
+	background: var(--color-background-secondary);
+	box-shadow: 0 2px 16px rgb(0 0 0 / 10%);
+	line-height: 1.6;
+}
+
+.heading {
+	margin-top: 1.5rem;
+	margin-bottom: 1rem;
+	padding-bottom: 0.25rem;
+	border-bottom: 2px solid var(--color-accent);
+	font-size: 1.3rem;
+}
+
+.subheading {
+	margin-top: 1.5rem;
+	margin-bottom: 0.5rem;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: var(--color-accent);
+}
+
+.card dl {
+	margin: 0 0 1.2rem;
+}
+
+.card dt {
+	margin-bottom: 0.2rem;
+	font-size: 1.08rem;
+	font-weight: 600;
+}
+
+.card dd {
+	margin: 1rem 0 0.5rem 1.2rem;
+	color: var(--color-text-secondary);
+	font-size: 0.98rem;
+}
+
+.card ul {
+	margin: 0;
+	padding: 1rem 0 0 2rem;
+}
+
+.card li {
+	padding-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (width <= 700px) {
+	.container {
+		gap: 1rem;
+	}
+
+	.card {
+		padding: 1rem 0.5rem;
+	}
+}

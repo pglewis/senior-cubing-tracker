@@ -61,7 +61,7 @@ export function KinchRanks() {
 			{totalPages > 1 && (
 				<div ref={topPaginationRef}>
 					<Pagination
-						className={styles.topPagination}
+						className={styles["top-pagination"]}
 						currentPage={page}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
@@ -78,7 +78,7 @@ export function KinchRanks() {
 
 			{totalPages > 1 && (
 				<Pagination
-					className={styles.bottomPagination}
+					className={styles["bottom-pagination"]}
 					currentPage={page}
 					totalPages={totalPages}
 					onPageChange={handlePageChange}

@@ -1,35 +1,35 @@
-.paginationContainer {
+.pagination-container {
 	font-size: var(--font-size-sm);
 }
 
-.pageButton {
+.page-button {
 	width: 1.5em;
-	padding: var(--spacing-xs) 0;
 	margin: 0 .1em;
+	padding: var(--spacing-xs) 0;
 	border-radius: var(--border-radius-md);
-	text-align: center;
 	background: transparent;
+	text-align: center;
 }
 
-.pageButton:hover:not(.pageButtonActive) {
-	background: var(--color-background-header);
+.page-button:disabled {
+	opacity: 0.25;
+	cursor: not-allowed;
 }
 
-.pageButtonActive {
+.page-button-active {
 	background: var(--color-active);
 	color: var(--color-active-fg);
 }
 
-.pageButton:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
+.page-button:hover:not(.page-button-active) {
+	background: var(--color-background-header);
 }
 
-.pageOf {
+.page-of {
 	margin-left: var(--spacing-sm);
 }
 
-.pageOf input[type="text"] {
-	font-size: var(--font-size-sm);
+.page-input {
 	width: 3em;
+	font-size: var(--font-size-sm);
 }

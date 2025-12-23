@@ -1,29 +1,30 @@
-.buttonTabGroup {
+.button-tab-group {
 	display: flex;
-	background: var(--color-background-secondary);
+	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-sm);
 	justify-content: center;
-	border: 1px solid var(--color-border);
+	background: var(--color-background-secondary);
 }
 
-.buttonTab {
-	flex: 1;
+.button-tab {
 	padding: var(--spacing-xs) var(--spacing-sm);
 	border: none;
+	border-radius: var(--border-radius-sm);
+	flex: 1;
 	background: transparent;
 	color: var(--color-text);
-	cursor: pointer;
-	border-radius: var(--border-radius-sm);
 	font-weight: 500;
+
 	/* transition: all 0.2s ease; */
 	opacity: 0.7;
+	cursor: pointer;
 }
 
-.buttonTab:focus-visible {
+.button-tab:focus-visible {
 	opacity: 1;
 }
 
-.buttonTab:hover:not(.active) {
+.button-tab:hover:not(.active) {
 	background-color: var(--color-background-header);
 }
 

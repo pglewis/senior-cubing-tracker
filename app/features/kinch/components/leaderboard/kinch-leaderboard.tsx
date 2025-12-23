@@ -22,9 +22,9 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 		<table className={styles.table}>
 			<thead>
 				<tr>
-					<th className={styles.rankColumn}>#</th>
-					<th className={styles.nameColumn}>Name</th>
-					<th className={styles.scoreColumn}>Score</th>
+					<th className={styles["rank-column"]}>#</th>
+					<th className={styles["name-column"]}>Name</th>
+					<th className={styles["score-column"]}>Score</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,8 +34,8 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 						ref={rank.personId === highlightId ? highlightRef : null}
 						className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
 					>
-						<td className={styles.rankColumn}>{startIdx + index + 1}</td>
-						<td className={styles.nameColumn}>
+						<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
+						<td className={styles["name-column"]}>
 							<Link
 								to={getPersonUrl(rank.personId)}
 								className={styles.link}
@@ -43,7 +43,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 								{rank.personName}
 							</Link>
 						</td>
-						<td className={styles.scoreColumn}>{rank.overall.toFixed(2)}</td>
+						<td className={styles["score-column"]}>{rank.overall.toFixed(2)}</td>
 					</tr>
 				))}
 			</tbody>

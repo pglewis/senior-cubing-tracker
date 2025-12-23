@@ -29,7 +29,7 @@ export function PersonScores(props: PersonScoresProps) {
 		countryCode,
 		regionName,
 		age,
-		// returnPath,
+		returnPath,
 		getRankingUrl,
 		getShowInRankingsUrl,
 		rowsPerPage,
@@ -59,27 +59,29 @@ export function PersonScores(props: PersonScoresProps) {
 	return (
 		<div className={styles.personScores}>
 			<Card className="personCard">
-				<div className={styles.personHeader}>
+				<div className={styles["person-header"]}>
 					<CountryFlag countryCode={countryCode} />
-					<h3 className={styles.personName}>
+					<h3 className={styles["person-name"]}>
 						<Link className={styles.link} to={competitorURL}>
 							{personKinchRank.personName}
 						</Link>
 					</h3>
 				</div>
 				<div className={styles.personRegionAge}>
-					{regionName}, {age}+
+					<Link to={returnPath} className={styles.link}>
+						{regionName}, {age}+
+					</Link>
 				</div>
 				<div className={styles.personRank}>
 					Rank:{" "}
-					<Link to={getShowInRankingsUrl(targetPage)} state={{highlight: personKinchRank.personId}}>
+					<Link to={getShowInRankingsUrl(targetPage)} className={styles["person-rank-link"]} state={{highlight: personKinchRank.personId}}>
 						#{kinchRanking}
 					</Link>
 				</div>
 				<div className={styles.personOverallScore}>
 					Overall score: {personKinchRank.overall.toFixed(2)}
 				</div>
-				{/* <Link className={styles.returnLink} to={returnPath}>
+				{/* <Link className={styles["return-link"]} to={returnPath}>
 					← Return to previous view
 				</Link> */}
 			</Card>
@@ -91,9 +93,10 @@ export function PersonScores(props: PersonScoresProps) {
 					<tr>
 						<th
 							className={clsx(
-								styles.tableHeader,
-								styles.eventColumn,
-								sortBy === "event" && styles.sortedAsc
+								styles["table-header"],
+								styles["event-column"],
+								styles["event-column-header"],
+								sortBy === "event" && styles["sorted-asc"]
 							)}
 							tabIndex={0}
 							onClick={() => handleSort("event")}
@@ -105,9 +108,10 @@ export function PersonScores(props: PersonScoresProps) {
 						</th>
 						<th
 							className={clsx(
-								styles.tableHeader,
-								styles.scoreColumn,
-								sortBy === "score" && styles.sortedDesc,
+								styles["table-header"],
+								styles["score-column"],
+								styles["score-column-header"],
+								sortBy === "score" && styles["sorted-desc"],
 							)}
 							tabIndex={0}
 							onClick={() => handleSort("score")}
@@ -117,7 +121,7 @@ export function PersonScores(props: PersonScoresProps) {
 						>
 							Score
 						</th>
-						<th className={clsx(styles.tableHeader, styles.resultColumn)}>
+						<th className={clsx(styles["table-header"], styles["result-column"])}>
 							Result
 						</th>
 					</tr>
@@ -147,11 +151,11 @@ function EventRow({event, getRankingUrl}: EventRowProps) {
 	let scoreClass;
 	let scoreDisplay = score.toFixed(2);
 	if (score >= 100) {
-		scoreClass = styles.topScore;
+		scoreClass = styles["top-score"];
 	} else if (score >= 90) {
-		scoreClass = styles.highScore;
+		scoreClass = styles["high-score"];
 	} else if (score >= 80) {
-		scoreClass = styles.goodScore;
+		scoreClass = styles["good-score"];
 	} else if (score === 0) {
 		scoreDisplay = "--";
 	}
@@ -174,9 +178,9 @@ function EventRow({event, getRankingUrl}: EventRowProps) {
 
 	return (
 		<tr className={clsx(styles.row, scoreClass)}>
-			<td className={styles.eventColumn}>{eventName}</td>
-			<td className={styles.scoreColumn}>{scoreDisplay}</td>
-			<td className={styles.resultColumn}>{resultText}</td>
+			<td className={styles["event-column"]}>{eventName}</td>
+			<td className={styles["score-column"]}>{scoreDisplay}</td>
+			<td className={styles["result-column"]}>{resultText}</td>
 		</tr>
 	);
 }

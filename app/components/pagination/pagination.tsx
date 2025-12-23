@@ -72,8 +72,8 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 	const pageButtons = [];
 	for (let page = startPage; page <= endPage; page++) {
 		const className = clsx(
-			styles.pageButton,
-			(page === currentPage) && styles.pageButtonActive
+			styles["page-button"],
+			(page === currentPage) && styles["page-button-active"]
 		);
 
 		pageButtons.push(
@@ -90,9 +90,9 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 	}
 
 	return (
-		<div className={clsx(styles.paginationContainer, className)}>
+		<div className={clsx(styles["pagination-container"], className)}>
 			<button
-				className={clsx(styles.pageButton, styles.previous)}
+				className={clsx(styles["page-button"], styles.previous)}
 				onClick={handlePrevious}
 				disabled={currentPage === 1}
 				aria-label="Go to previous page"
@@ -101,14 +101,14 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 			</button>
 			{pageButtons}
 			<button
-				className={clsx(styles.pageButton, styles.next)}
+				className={clsx(styles["page-button"], styles.next)}
 				onClick={handleNext}
 				disabled={currentPage === totalPages}
 				aria-label="Go to next page"
 			>
 				▶
 			</button>
-			<span className={styles.pageOf}>
+			<span className={styles["page-of"]}>
 				{"page "}
 				<input
 					type="text"
@@ -119,6 +119,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 					onBlur={handleInputBlur}
 					onKeyDown={handleKeyDown}
 					aria-label="Enter page number"
+					className={styles["page-input"]}
 				/>
 				{" of "}{totalPages}
 			</span>

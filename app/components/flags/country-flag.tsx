@@ -32,7 +32,7 @@ export function CountryFlag({
 
 	return (
 		<span
-			className={clsx(styles.countryFlag, styles[size], className)}
+			className={clsx(styles["country-flag"], styles[size], className)}
 			title={decorative ? undefined : (title || countryCode)}
 			aria-hidden={decorative ? "true" : undefined}
 			role={decorative ? "presentation" : undefined}

@@ -3,9 +3,9 @@ import {ROUTES} from "@repo/app/routes";
 import {ErrorHandler} from "./components/error/error-handler";
 import {PageLayout} from "@repo/app/components/layout/page-layout";
 import {Home} from "@repo/app/pages/home";
-import {Recent} from "@repo/app/pages/recent";
 import {KinchRanks} from "./pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
+import {CompetitorDataFaq} from "@repo/app/pages/competitor-data-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Profile} from "@repo/app/pages/profile";
 import {KinchProvider} from "@repo/app/features/kinch/context/kinch-provider";
@@ -27,9 +27,6 @@ const router = createBrowserRouter([
 				index: true,
 				element: <Home />
 			}, {
-				path: ROUTES.RECENT,
-				element: <Recent />
-			}, {
 				path: ROUTES.KINCH_RANKS,
 				element:
 					<KinchProvider>
@@ -49,6 +46,9 @@ const router = createBrowserRouter([
 						element: <KinchRanksFaq />
 					}
 				]
+			}, {
+				path: ROUTES.COMPETITOR_DATA_FAQ,
+				element: <CompetitorDataFaq />
 			}, {
 				path: "/profile/:wcaid?",
 				element: <Profile />

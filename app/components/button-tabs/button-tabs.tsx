@@ -26,12 +26,12 @@ export function ButtonTabs({options, selectedValue, onChange}: ButtonTabsProps) 
 	};
 
 	return (
-		<div className={styles.buttonTabGroup} role="tablist" aria-label="Content tabs">
+		<div className={styles["button-tab-group"]} role="tablist" aria-label="Content tabs">
 			{options.map((option, index) => (
 				<button
 					key={option.value}
 					className={clsx(
-						styles.buttonTab,
+						styles["button-tab"],
 						(selectedValue === option.value) && styles.active
 					)}
 					role="tab"

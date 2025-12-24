@@ -31,6 +31,7 @@ jobs:
         run: npm run build
         env:
           VITE_BASE_URL: /${{github.event.repository.name}}/
+          VITE_FULL_BASE_URL: https://${{github.repository_owner}}.github.io/${{github.event.repository.name}}
 
       - name: Copy and process the senior rankings data
         run: npm run process-data

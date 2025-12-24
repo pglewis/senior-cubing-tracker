@@ -13,7 +13,7 @@ export function Home() {
 					<dl>
 						<dt><Link to={ROUTES.PROFILE} className={styles.link}>Senior Profile Pages</Link></dt>
 						<dd>
-							Overview page with a competitor&apos;s personal bests and rankings for all events by age group
+							Overview page with a competitor&apos;s personal best and rankings for all events by age group
 							and region.
 						</dd>
 					</dl>

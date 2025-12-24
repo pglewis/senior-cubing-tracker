@@ -218,7 +218,7 @@ function EventResults({person, age, eventResults}: EventResultsProps) {
 			{eventResults.map((event) => (
 				<Card key={event.eventId} className={styles["event-card"]}>
 					<div className={styles["event-header"]}>
-						<div className={styles["event-name"]}>{event.eventName} ({age}+)</div>
+						<div className={styles["event-name"]}><span className={`cubing-icon event-${event.eventId}`}></span>{event.eventName} ({age}+)</div>
 						{event.kinchScores && (
 							<div className={styles["event-kinch"]}>
 								<div className={styles["kinch-label"]}>Kinch Scores</div>

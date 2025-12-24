@@ -118,8 +118,15 @@
 }
 
 .event-name {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-xs);
 	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-bold);
+}
+
+.event-name span {
+	transform: translateY(2px);
 }
 
 .event-kinch {

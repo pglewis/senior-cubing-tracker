@@ -12,7 +12,6 @@
 	--font-weight-bold: 700;
 
 	/* Layout */
-	--header-height: 4rem; 	/* Fixed header */
 	--header-shadow-depth: 2px;
 	--max-width-controls: 320px;
 	--max-width-content: 500px;

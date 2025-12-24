@@ -1,5 +1,5 @@
 .highlighted {
-	scroll-margin-top: calc(var(--header-height) + 3rem);
+	scroll-margin-top: 3rem;
 }
 
 .table {

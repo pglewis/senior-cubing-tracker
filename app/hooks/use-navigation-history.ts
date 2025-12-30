@@ -1,60 +1,82 @@
-import {useLocation} from "react-router";
+import {useLocation, useNavigationType} from "react-router";
 import {useEffect, useRef, useState} from "react";
+
+interface HistoryEntry {
+	key: string;
+	path: string;
+}
+
+interface NavigationState {
+	entries: HistoryEntry[];
+	currentIndex: number;
+}
 
 export function useNavigationHistory() {
 	const location = useLocation();
-	const [backStackSize, setBackStackSize] = useState(0);
-	const [forwardStackSize, setForwardStackSize] = useState(0);
-	const navigationInitiatedRef = useRef<"back" | "forward" | null>(null);
-	const prevLocationRef = useRef<string | null>(null);
+	const navigationType = useNavigationType();
+	const [navHistory, setNavHistory] = useState<NavigationState>(() => ({
+		entries: [{key: location.key, path: location.pathname + location.search}],
+		currentIndex: 0
+	}));
+	const prevKeyRef = useRef(location.key);
 
 	useEffect(() => {
 		const currentPath = location.pathname + location.search;
+		const currentKey = location.key;
 
-		// Skip on initial render
-		if (prevLocationRef.current === null) {
-			prevLocationRef.current = currentPath;
+		// Skip if key hasn't changed (initial render or duplicate navigation)
+		if (prevKeyRef.current === currentKey) {
 			return;
 		}
+		prevKeyRef.current = currentKey;
 
-		// Skip if location hasn't actually changed
-		if (prevLocationRef.current === currentPath) {
-			return;
+		if (navigationType === "PUSH") {
+			// New navigation: add entry, trim forward history
+			setNavHistory(prev => ({
+				entries: [
+					...prev.entries.slice(0, prev.currentIndex + 1),
+					{key: currentKey, path: currentPath}
+				],
+				currentIndex: prev.currentIndex + 1
+			}));
+		} else if (navigationType === "POP") {
+			// Back/forward: find entry by key
+			setNavHistory(prev => {
+				const foundIndex = prev.entries.findIndex(entry => entry.key === currentKey);
+				if (foundIndex !== -1) {
+					return {...prev, currentIndex: foundIndex};
+				}
+				// Key not found (edge case, e.g., page refresh): treat as fresh start
+				return {
+					entries: [{key: currentKey, path: currentPath}],
+					currentIndex: 0
+				};
+			});
+		} else if (navigationType === "REPLACE") {
+			// Replace current entry with new key/path
+			setNavHistory(prev => {
+				const newEntries = [...prev.entries];
+				newEntries[prev.currentIndex] = {key: currentKey, path: currentPath};
+				return {...prev, entries: newEntries};
+			});
 		}
-
-		prevLocationRef.current = currentPath;
-
-		if (navigationInitiatedRef.current === "back") {
-			navigationInitiatedRef.current = null;
-			setBackStackSize(prev => prev - 1);
-			setForwardStackSize(prev => prev + 1);
-		} else if (navigationInitiatedRef.current === "forward") {
-			navigationInitiatedRef.current = null;
-			setBackStackSize(prev => prev + 1);
-			setForwardStackSize(prev => prev - 1);
-		} else {
-			setBackStackSize(prev => prev + 1);
-			setForwardStackSize(0);
-		}
-	}, [location.pathname, location.search]);
+	}, [location.pathname, location.search, location.key, navigationType]);
 
 	const goBack = () => {
-		if (backStackSize === 0) return;
-
-		navigationInitiatedRef.current = "back";
-		window.history.back();
+		if (navHistory.currentIndex > 0) {
+			window.history.back();
+		}
 	};
 
 	const goForward = () => {
-		if (forwardStackSize === 0) return;
-
-		navigationInitiatedRef.current = "forward";
-		window.history.forward();
+		if (navHistory.currentIndex < navHistory.entries.length - 1) {
+			window.history.forward();
+		}
 	};
 
 	return {
-		canGoBack: backStackSize > 0,
-		canGoForward: forwardStackSize > 0,
+		canGoBack: navHistory.currentIndex > 0,
+		canGoForward: navHistory.currentIndex < navHistory.entries.length - 1,
 		goBack,
 		goForward
 	};

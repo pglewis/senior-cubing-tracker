@@ -4,7 +4,6 @@ import staticStyles from "./static-page.module.css";
 import styles from "./home.module.css";
 
 export function Home() {
-
 	return (
 		<div className={staticStyles.container}>
 			<div className={staticStyles.card}>

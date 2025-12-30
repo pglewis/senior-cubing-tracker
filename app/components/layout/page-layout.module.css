@@ -68,8 +68,12 @@
 
 .hamburger:hover,
 .back-button:hover:not(:disabled),
-.forward-button:hover:not(:disabled) {
+.forward-button:hover:not(:disabled),
+.hamburger:focus-visible,
+.back-button:focus-visible:not(:disabled),
+.forward-button:focus-visible:not(:disabled) {
 	background: rgb(255 255 255 / 10%);
+	outline: none;
 }
 
 .hamburger-icon {
@@ -141,8 +145,10 @@
 	font-size: 1.1rem;
 }
 
-.menu-link:hover {
+.menu-link:hover,
+.menu-link:focus-visible {
 	background: rgb(255 255 255 / 10%);
+	outline: none;
 }
 
 .menu-footer {

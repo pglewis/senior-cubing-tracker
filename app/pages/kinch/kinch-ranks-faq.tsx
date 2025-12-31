@@ -19,14 +19,33 @@ export function KinchRanksFaq() {
 				</p>
 				<ul className="disc">
 					<li>Higher scores are better</li>
-					<li>Your score is relative to the top result only</li>
+					<li>Your event score is relative to the top result only</li>
 					<li>The record holder for an event and category scores 100</li>
-					<li>Double the record scores 50</li>
+					<li>Twice the record time scores 50</li>
 				</ul>
 				<p>
-					One thing of note is that Kinch Ranks only considers averages for most events
-					(excluding blindfold events and FMC) with the philosophy that outlier singles
-					are not as useful for measuring overall performance.
+					Kinch Ranks only considers averages for most events with the philosophy
+					that outlier singles are not as useful for measuring overall performance.
+				</p>
+				<p>
+					FM and blind events are exceptions where both single and average (where applicable)
+					will be considered, using whichever scores higher. Note that this can result in
+					two competitors scoring 100 for the same event.
+					<blockquote>
+						For 3bld and FM, the average rankings are not yet established enough, so single
+						ranks are allowed to be used instead if advantageous for a person. FM may be
+						restricted to averages only in the future if the rankings reach a good point to
+						do that.
+					</blockquote>
+				</p>
+				<p>
+					Multi-blind scoring has special handling:
+					<blockquote>
+						For multibld, your result is adjusted to a single number Points + ProportionofHourLeft.
+						[...] Someone with e.g. 11 points in 45:00 would get (11+0.25)/41.0961 = 0.2737. This
+						calculation  ensures that more points always equals a better score, no matter the time
+						spent.  Less time spent still gives a better <score className=""></score>
+					</blockquote>
 				</p>
 				<p>
 					The Senior Kinch Ranks calculations use official WCA results from known senior competitors,
@@ -38,6 +57,6 @@ export function KinchRanksFaq() {
 					{" "}.
 				</p>
 			</div>
-		</div>
+		</div >
 	);
 }

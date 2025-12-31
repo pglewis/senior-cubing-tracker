@@ -112,6 +112,22 @@ ul.disc li {
 	margin-left: 0;
 }
 
+blockquote {
+	background-color: var(--color-background-secondary);
+	border-left: 4px solid var(--color-accent);
+	padding: 1em;
+	margin: 1em 0;
+	border-radius: var(--border-radius-sm);
+	color: var(--color-text-secondary);
+	font-style: italic;
+	line-height: 1.7;
+}
+
+blockquote strong {
+	color: var(--color-text);
+	font-weight: 600;
+}
+
 /* Utility classes */
 .sr-only {
 	position: absolute;

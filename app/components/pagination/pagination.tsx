@@ -7,7 +7,7 @@ interface PaginationProps {
 	totalPages: number,
 	onPageChange: (page: number) => void,
 	className?: string,
-};
+}
 
 export function Pagination({currentPage, totalPages, onPageChange, className}: PaginationProps) {
 	const [inputValue, setInputValue] = useState(String(currentPage));
@@ -91,24 +91,26 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 
 	return (
 		<div className={clsx(styles["pagination-container"], className)}>
-			<button
-				className={clsx(styles["page-button"], styles.previous)}
-				onClick={handlePrevious}
-				disabled={currentPage === 1}
-				aria-label="Go to previous page"
-			>
-				◀
-			</button>
-			{pageButtons}
-			<button
-				className={clsx(styles["page-button"], styles.next)}
-				onClick={handleNext}
-				disabled={currentPage === totalPages}
-				aria-label="Go to next page"
-			>
-				▶
-			</button>
-			<span className={styles["page-of"]}>
+			<div className={styles["page-nav"]}>
+				<button
+					className={styles["page-button"]}
+					onClick={handlePrevious}
+					disabled={currentPage === 1}
+					aria-label="Go to previous page"
+				>
+					◀
+				</button>
+				{pageButtons}
+				<button
+					className={styles["page-button"]}
+					onClick={handleNext}
+					disabled={currentPage === totalPages}
+					aria-label="Go to next page"
+				>
+					▶
+				</button>
+			</div>
+			<div className={styles["page-of"]}>
 				{"page "}
 				<input
 					type="text"
@@ -122,7 +124,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 					className={styles["page-input"]}
 				/>
 				{" of "}{totalPages}
-			</span>
+			</div>
 		</div>
 	);
 };

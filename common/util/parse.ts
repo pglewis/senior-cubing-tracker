@@ -39,10 +39,10 @@ export function timeResultToSeconds(result: string): number {
 	return seconds;
 }
 
-export function daysAgo(dateString: string): number {
-	// Calculate difference in milliseconds
+export function dateIsRecent(dateString: string): boolean {
+	const RECENT_THRESHOLD_DAYS = 30;
 	const diffTime = new Date().getTime() - new Date(dateString).getTime();
+	const daysElapsed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-	// Convert to days (1000ms * 60s * 60m * 24h = milliseconds per day)
-	return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+	return daysElapsed <= RECENT_THRESHOLD_DAYS;
 }

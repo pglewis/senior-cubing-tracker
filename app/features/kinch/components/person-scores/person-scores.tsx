@@ -5,6 +5,7 @@ import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/ty
 import {buildProfilePersonRoute} from "@repo/app/routing/routes";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
+import {dateIsRecent} from "@repo/common/util/parse";
 import styles from "./person-scores.module.css";
 
 interface PersonScoresProps {
@@ -146,7 +147,9 @@ interface EventRowProps {
 }
 
 function EventRow({event, getRankingUrl}: EventRowProps) {
-	const {eventName, score, result, type} = event;
+	const {eventName, score, result, type, date} = event;
+
+	const isRecent = date && dateIsRecent(date);
 
 	let scoreClass;
 	let scoreDisplay = score.toFixed(2);
@@ -178,7 +181,7 @@ function EventRow({event, getRankingUrl}: EventRowProps) {
 
 	return (
 		<tr className={clsx(styles.row, scoreClass)}>
-			<td className={styles["event-column"]}>{eventName}</td>
+			<td className={styles["event-column"]}>{eventName} {isRecent && "🔥"}</td>
 			<td className={styles["score-column"]}>{scoreDisplay}</td>
 			<td className={styles["result-column"]}>{resultText}</td>
 		</tr>

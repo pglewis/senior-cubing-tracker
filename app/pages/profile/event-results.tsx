@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type {ProfileData} from "@repo/app/features/profile/hooks/use-profile";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
@@ -50,7 +51,7 @@ export function EventResults({person, age, eventResults}: EventResultsProps) {
 						)}
 					</div>
 					<div className={styles["results-container"]}>
-						<div className={`${styles["results-grid"]} ${event.single && event.average ? styles["two-column"] : ""}`}>
+						<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
 							{event.single && (
 								<ResultDisplay
 									type="single"

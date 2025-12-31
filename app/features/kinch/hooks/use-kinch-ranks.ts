@@ -180,6 +180,7 @@ function getPersonAverageScore(
 		score: getPersonScore("time", topRank, result.result), // Most average events are time-based
 		result: result.result,
 		type: "average",
+		date: result.date,
 	};
 }
 
@@ -208,6 +209,7 @@ function getPersonSingleOrAverageScore(
 	let result: string;
 	let score = 0;
 	let type: KinchEvent["type"];
+	let date: string;
 
 	// Get event format from enhanced data
 	const format = rankings.events[eventId].format;
@@ -222,15 +224,18 @@ function getPersonSingleOrAverageScore(
 			score = singleScore;
 			result = singleResult.result;
 			type = "single";
+			date = singleResult.date;
 		} else {
 			score = averageScore;
 			result = averageResult.result;
 			type = "average";
+			date = averageResult.date;
 		}
 	} else {
 		score = singleScore;
 		result = singleResult.result;
 		type = "single";
+		date = singleResult.date;
 	}
 
 	return {
@@ -239,6 +244,7 @@ function getPersonSingleOrAverageScore(
 		score: score,
 		result: result,
 		type: type,
+		date: date,
 	};
 }
 
@@ -281,6 +287,7 @@ function getPersonMultiScore(
 		score: (getKinchMultiScore(result.result) / getKinchMultiScore(topRank.result)) * 100,
 		result: result.result,
 		type: "single",
+		date: result.date,
 	};
 }
 

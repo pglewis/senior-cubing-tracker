@@ -41,4 +41,5 @@ export interface KinchEvent {
 	score: number,
 	result: string,
 	type: EventRanking["type"] | null,
+	date?: string,
 };

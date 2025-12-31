@@ -1,6 +1,7 @@
 import {useEffect, useRef} from "react";
 import {Link} from "react-router";
 import type {KinchRank} from "@repo/common/types/kinch-types";
+import {dateIsRecent} from "@repo/common/util/parse";
 import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
@@ -28,24 +29,27 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 				</tr>
 			</thead>
 			<tbody>
-				{displayRanks.map((rank, index) => (
-					<tr
-						key={rank.personId}
-						ref={rank.personId === highlightId ? highlightRef : null}
-						className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
-					>
-						<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
-						<td className={styles["name-column"]}>
-							<Link
-								to={getPersonUrl(rank.personId)}
-								className={styles.link}
-							>
-								{rank.personName}
-							</Link>
-						</td>
-						<td className={styles["score-column"]}>{rank.overall.toFixed(2)}</td>
-					</tr>
-				))}
+				{displayRanks.map((rank, index) => {
+					const hasRecentPB = rank.events.some(event => event.date && dateIsRecent(event.date));
+					return (
+						<tr
+							key={rank.personId}
+							ref={rank.personId === highlightId ? highlightRef : null}
+							className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""} ${hasRecentPB ? styles.recent : ""}`}
+						>
+							<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
+							<td className={styles["name-column"]}>
+								<Link
+									to={getPersonUrl(rank.personId)}
+									className={styles.link}
+								>
+									{rank.personName}
+								</Link>
+							</td>
+							<td className={styles["score-column"]}>{rank.overall.toFixed(2)}</td>
+						</tr>
+					);
+				})}
 			</tbody>
 		</table>
 	);

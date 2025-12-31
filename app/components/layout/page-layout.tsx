@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from "react";
 import {Outlet, Link, useLocation} from "react-router";
-import {ROUTES} from "@repo/app/routes";
+import {ROUTES} from "@repo/app/routing/routes";
 import {ThemeToggle} from "@repo/app/components/theme/theme-toggle";
 import {KofiButton} from "@repo/app/components/kofi-button/kofi-button";
 import {useNavigationHistory} from "@repo/app/hooks/use-navigation-history";

@@ -1,6 +1,6 @@
 import {useRef, useMemo} from "react";
 import {useLocation} from "react-router";
-import {buildKinchPersonRoute} from "@repo/app/routes";
+import {buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";

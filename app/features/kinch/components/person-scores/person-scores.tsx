@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Link} from "react-router";
 import clsx from "clsx";
 import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
-import {buildProfileRoute} from "@repo/app/routes";
+import {buildProfileRoute} from "@repo/app/routing/routes";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./person-scores.module.css";

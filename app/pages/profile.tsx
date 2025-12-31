@@ -2,7 +2,7 @@ import {useParams, useSearchParams, useNavigate, Link} from "react-router";
 import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import {useProfile, type ProfileData} from "@repo/app/features/profile/hooks/use-profile";
 import {useData} from "@repo/app/hooks/use-data";
-import {buildKinchPersonRoute} from "@repo/app/routes";
+import {buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import {Card} from "@repo/app/components/card/card";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";

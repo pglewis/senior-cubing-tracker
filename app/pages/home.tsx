@@ -1,5 +1,5 @@
 import {Link} from "react-router";
-import {ROUTES} from "@repo/app/routes";
+import {ROUTES} from "@repo/app/routing/routes";
 import staticStyles from "./static-page.module.css";
 import styles from "./home.module.css";
 

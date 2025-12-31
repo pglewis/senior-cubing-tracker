@@ -1,5 +1,5 @@
 import {Link, useParams} from "react-router";
-import {ROUTES} from "@repo/app/routes";
+import {ROUTES} from "@repo/app/routing/routes";
 import type {KinchEvent} from "@repo/common/types/kinch-types";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";

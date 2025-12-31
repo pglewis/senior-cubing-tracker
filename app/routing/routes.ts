@@ -7,5 +7,5 @@ export const ROUTES = {
 	PROFILE: "/profile/",
 } as const;
 
-export const buildKinchPersonRoute = (wcaid: string) => `/kinch-ranks/${wcaid}`;
-export const buildProfileRoute = (wcaid: string) => `/profile/${wcaid}`;
+export const buildKinchPersonRoute = (wcaid: string) => `${ROUTES.KINCH_RANKS}/${wcaid}`;
+export const buildProfileRoute = (wcaid: string) => `${ROUTES.PROFILE}${wcaid}`;

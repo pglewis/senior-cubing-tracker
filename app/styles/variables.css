@@ -47,7 +47,7 @@
 	--color-active: #e64503;
 	--color-active-fg: white; /* FG color to use with --color-active as a FG */
 	--color-focus: #4a9eff;
-	--color-highlight: #fff68e;
+	--color-highlight: #4f4520;
 	--color-table-row-odd: var(--color-background);
 	--color-table-row-even: var(--color-background-secondary);
 }
@@ -69,6 +69,7 @@
 	--color-border-subtle: #d4d4d5;
 	--color-active: #375e97;
 	--color-focus: #1976d2;
+	--color-highlight: #ffffd0;
 	--color-table-row-odd: var(--color-background);
 	--color-table-row-even: #f2f2f2;
 }

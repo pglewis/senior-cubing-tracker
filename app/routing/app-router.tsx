@@ -9,7 +9,7 @@ import {KinchRanks} from "@repo/app/pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
 import {CompetitorDataFaq} from "@repo/app/pages/competitor-data-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
-import {Profile} from "@repo/app/pages/profile";
+import {Profile} from "@repo/app/pages/profile/profile";
 
 export const appRouter = createBrowserRouter([
 	{

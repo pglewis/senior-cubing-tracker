@@ -178,9 +178,21 @@
 }
 
 .result-item {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
 	padding: var(--spacing-sm);
 	border-radius: var(--border-radius-sm);
 	background: var(--color-background);
+}
+
+.result-item.recent {
+	background: var(--color-highlight);
+}
+
+.result-info {
+	display: flex;
+	flex-direction: column;
 }
 
 .result-type {
@@ -195,6 +207,11 @@
 	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-bold);
 	font-family: monospace;
+}
+
+.result-date {
+	font-size: var(--font-size-xs);
+	opacity: 0.6;
 }
 
 .result-ranks {

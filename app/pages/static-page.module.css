@@ -8,10 +8,11 @@
 
 .card {
 	padding: 2rem 2.5rem;
-	border-radius: 1rem;
+	border: var(--border-subtle);
+	border-radius: var(--border-radius-md);
 	background: var(--color-background-secondary);
 	box-shadow: 0 2px 16px rgb(0 0 0 / 10%);
-	line-height: 1.6;
+	line-height: 1.5;
 }
 
 .heading {
@@ -41,7 +42,7 @@
 }
 
 .card dd {
-	margin: 1rem 0 0.5rem 1.2rem;
+	margin: 0.5rem 0 0.5rem 1.2rem;
 	color: var(--color-text-secondary);
 	font-size: 0.98rem;
 }

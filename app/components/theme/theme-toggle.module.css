@@ -8,13 +8,13 @@
 	cursor: pointer;
 }
 
-.switcher:focus {
+.switcher:focus-visible {
 	outline: none;
 	box-shadow: 0 0 0 2px rgb(59 130 246 / 50%);
 }
 
 .light {
-	background-color: #fed7aa;
+	background-color: #e64503;
 }
 
 .dark {

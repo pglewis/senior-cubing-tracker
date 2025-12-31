@@ -31,22 +31,22 @@ export function KinchRanksFaq() {
 					FM and blind events are exceptions where both single and average (where applicable)
 					will be considered, using whichever scores higher. Note that this can result in
 					two competitors scoring 100 for the same event.
-					<blockquote>
-						For 3bld and FM, the average rankings are not yet established enough, so single
-						ranks are allowed to be used instead if advantageous for a person. FM may be
-						restricted to averages only in the future if the rankings reach a good point to
-						do that.
-					</blockquote>
 				</p>
+				<blockquote>
+					For 3bld and FM, the average rankings are not yet established enough, so single
+					ranks are allowed to be used instead if advantageous for a person. FM may be
+					restricted to averages only in the future if the rankings reach a good point to
+					do that.
+				</blockquote>
 				<p>
 					Multi-blind scoring has special handling:
-					<blockquote>
-						For multibld, your result is adjusted to a single number Points + ProportionofHourLeft.
-						[...] Someone with e.g. 11 points in 45:00 would get (11+0.25)/41.0961 = 0.2737. This
-						calculation  ensures that more points always equals a better score, no matter the time
-						spent.  Less time spent still gives a better score.
-					</blockquote>
 				</p>
+				<blockquote>
+					For multibld, your result is adjusted to a single number Points + ProportionofHourLeft.
+					[...] Someone with e.g. 11 points in 45:00 would get (11+0.25)/41.0961 = 0.2737. This
+					calculation ensures that more points always equals a better score, no matter the time
+					spent.  Less time spent still gives a better score.
+				</blockquote>
 				<p>
 					The Senior Kinch Ranks calculations use official WCA results from known senior competitors,
 					thanks to the data collected and maintained by Michael George for the
@@ -57,6 +57,6 @@ export function KinchRanksFaq() {
 					{" "}.
 				</p>
 			</div>
-		</div >
+		</div>
 	);
 }

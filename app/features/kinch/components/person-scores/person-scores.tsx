@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Link} from "react-router";
 import clsx from "clsx";
 import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
-import {buildProfileRoute} from "@repo/app/routing/routes";
+import {buildProfilePersonRoute} from "@repo/app/routing/routes";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./person-scores.module.css";
@@ -43,7 +43,7 @@ export function PersonScores(props: PersonScoresProps) {
 	}
 
 	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
-	const competitorURL = `${buildProfileRoute(personKinchRank.personId)}?age=${age}`;
+	const competitorURL = `${buildProfilePersonRoute(personKinchRank.personId)}?age=${age}`;
 
 	const handleSort = (column: SortColumn) => {
 		setSortBy(column);

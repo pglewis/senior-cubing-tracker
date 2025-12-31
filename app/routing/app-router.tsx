@@ -22,6 +22,14 @@ export const appRouter = createBrowserRouter([
 				element: <Home />
 			},
 			{
+				path: ROUTES.PROFILE,
+				element: <Profile />
+			},
+			{
+				path: ROUTES.PROFILE_PERSON,
+				element: <Profile />
+			},
+			{
 				path: ROUTES.KINCH_RANKS,
 				element: <KinchRouteLayout />,
 				children: [
@@ -42,10 +50,6 @@ export const appRouter = createBrowserRouter([
 			{
 				path: ROUTES.COMPETITOR_DATA_FAQ,
 				element: <CompetitorDataFaq />
-			},
-			{
-				path: `${ROUTES.PROFILE}:wcaid?`,
-				element: <Profile />
 			}
 		]
 	},

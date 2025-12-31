@@ -44,7 +44,7 @@ export function KinchRanksFaq() {
 						For multibld, your result is adjusted to a single number Points + ProportionofHourLeft.
 						[...] Someone with e.g. 11 points in 45:00 would get (11+0.25)/41.0961 = 0.2737. This
 						calculation  ensures that more points always equals a better score, no matter the time
-						spent.  Less time spent still gives a better <score className=""></score>
+						spent.  Less time spent still gives a better score.
 					</blockquote>
 				</p>
 				<p>

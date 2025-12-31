@@ -5,7 +5,6 @@ import {appRouter} from "@repo/app/routing/app-router";
 import {DataProvider} from "./context/data-provider";
 import {ThemeProvider} from "./context/theme-provider";
 import "./styles/global.css";
-import "./styles/utilities.css";
 
 createRoot(document.getElementById("app")!).render(
 	<StrictMode>

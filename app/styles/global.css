@@ -112,7 +112,7 @@ ul.disc li {
 	margin-left: 0;
 }
 
-/* Screen reader only */
+/* Utility classes */
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -123,6 +123,29 @@ ul.disc li {
 	overflow: hidden;
 	clip-path: inset(100%);
 	white-space: nowrap;
+}
+
+.strong {
+	font-size: 90%;
+	font-weight: 600;
+}
+
+.important {
+	color: #d00000;
+	font-weight: 600;
+}
+
+.error {
+	margin: 10px 0;
+	padding: 0 10px 10px;
+	border: 1px solid #f88888;
+	border-radius: 5px;
+	background-color: #fcc;
+	color: #de222b;
+}
+
+.error .message {
+	color: black;
 }
 
 @media print {

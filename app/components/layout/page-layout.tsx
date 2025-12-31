@@ -9,6 +9,7 @@ import styles from "./page-layout.module.css";
 export function PageLayout() {
 	const {canGoBack, canGoForward, goBack, goForward} = useNavigationHistory();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [blockPointerEvents, setBlockPointerEvents] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
 	const hamburgerRef = useRef<HTMLButtonElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -17,6 +18,16 @@ export function PageLayout() {
 	// Scroll content to top on route change
 	useEffect(() => {
 		contentRef.current?.scrollTo(0, 0);
+	}, [pathname]);
+
+	// Prevent touch bleed-through after navigation
+	useEffect(() => {
+		setBlockPointerEvents(true);
+		const timer = setTimeout(() => {
+			setBlockPointerEvents(false);
+		}, 150);
+
+		return () => clearTimeout(timer);
 	}, [pathname]);
 
 	useEffect(() => {
@@ -128,7 +139,7 @@ export function PageLayout() {
 					className={`${styles.backdrop} ${isMenuOpen ? styles.open : ""}`}
 					onClick={() => setIsMenuOpen(false)}
 				></div>
-				<div ref={contentRef} className={styles["content-wrapper"]}>
+				<div ref={contentRef} className={`${styles["content-wrapper"]} ${blockPointerEvents ? styles["block-pointer-events"] : ""}`}>
 					<Outlet />
 				</div>
 			</main>

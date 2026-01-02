@@ -12,6 +12,7 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: "prompt",
+			manifestFilename: "manifest.json",
 			includeAssets: ["favicon.ico", "robots.txt"],
 			workbox: {
 				globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
@@ -69,17 +70,20 @@ export default defineConfig({
 					{
 						src: "/icons/icon-192x192.png",
 						sizes: "192x192",
-						type: "image/png"
+						type: "image/png",
+						purpose: "any maskable"
 					},
 					{
 						src: "/icons/icon-384x384.png",
 						sizes: "384x384",
-						type: "image/png"
+						type: "image/png",
+						purpose: "any maskable"
 					},
 					{
 						src: "/icons/icon-512x512.png",
 						sizes: "512x512",
-						type: "image/png"
+						type: "image/png",
+						purpose: "any maskable"
 					}
 				]
 			}

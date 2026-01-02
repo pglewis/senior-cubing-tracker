@@ -12,6 +12,7 @@
 	z-index: 100;
 	background-color: var(--color-background-secondary);
 	box-shadow: 0 2px var(--header-shadow-depth) rgb(0 0 0 / 20%);
+	padding-top: max(var(--spacing-md), env(safe-area-inset-top));
 }
 
 .header-content {
@@ -110,8 +111,8 @@
 
 .content-wrapper {
 	height: 100%;
-	padding: 0 7px 1.5em 0;
 	overflow-y: auto;
+	padding: 0 7px max(1.5em, env(safe-area-inset-bottom)) 0;
 }
 
 .block-pointer-events {

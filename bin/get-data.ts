@@ -3,7 +3,7 @@ import {createContext, runInContext} from "node:vm";
 import type {RankingsSnapshot, ExtendedRankingsData} from "@repo/common/types/rankings-snapshot";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
-const DESTINATION_DIR = "../dist/data";
+const DESTINATION_DIR = "../app/public/data";
 const outputFilePath = `${DESTINATION_DIR}/senior-rankings.json`;
 
 async function main(): Promise<void> {

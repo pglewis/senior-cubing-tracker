@@ -33,6 +33,7 @@ export function DataProvider({children}: {children: React.ReactNode;}) {
 	const [error, setError] = useState<Error | null>(null);
 
 	// Stable reference to loadData for use in polling callback
+	// Service worker handles caching via NetworkFirst strategy
 	const loadData = useCallback(async() => {
 		try {
 			const [rankingsRes, topRanksRes] = await Promise.all([

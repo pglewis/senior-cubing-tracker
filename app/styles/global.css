@@ -16,6 +16,13 @@ body {
 	overflow-y: scroll;
 }
 
+/* Hide body scrollbar in PWA standalone mode to prevent double scrollbars */
+@media (display-mode: standalone) {
+	body {
+		overflow-y: hidden;
+	}
+}
+
 /* Form control base styles */
 input,
 select {

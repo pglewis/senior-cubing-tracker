@@ -4,7 +4,7 @@ import type {Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankin
 import type {EnhancedRankingsData, FlatResult, PersonProfile} from "@repo/common/types/enhanced-rankings";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
-const DESTINATION_DIR = "../dist/data";
+const DESTINATION_DIR = "../app/public/data";
 const outputFilePath = `${DESTINATION_DIR}/enhanced-rankings.json`;
 
 async function main(): Promise<void> {

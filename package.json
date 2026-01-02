@@ -15,8 +15,7 @@
         "lint:css": "stylelint \"app/**/*.css\" --fix",
         "tsc": "npm run tsc --workspaces --if-present",
         "build": "npm run lint && npm run tsc && npm run build --workspaces --if-present",
-        "process-data": "npm run process-data -w bin",
-        "copy-dev-data": "shx cp dist/data/* app/data/"
+        "process-data": "npm run process-data -w bin"
     },
     "devDependencies": {
         "@eslint/js": "^9.25.0",

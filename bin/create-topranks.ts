@@ -4,8 +4,8 @@ import type {EnhancedRankingsData, FlatResult} from "@repo/common/types/enhanced
 import {scoreAverageOnly, type TopRank} from "@repo/common/types/kinch-types";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 
-const ENHANCED_RANKINGS_FILE = "../dist/data/enhanced-rankings.json";
-const TOPRANKS_FILE = "../dist/data/topranks.json";
+const ENHANCED_RANKINGS_FILE = "../app/public/data/enhanced-rankings.json";
+const TOPRANKS_FILE = "../app/public/data/topranks.json";
 
 async function main(): Promise<void> {
 	// Load and parse the enhanced rankings data

@@ -1,0 +1,28 @@
+.button {
+	display: flex;
+	height: 1.5rem;
+	padding: 12px 8px;
+	border: none;
+	border-radius: 4px;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	color: var(--color-text);
+	transition: background-color 0.2s ease-out;
+}
+
+.button:disabled {
+	opacity: 0.4;
+	cursor: auto;
+}
+
+@media (hover: hover) {
+	.button:hover:not(:disabled) {
+		background: rgb(255 255 255 / 10%);
+	}
+}
+
+.button:focus-visible:not(:disabled) {
+	background: rgb(255 255 255 / 10%);
+	outline: none;
+}

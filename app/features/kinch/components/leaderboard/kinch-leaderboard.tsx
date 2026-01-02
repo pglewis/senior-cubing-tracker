@@ -2,6 +2,8 @@ import {useEffect, useRef} from "react";
 import {Link} from "react-router";
 import type {KinchRank} from "@repo/common/types/kinch-types";
 import {dateIsRecent} from "@repo/common/util/parse";
+import {useData} from "@repo/app/hooks/use-data";
+import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
@@ -11,6 +13,7 @@ interface KinchLeaderboardProps {
 };
 
 export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highlightId}: KinchLeaderboardProps) {
+	const {rankings} = useData();
 	const highlightRef = useRef<HTMLTableRowElement>(null);
 
 	useEffect(() => {
@@ -39,6 +42,12 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 						>
 							<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
 							<td className={styles["name-column"]}>
+								<CountryFlag
+									countryCode={rankings?.persons[rank.personId]?.countryId ?? ""}
+									size="small"
+									decorative
+								/>
+								{" "}
 								<Link
 									to={getPersonUrl(rank.personId)}
 									className={styles.link}

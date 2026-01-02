@@ -1,6 +1,6 @@
 .container {
 	display: flex;
-	margin: .5rem auto;
+	margin: 1rem auto;
 	flex-direction: column;
 	gap: 2rem;
 	max-width: var(--max-width-content);

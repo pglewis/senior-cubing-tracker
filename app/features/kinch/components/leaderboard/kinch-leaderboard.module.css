@@ -34,7 +34,3 @@
 	background-color: var(--color-background-header);
 	transition: background-color 0.3s ease-out;
 }
-
-.table tr.recent {
-	background-color: var(--color-highlight);
-}

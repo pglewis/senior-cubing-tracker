@@ -38,7 +38,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 						<tr
 							key={rank.personId}
 							ref={rank.personId === highlightId ? highlightRef : null}
-							className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""} ${hasRecentPB ? styles.recent : ""}`}
+							className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
 						>
 							<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
 							<td className={styles["name-column"]}>
@@ -54,6 +54,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 								>
 									{rank.personName}
 								</Link>
+								{hasRecentPB && " 🔥"}
 							</td>
 							<td className={styles["score-column"]}>{rank.overall.toFixed(2)}</td>
 						</tr>

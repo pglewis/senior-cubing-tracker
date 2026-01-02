@@ -5,6 +5,7 @@ import {ThemeToggle} from "@repo/app/components/theme/theme-toggle";
 import {NavigationButton} from "@repo/app/components/layout/navigation-button";
 import {HamburgerButton} from "@repo/app/components/layout/hamburger-button";
 import {NavigationMenu} from "@repo/app/components/layout/navigation-menu";
+import {UpdateButton} from "@repo/app/components/layout/update-button";
 import {useNavigationHistory} from "@repo/app/hooks/use-navigation-history";
 import {useSwUpdate} from "@repo/app/hooks/use-sw-update";
 import styles from "./page-layout.module.css";
@@ -17,8 +18,8 @@ export function PageLayout() {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const {pathname} = useLocation();
 
-	// Side-effect only hook - registers SW and sets up periodic update checks
-	useSwUpdate();
+	// Registers SW and sets up periodic update checks
+	const {needsUpdate, updateApp} = useSwUpdate();
 
 	// Scroll content to top on route change
 	useEffect(() => {
@@ -39,22 +40,29 @@ export function PageLayout() {
 		<div className={styles["app-shell"]}>
 			<header className={styles.header}>
 				<div className={styles["header-content"]}>
-					<HamburgerButton
-						ref={hamburgerRef}
-						isOpen={isMenuOpen}
-						onClick={() => setIsMenuOpen(!isMenuOpen)}
-					/>
-					<NavigationButton
-						direction="back"
-						onClick={goBack}
-						disabled={!canGoBack}
-					/>
-					<NavigationButton
-						direction="forward"
-						onClick={goForward}
-						disabled={!canGoForward}
-					/>
-					<ThemeToggle />
+					<div className={styles["header-left"]}>
+						<HamburgerButton
+							ref={hamburgerRef}
+							isOpen={isMenuOpen}
+							onClick={() => setIsMenuOpen(!isMenuOpen)}
+						/>
+						<UpdateButton needsUpdate={needsUpdate} onUpdate={updateApp} />
+					</div>
+					<div className={styles["header-center"]}>
+						<NavigationButton
+							direction="back"
+							onClick={goBack}
+							disabled={!canGoBack}
+						/>
+						<NavigationButton
+							direction="forward"
+							onClick={goForward}
+							disabled={!canGoForward}
+						/>
+					</div>
+					<div className={styles["header-right"]}>
+						<ThemeToggle />
+					</div>
 				</div>
 			</header>
 			<main className={styles["main-container"]}>

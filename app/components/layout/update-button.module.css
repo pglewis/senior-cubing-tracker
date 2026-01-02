@@ -1,0 +1,59 @@
+.button {
+	position: relative;
+	display: flex;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	cursor: pointer;
+}
+
+.dot {
+	display: block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--color-active);
+	transition: opacity 0.2s ease-out;
+}
+
+@media (hover: hover) {
+	.button:hover .dot {
+		opacity: 0.85;
+	}
+}
+
+.button:focus-visible .dot {
+	opacity: 0.85;
+	outline: 2px solid var(--color-active);
+	outline-offset: 2px;
+}
+
+.callout {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 50%;
+	z-index: 1000;
+	padding: 6px 12px;
+	border-radius: 6px;
+	background: var(--color-active);
+	color: var(--color-active-fg);
+	font-size: 0.75rem;
+	font-weight: 500;
+	white-space: nowrap;
+	transform: translateX(-50%);
+}
+
+.callout::before {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	border: 6px solid transparent;
+	border-bottom-color: var(--color-active);
+	content: "";
+	transform: translateX(-50%);
+}

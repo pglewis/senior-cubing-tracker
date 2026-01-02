@@ -11,7 +11,7 @@ export default defineConfig({
 	plugins: [
 		react(),
 		VitePWA({
-			registerType: "autoUpdate",
+			registerType: "prompt",
 			includeAssets: ["favicon.ico", "robots.txt"],
 			workbox: {
 				globPatterns: ["**/*.{js,css,html,ico,png,svg}"],

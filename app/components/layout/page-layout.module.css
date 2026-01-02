@@ -26,6 +26,28 @@
 	padding: 0.7rem 0.5rem;
 }
 
+.header-left,
+.header-right {
+	display: flex;
+	flex: 1;
+	align-items: center;
+}
+
+.header-left {
+	gap: 0.5rem;
+}
+
+.header-center {
+	display: flex;
+	flex: 1.5;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.header-right {
+	justify-content: flex-end;
+}
+
 /* Main container */
 .main-container {
 	grid-row: 2;

@@ -7,7 +7,7 @@
 }
 
 .card {
-	padding: 2rem 2.5rem;
+	padding: 1.5rem;
 	border: var(--border-subtle);
 	border-radius: var(--border-radius-md);
 	background: var(--color-background-secondary);
@@ -16,7 +16,7 @@
 }
 
 .heading {
-	margin-top: 1.5rem;
+	margin-top: 0.5rem;
 	margin-bottom: 1rem;
 	padding-bottom: 0.25rem;
 	border-bottom: 2px solid var(--color-accent);

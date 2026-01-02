@@ -63,58 +63,53 @@ export function PageLayout() {
 		<div className={styles["app-shell"]}>
 			<header className={styles.header}>
 				<div className={styles["header-content"]}>
-					<div className={styles["header-row-1"]}>
-						<button
-							ref={hamburgerRef}
-							className={styles.hamburger}
-							onClick={() => setIsMenuOpen(!isMenuOpen)}
-							aria-label="Toggle navigation menu"
-							aria-expanded={isMenuOpen}
-							aria-controls="main-navigation"
+					<button
+						ref={hamburgerRef}
+						className={styles.hamburger}
+						onClick={() => setIsMenuOpen(!isMenuOpen)}
+						aria-label="Toggle navigation menu"
+						aria-expanded={isMenuOpen}
+						aria-controls="main-navigation"
+					>
+						<div className={styles["hamburger-icon"]}>
+							<span className={styles["hamburger-icon-bar"]}></span>
+							<span className={styles["hamburger-icon-bar"]}></span>
+							<span className={styles["hamburger-icon-bar"]}></span>
+						</div>
+					</button>
+					<button
+						className={styles["back-button"]}
+						onClick={goBack}
+						disabled={!canGoBack}
+						aria-label="Go back to previous page"
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							width="24"
+							height="24"
+							fill="currentColor"
 						>
-							<div className={styles["hamburger-icon"]}>
-								<span className={styles["hamburger-icon-bar"]}></span>
-								<span className={styles["hamburger-icon-bar"]}></span>
-								<span className={styles["hamburger-icon-bar"]}></span>
-							</div>
-						</button>
-						<button
-							className={styles["back-button"]}
-							onClick={goBack}
-							disabled={!canGoBack}
-							aria-label="Go back to previous page"
+							<path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+						</svg>
+					</button>
+					<button
+						className={styles["forward-button"]}
+						onClick={goForward}
+						disabled={!canGoForward}
+						aria-label="Go forward to next page"
+					>
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 24 24"
+							width="24"
+							height="24"
+							fill="currentColor"
 						>
-							<svg
-								aria-hidden="true"
-								viewBox="0 0 24 24"
-								width="24"
-								height="24"
-								fill="currentColor"
-							>
-								<path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-							</svg>
-						</button>
-						<button
-							className={styles["forward-button"]}
-							onClick={goForward}
-							disabled={!canGoForward}
-							aria-label="Go forward to next page"
-						>
-							<svg
-								aria-hidden="true"
-								viewBox="0 0 24 24"
-								width="24"
-								height="24"
-								fill="currentColor"
-							>
-								<path d="M4 13h12.17l-5.59 5.59L12 20l8-8-8-8-1.41 1.41L16.17 11H4v2z" />
-							</svg>
-						</button>
-						<ThemeToggle />
-					</div>
-					<div className={styles["header-row-2"]}>
-						<h2>Senior Cubing Tracker</h2>
-					</div>
+							<path d="M4 13h12.17l-5.59 5.59L12 20l8-8-8-8-1.41 1.41L16.17 11H4v2z" />
+						</svg>
+					</button>
+					<ThemeToggle />
 				</div>
 			</header>
 			<main className={styles["main-container"]}>

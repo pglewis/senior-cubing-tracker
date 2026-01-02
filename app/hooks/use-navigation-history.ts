@@ -1,6 +1,8 @@
 import {useLocation, useNavigationType} from "react-router";
 import {useEffect, useRef, useState} from "react";
 
+const STORAGE_KEY = "sct-nav-history";
+
 interface HistoryEntry {
 	key: string;
 	path: string;
@@ -11,14 +13,56 @@ interface NavigationState {
 	currentIndex: number;
 }
 
+function saveNavigationState(state: NavigationState): void {
+	try {
+		sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+	} catch (error) {
+		// Silently fail if sessionStorage is unavailable or quota exceeded
+		console.error("Failed to save navigation state:", error);
+	}
+}
+
+function loadNavigationState(): NavigationState | null {
+	try {
+		const stored = sessionStorage.getItem(STORAGE_KEY);
+		if (!stored) {
+			return null;
+		}
+
+		const parsed = JSON.parse(stored);
+		if (
+			parsed &&
+			Array.isArray(parsed.entries) &&
+			typeof parsed.currentIndex === "number"
+		) {
+			return parsed as NavigationState;
+		}
+		return null;
+	} catch (error) {
+		console.error("Failed to load navigation state:", error);
+		return null;
+	}
+}
+
 export function useNavigationHistory() {
 	const location = useLocation();
 	const navigationType = useNavigationType();
-	const [navHistory, setNavHistory] = useState<NavigationState>(() => ({
-		entries: [{key: location.key, path: location.pathname + location.search}],
-		currentIndex: 0
-	}));
+	const [navHistory, setNavHistory] = useState<NavigationState>(() => {
+		const stored = loadNavigationState();
+		if (stored) {
+			return stored;
+		}
+		return {
+			entries: [{key: location.key, path: location.pathname + location.search}],
+			currentIndex: 0
+		};
+	});
 	const prevKeyRef = useRef(location.key);
+
+	// Persist navigation state to sessionStorage
+	useEffect(() => {
+		saveNavigationState(navHistory);
+	}, [navHistory]);
 
 	useEffect(() => {
 		const currentPath = location.pathname + location.search;

@@ -1,5 +1,6 @@
 import {useEffect, useRef, type RefObject} from "react";
 import {Link} from "react-router";
+import clsx from "clsx";
 import {ROUTES} from "@repo/app/routing/routes";
 import {KofiButton} from "@repo/app/components/kofi-button/kofi-button";
 import styles from "./navigation-menu.module.css";
@@ -45,7 +46,7 @@ export function NavigationMenu({isOpen, onClose, hamburgerRef}: NavigationMenuPr
 		<>
 			<nav
 				id="main-navigation"
-				className={`${styles.menu} ${isOpen ? styles.open : ""}`}
+				className={clsx(styles.menu, isOpen && styles.open)}
 				ref={menuRef}
 			>
 				<div className={styles["menu-links"]}>
@@ -61,7 +62,7 @@ export function NavigationMenu({isOpen, onClose, hamburgerRef}: NavigationMenuPr
 				</div>
 			</nav>
 			<div
-				className={`${styles.backdrop} ${isOpen ? styles.open : ""}`}
+				className={clsx(styles.backdrop, isOpen && styles.open)}
 				onClick={onClose}
 			></div>
 		</>

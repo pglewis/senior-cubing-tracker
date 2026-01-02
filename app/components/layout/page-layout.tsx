@@ -1,5 +1,6 @@
 import {useState, useEffect, useRef} from "react";
 import {Outlet, useLocation} from "react-router";
+import clsx from "clsx";
 import {ThemeToggle} from "@repo/app/components/theme/theme-toggle";
 import {NavigationButton} from "@repo/app/components/layout/navigation-button";
 import {HamburgerButton} from "@repo/app/components/layout/hamburger-button";
@@ -62,7 +63,7 @@ export function PageLayout() {
 					onClose={() => setIsMenuOpen(false)}
 					hamburgerRef={hamburgerRef}
 				/>
-				<div ref={contentRef} className={`${styles["content-wrapper"]} ${blockPointerEvents ? styles["block-pointer-events"] : ""}`}>
+				<div ref={contentRef} className={clsx(styles["content-wrapper"], blockPointerEvents && styles["block-pointer-events"])}>
 					<Outlet />
 				</div>
 			</main>

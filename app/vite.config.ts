@@ -6,8 +6,8 @@ import {resolve} from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
-	// Use environment variable for base URL, fallback to empty string for local dev
-	base: process.env.VITE_BASE_URL || "",
+	// Use environment variable for base URL, fallback to root for local dev
+	base: process.env.VITE_BASE_URL || "/",
 	plugins: [
 		react(),
 		VitePWA({

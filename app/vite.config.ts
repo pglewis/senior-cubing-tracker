@@ -33,8 +33,8 @@ export default defineConfig({
 				background_color: "#1a1d24",
 				display: "standalone",
 				orientation: "portrait",
-				scope: "/",
-				start_url: "/",
+				scope: process.env.VITE_BASE_URL || "/",
+				start_url: process.env.VITE_BASE_URL || "/",
 				icons: [
 					{
 						src: "/icons/icon-48x48.png",

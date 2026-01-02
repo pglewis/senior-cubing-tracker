@@ -4,6 +4,7 @@ import {ROUTES} from "@repo/app/routing/routes";
 import {ThemeToggle} from "@repo/app/components/theme/theme-toggle";
 import {KofiButton} from "@repo/app/components/kofi-button/kofi-button";
 import {useNavigationHistory} from "@repo/app/hooks/use-navigation-history";
+import {useSwUpdate} from "@repo/app/hooks/use-sw-update";
 import styles from "./page-layout.module.css";
 
 export function PageLayout() {
@@ -14,6 +15,9 @@ export function PageLayout() {
 	const hamburgerRef = useRef<HTMLButtonElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 	const {pathname} = useLocation();
+
+	// Side-effect only hook - registers SW and sets up periodic update checks
+	useSwUpdate();
 
 	// Scroll content to top on route change
 	useEffect(() => {

@@ -6,6 +6,9 @@
 			"DOM",
 			"DOM.Iterable"
 		],
+		"types": [
+			"vite-plugin-pwa/react"
+		],
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"jsx": "react-jsx",

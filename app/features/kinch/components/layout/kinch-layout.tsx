@@ -29,7 +29,6 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 
 	const handleCompetitorSelect = (item: ComboboxItem) => {
 		navigate(buildKinchPersonRoute(item.value) + `?age=${age}&region=world`);
-		setParams({age, region, page: 1});
 	};
 
 	return (

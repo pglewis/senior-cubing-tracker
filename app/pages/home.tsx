@@ -8,7 +8,14 @@ export function Home() {
 		<div className={staticStyles.container}>
 			<div className={staticStyles.card}>
 				<nav>
+					<h2>Senior Cubing Tracker</h2>
 					<h3 className={staticStyles.heading}>On the site</h3>
+					<dl>
+						<dt><Link to={ROUTES.KINCH_RANKS} className={styles.link}>Senior Kinch Ranks</Link></dt>
+						<dd>
+							Kinch Ranks are designed to measure a competitor&apos;s overall performance across all official WCA events.
+						</dd>
+					</dl>
 					<dl>
 						<dt><Link to={ROUTES.PROFILE} className={styles.link}>Senior Profile Pages</Link></dt>
 						<dd>
@@ -17,9 +24,9 @@ export function Home() {
 						</dd>
 					</dl>
 					<dl>
-						<dt><Link to={ROUTES.KINCH_RANKS} className={styles.link}>Senior Kinch Ranks</Link></dt>
+						<dt><a href="https://pglewis.github.io/wca-recent-senior-records/recent/" target="_blank" rel="noopener noreferrer" className={styles.link}>Recent Senior Records</a></dt>
 						<dd>
-							Kinch Ranks are designed to measure a competitor&apos;s overall performance across all official WCA events.
+							Recent top senior results, see who is out there raising the bar for everyone else.
 						</dd>
 					</dl>
 					<dl>
@@ -34,15 +41,7 @@ export function Home() {
 							Understand where the data comes from, how often it updates, and why your results might not appear immediately.
 						</dd>
 					</dl>
-					<dl>
-						<dt><a href="https://pglewis.github.io/wca-recent-senior-records/recent/" target="_blank" rel="noopener noreferrer" className={styles.link}>Recent Senior Records</a></dt>
-						<dd>
-							Recent top senior results, see who is out there raising the bar for everyone else.
-						</dd>
-					</dl>
 				</nav>
-			</div>
-			<div className={staticStyles.card}>
 				<h3 className={staticStyles.heading}>Other Senior Cubing Resources</h3>
 				<dl>
 					<dt>

@@ -51,11 +51,11 @@ export function NavigationMenu({isOpen, onClose, hamburgerRef}: NavigationMenuPr
 			>
 				<div className={styles["menu-links"]}>
 					<Link to={ROUTES.HOME} className={styles["menu-link"]} onClick={onClose}>Home</Link>
-					<Link to={ROUTES.PROFILE} className={styles["menu-link"]} onClick={onClose}>Senior Profile Pages</Link>
 					<Link to={ROUTES.KINCH_RANKS} className={styles["menu-link"]} onClick={onClose}>Senior Kinch Ranks</Link>
+					<Link to={ROUTES.PROFILE} className={styles["menu-link"]} onClick={onClose}>Senior Profile Pages</Link>
+					<a href="https://pglewis.github.io/wca-recent-senior-records/recent/" target="_blank" rel="noopener noreferrer" className={styles["menu-link"]} onClick={onClose}>Recent Senior Records</a>
 					<Link to={ROUTES.KINCH_FAQ} className={styles["menu-link"]} onClick={onClose}>Kinch Ranks FAQ</Link>
 					<Link to={ROUTES.COMPETITOR_DATA_FAQ} className={styles["menu-link"]} onClick={onClose}>Competitor Data FAQ</Link>
-					<a href="https://pglewis.github.io/wca-recent-senior-records/recent/" target="_blank" rel="noopener noreferrer" className={styles["menu-link"]} onClick={onClose}>Recent Senior Records</a>
 				</div>
 				<div className={styles["menu-footer"]}>
 					<KofiButton />

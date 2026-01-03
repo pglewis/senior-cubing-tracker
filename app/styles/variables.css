@@ -36,12 +36,12 @@
 	--color-background: #222;
 	--color-background-secondary: #2a2a2a; /* Card and input background */
 	--color-background-header: #404040;
-	--color-text: gainsboro;
-	--color-text-secondary: #b0b0b0;
-	--color-link: #fff3cc;
+	--color-text: #f0f0f0;
+	--color-text-secondary: #e0e0e0;
+	--color-link: #fae9b3;
 	--color-link-hover: #fffbe0;
 	--color-surface: #23272f;
-	--color-accent: #f0d580;
+	--color-accent: #f3d677;
 	--color-border: #ccc;
 	--color-border-subtle: #cccccc60;
 	--color-active: #e64503;

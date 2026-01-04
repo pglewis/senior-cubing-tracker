@@ -48,23 +48,45 @@
 	justify-content: flex-end;
 }
 
-/* Main container */
+/* Main container - always the scroll container */
 .main-container {
 	grid-row: 2;
-	position: relative;
 	width: 100%;
 	max-width: var(--max-width-content);
 	margin: 0 auto;
 	padding: 0 5px;
-	overflow: hidden;
+	height: 100%;
+	overflow-y: auto;
+}
+
+/* Positioning wrapper - provides context for menu, clips menu when hidden */
+.content-positioning {
+	position: relative;
+	height: 100%;
+	overflow: clip visible;
 }
 
 .content-wrapper {
-	height: 100%;
-	overflow-y: auto;
-	padding: 0 7px max(1.5em, env(safe-area-inset-bottom)) 0;
+	padding: 1px 7px max(1.5em, env(safe-area-inset-bottom)) 0;
 }
 
 .block-pointer-events {
 	pointer-events: none;
+}
+
+/* Desktop: move scrollbar to viewport edge */
+@media (width >= 520px) {
+	.main-container {
+		max-width: none;
+		padding: 0;
+	}
+
+	.content-positioning {
+		max-width: var(--max-width-content);
+		margin: 0 auto;
+	}
+
+	.content-wrapper {
+		padding: 1px 12px max(1.5em, env(safe-area-inset-bottom)) 0;
+	}
 }

@@ -15,7 +15,7 @@ export function PageLayout() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [blockPointerEvents, setBlockPointerEvents] = useState(false);
 	const hamburgerRef = useRef<HTMLButtonElement>(null);
-	const contentRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLElement>(null);
 	const {pathname} = useLocation();
 
 	// Registers SW and sets up periodic update checks
@@ -65,14 +65,16 @@ export function PageLayout() {
 					</div>
 				</div>
 			</header>
-			<main className={styles["main-container"]}>
-				<NavigationMenu
-					isOpen={isMenuOpen}
-					onClose={() => setIsMenuOpen(false)}
-					hamburgerRef={hamburgerRef}
-				/>
-				<div ref={contentRef} className={clsx(styles["content-wrapper"], blockPointerEvents && styles["block-pointer-events"])}>
-					<Outlet />
+			<main ref={contentRef} className={styles["main-container"]}>
+				<div className={styles["content-positioning"]}>
+					<NavigationMenu
+						isOpen={isMenuOpen}
+						onClose={() => setIsMenuOpen(false)}
+						hamburgerRef={hamburgerRef}
+					/>
+					<div className={clsx(styles["content-wrapper"], blockPointerEvents && styles["block-pointer-events"])}>
+						<Outlet />
+					</div>
 				</div>
 			</main>
 		</div>

@@ -1,7 +1,7 @@
 .menu {
 	display: flex;
 	position: absolute;
-	top: 2px;
+	top: 0;
 	left: 0;
 	z-index: 90;
 	width: 300px;
@@ -47,7 +47,7 @@
 
 .backdrop {
 	position: absolute;
-	top: 2px;
+	top: 0;
 	left: 0;
 	z-index: 85;
 	width: 100%;

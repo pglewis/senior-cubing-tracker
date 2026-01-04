@@ -1,4 +1,4 @@
-import type {WCAEventId} from "./rankings-snapshot";
+import type {Missing, WCAEventId} from "./rankings-snapshot";
 
 // Flattened result with all context pre-attached
 export interface FlatResult {
@@ -88,6 +88,15 @@ export interface EnhancedRankingsData {
 			id: string;
 			name: string;
 			continent: string;
+		};
+	};
+
+	// Missing competitor counts per event/type/age for rank adjustment
+	missing: {
+		[eventId: string]: {
+			[type: string]: {
+				[age: number]: Missing;
+			};
 		};
 	};
 }

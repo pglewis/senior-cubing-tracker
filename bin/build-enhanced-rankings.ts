@@ -1,6 +1,6 @@
 import {writeFile, mkdir} from "node:fs/promises";
 import {createContext, runInContext} from "node:vm";
-import type {Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
+import type {Missing, Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData, FlatResult, PersonProfile} from "@repo/common/types/enhanced-rankings";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
@@ -55,6 +55,7 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 	const continents: {[id: string]: {id: string; name: string;};} = {};
 	const countries: {[id: string]: {id: string; name: string; continent: string;};} = {};
 	const events: {[id: string]: {id: WCAEventId; name: string; format: "time" | "number" | "multi";};} = {};
+	const missing: {[eventId: string]: {[type: string]: {[age: number]: Missing;};};} = {};
 
 	// Preserve canonical event order from source data
 	const eventOrder: WCAEventId[] = rankings.events.map(event => event.id);
@@ -108,8 +109,18 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 
 	// First pass: Create all flat results with full context
 	for (const event of rankings.events) {
+		if (!missing[event.id]) {
+			missing[event.id] = {};
+		}
+
 		for (const eventRanking of event.rankings) {
 			const {age, type, ranks} = eventRanking;
+
+			// Copy missing data for this event/type/age combination
+			if (!missing[event.id][type]) {
+				missing[event.id][type] = {};
+			}
+			missing[event.id][type][age] = eventRanking.missing;
 
 			// Skip if no ranks
 			if (ranks.length === 0) {
@@ -117,7 +128,14 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 			}
 
 			// Build regional rankings for this specific combination
-			const regionalRankings = buildRegionalRankings(ranks, rankings, personIdToIndex, countryIdToIndex, continentIdToIndex);
+			const regionalRankings = buildRegionalRankings(
+				ranks,
+				eventRanking.missing,
+				rankings,
+				personIdToIndex,
+				countryIdToIndex,
+				continentIdToIndex
+			);
 
 			for (let i = 0; i < ranks.length; i++) {
 				const rank = ranks[i];
@@ -205,12 +223,14 @@ function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
 		competitions,
 		continents,
 		countries,
-		events
+		events,
+		missing
 	};
 }
 
 function buildRegionalRankings(
 	ranks: Rank[],
+	missingData: Missing,
 	rankings: RankingsSnapshot,
 	personIdToIndex: {[key: string]: number},
 	countryIdToIndex: {[key: string]: number},
@@ -219,13 +239,24 @@ function buildRegionalRankings(
 	const continents: {[continentId: string]: {[personId: string]: number;};} = {};
 	const countries: {[countryId: string]: {[personId: string]: number;};} = {};
 
-	for (let i = 0; i < ranks.length; i++) {
-		const rank = ranks[i];
+	// Track counts per region
+	const continentCounts: {[id: string]: number;} = {};
+	const countryCounts: {[id: string]: number;} = {};
+
+	// Track previous result and ranks for tie handling
+	let prevResult = "";
+	const prevContinentRanks: {[id: string]: number;} = {};
+	const prevCountryRanks: {[id: string]: number;} = {};
+
+	const worldMissing = missingData.world;
+
+	for (let arrayIndex = 0; arrayIndex < ranks.length; arrayIndex++) {
+		const rank = ranks[arrayIndex];
 		const person = rankings.persons[personIdToIndex[rank.id]];
 		const country = rankings.countries[countryIdToIndex[person.country]];
 		const continent = rankings.continents[continentIdToIndex[country.continent]];
 
-		// Initialize continent tracking
+		// Initialize region tracking
 		if (!continents[continent.id]) {
 			continents[continent.id] = {};
 		}
@@ -233,13 +264,45 @@ function buildRegionalRankings(
 			countries[country.id] = {};
 		}
 
-		// Assign regional ranks (1-based, in order of appearance)
-		if (!continents[continent.id]![person.id]) {
-			continents[continent.id]![person.id] = Object.keys(continents[continent.id]!).length + 1;
+		// Increment region counts
+		continentCounts[continent.id] = (continentCounts[continent.id] ?? 0) + 1;
+		countryCounts[country.id] = (countryCounts[country.id] ?? 0) + 1;
+
+		let continentRank: number;
+		let countryRank: number;
+
+		if (rank.best === prevResult) {
+			// Tie: use same rank as previous for this region
+			continentRank = prevContinentRanks[continent.id] ?? continentCounts[continent.id];
+			countryRank = prevCountryRanks[country.id] ?? countryCounts[country.id];
+		} else {
+			// Calculate gap between world rank and array position
+			const gap = rank.rank - arrayIndex - 1;
+
+			// Calculate continent fakeRatio and adjusted rank
+			const continentMissing = missingData.continents?.[continent.id];
+			const continentFakeRatio = (worldMissing > 0 && continentMissing !== undefined)
+				? continentMissing / worldMissing
+				: (worldMissing > 0 ? 0 : 1);
+			continentRank = Math.round(continentCounts[continent.id] + continentFakeRatio * gap);
+
+			// Calculate country fakeRatio and adjusted rank
+			const countryMissing = missingData.countries?.[country.id];
+			const countryFakeRatio = (worldMissing > 0 && countryMissing !== undefined)
+				? countryMissing / worldMissing
+				: (worldMissing > 0 ? 0 : 1);
+			countryRank = Math.round(countryCounts[country.id] + countryFakeRatio * gap);
+
+			// Update previous ranks for tie handling
+			prevContinentRanks[continent.id] = continentRank;
+			prevCountryRanks[country.id] = countryRank;
 		}
-		if (!countries[country.id]![person.id]) {
-			countries[country.id]![person.id] = Object.keys(countries[country.id]!).length + 1;
-		}
+
+		prevResult = rank.best;
+
+		// Assign adjusted regional ranks
+		continents[continent.id]![person.id] = continentRank;
+		countries[country.id]![person.id] = countryRank;
 	}
 
 	return {continents, countries};

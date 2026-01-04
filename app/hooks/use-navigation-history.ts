@@ -76,13 +76,16 @@ export function useNavigationHistory() {
 
 		if (navigationType === "PUSH") {
 			// New navigation: add entry, trim forward history
-			setNavHistory(prev => ({
-				entries: [
-					...prev.entries.slice(0, prev.currentIndex + 1),
-					{key: currentKey, path: currentPath}
-				],
-				currentIndex: prev.currentIndex + 1
-			}));
+			setNavHistory(prev => {
+				const newState = {
+					entries: [
+						...prev.entries.slice(0, prev.currentIndex + 1),
+						{key: currentKey, path: currentPath}
+					],
+					currentIndex: prev.currentIndex + 1
+				};
+				return newState;
+			});
 		} else if (navigationType === "POP") {
 			// Back/forward: find entry by key
 			setNavHistory(prev => {

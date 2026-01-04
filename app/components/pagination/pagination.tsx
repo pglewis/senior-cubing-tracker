@@ -21,7 +21,7 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 		setInputValue(e.target.value);
 	};
 
-	const handleInputBlur = () => {
+	const handleSubmit = () => {
 		const pageNumber = parseInt(inputValue.trim(), 10);
 
 		if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
@@ -32,10 +32,9 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 		}
 	};
 
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleInputBlur();
-		}
+	const handleFormSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		handleSubmit();
 	};
 
 	const handlePrevious = () => {
@@ -112,17 +111,17 @@ export function Pagination({currentPage, totalPages, onPageChange, className}: P
 			</div>
 			<div className={styles["page-of"]}>
 				{"page "}
-				<input
-					type="text"
-					inputMode="numeric"
-					pattern="[0-9]*"
-					value={inputValue}
-					onChange={handleInputChange}
-					onBlur={handleInputBlur}
-					onKeyDown={handleKeyDown}
-					aria-label="Enter page number"
-					className={styles["page-input"]}
-				/>
+				<form onSubmit={handleFormSubmit} style={{display: "inline"}}>
+					<input
+						type="text"
+						inputMode="numeric"
+						pattern="[0-9]*"
+						value={inputValue}
+						onChange={handleInputChange}
+						aria-label="Enter page number"
+						className={styles["page-input"]}
+					/>
+				</form>
 				{" of "}{totalPages}
 			</div>
 		</div>

@@ -13,7 +13,8 @@ export function Home() {
 					<dl>
 						<dt><Link to={ROUTES.KINCH_RANKS} className={styles.link}>Senior Kinch Ranks</Link></dt>
 						<dd>
-							Kinch Ranks are designed to measure a competitor&apos;s overall performance across all official WCA events.
+							Kinch Ranks are designed to measure a competitor&apos;s overall performance relative to
+							other competitors across all official WCA events.
 						</dd>
 					</dl>
 					<dl>

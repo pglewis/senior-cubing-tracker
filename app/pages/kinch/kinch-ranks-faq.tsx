@@ -6,13 +6,14 @@ export function KinchRanksFaq() {
 			<div className={staticStyles.card}>
 				<h3 className={staticStyles.heading}>Senior Kinch Ranks FAQ</h3>
 				<p>
-					Kinch Ranks is a system designed to measure competitors&apos; overall performance across all official WCA
-					events. The details of how the ranks are calculated can be found in the
+					Kinch Ranks are designed to measure a competitor&apos;s overall performance relative to other
+					competitors across all official WCA events.  The details of how the ranks are calculated can be
+					found in the
 					{" "}
 					<a href="https://www.speedsolving.com/threads/all-round-rankings-kinchranks.53353/" target="_blank" rel="noopener noreferrer">
 						original forum discussion from SpeedSolving.com
 					</a>
-					{" "}.
+					.
 				</p>
 				<p>
 					In short:

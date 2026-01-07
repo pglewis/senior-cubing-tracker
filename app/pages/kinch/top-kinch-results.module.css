@@ -1,6 +1,21 @@
-.description {
+.header-card {
 	margin-bottom: var(--spacing-md);
 	text-align: center;
+}
+
+.header-title {
+	margin: 0 0 var(--spacing-xs) 0;
+	padding: 0;
+}
+
+.header-subtitle {
+	margin-bottom: var(--spacing-sm);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+}
+
+.description {
+	margin: 0;
 	font-size: var(--font-size-sm);
 	color: var(--color-text-secondary);
 }
@@ -28,29 +43,28 @@
 	font-weight: var(--font-weight-bold);
 }
 
-.event-header span.cubing-icon {
-	transform: translateY(2px);
+.event-header .cubing-icon {
+	font-size: 0.85em;
+	transform: translateY(1px);
 }
 
-.event-name {
-	display: flex;
-	align-items: center;
+.results-container-inner {
+	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
 }
 
 .results-grid {
 	display: grid;
 	gap: var(--spacing-md);
-	padding: var(--spacing-sm);
 }
 
-.results-grid:has(.result-item:nth-child(2)) {
+.results-grid.two-column {
 	grid-template-columns: 1fr 1fr;
 }
 
 .result-item {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-xs);
+	gap: var(--spacing-sm);
 	padding: var(--spacing-sm);
 	border-radius: var(--border-radius-sm);
 	background: var(--color-background);
@@ -70,7 +84,7 @@
 }
 
 .result-person {
-	font-size: var(--font-size-sm);
+	font-size: var(--font-size-md);
 }
 
 .person-link {
@@ -83,6 +97,6 @@
 }
 
 .result-date {
-	font-size: var(--font-size-xs);
+	font-size: var(--font-size-sm);
 	color: var(--color-text-secondary);
 }

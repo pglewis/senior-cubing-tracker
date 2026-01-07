@@ -1,5 +1,6 @@
 import {useMemo} from "react";
 import {Link} from "react-router";
+import clsx from "clsx";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useTopKinchResults} from "@repo/app/features/kinch/hooks/use-top-kinch-results";
@@ -50,46 +51,51 @@ export function TopKinchResults() {
 
 	return (
 		<KinchLayout availableAgeOptions={ageOptions}>
-			<h3>Top Kinch Results</h3>
-			<p className={styles.description}>
-				These are the best results for each event used as benchmarks for Kinch scoring.
-			</p>
+			<Card className={styles["header-card"]}>
+				<h3 className={styles["header-title"]}>Top Kinch Results</h3>
+				<div className={styles["header-subtitle"]}>
+					{regionName}, {age}+
+				</div>
+				<p className={styles.description}>
+					These are the best results for each event used as benchmarks for Kinch scoring.
+				</p>
+			</Card>
 
 			<div className={styles["results-container"]}>
 				{results.map((event) => (
 					<Card key={event.eventId} className={styles["event-card"]}>
 						<div className={styles["event-header"]}>
 							<span className={`cubing-icon event-${event.eventId}`}></span>
-							<span className={styles["event-name"]}>
-								{event.eventName} ({regionName}, {age}+)
-							</span>
+							{event.eventName} ({regionName}, {age}+)
 						</div>
 
-						<div className={styles["results-grid"]}>
-							{event.single && (
-								<ResultItem
-									type="single"
-									result={event.single.result}
-									personId={event.single.personId}
-									personName={event.single.personName}
-									countryId={rankings?.persons[event.single.personId]?.countryId ?? ""}
-									date={event.single.date}
-									age={age}
-									region={region}
-								/>
-							)}
-							{event.average && (
-								<ResultItem
-									type="average"
-									result={event.average.result}
-									personId={event.average.personId}
-									personName={event.average.personName}
-									countryId={rankings?.persons[event.average.personId]?.countryId ?? ""}
-									date={event.average.date}
-									age={age}
-									region={region}
-								/>
-							)}
+						<div className={styles["results-container-inner"]}>
+							<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
+								{event.single && (
+									<ResultItem
+										type="single"
+										result={event.single.result}
+										personId={event.single.personId}
+										personName={event.single.personName}
+										countryId={rankings?.persons[event.single.personId]?.countryId ?? ""}
+										date={event.single.date}
+										age={age}
+										region={region}
+									/>
+								)}
+								{event.average && (
+									<ResultItem
+										type="average"
+										result={event.average.result}
+										personId={event.average.personId}
+										personName={event.average.personName}
+										countryId={rankings?.persons[event.average.personId]?.countryId ?? ""}
+										date={event.average.date}
+										age={age}
+										region={region}
+									/>
+								)}
+							</div>
 						</div>
 					</Card>
 				))}

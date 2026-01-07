@@ -8,6 +8,7 @@ import {DataGate} from "@repo/app/components/loading/data-gate";
 import {Home} from "@repo/app/pages/home";
 import {KinchRanks} from "@repo/app/pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
+import {TopKinchResults} from "@repo/app/pages/kinch/top-kinch-results";
 import {CompetitorDataFaq} from "@repo/app/pages/competitor-data-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Profile} from "@repo/app/pages/profile/profile";
@@ -45,6 +46,10 @@ export const appRouter = createBrowserRouter([
 					{
 						path: "faq",
 						element: <KinchRanksFaq />
+					},
+					{
+						path: "top-results",
+						element: <TopKinchResults />
 					}
 				]
 			},

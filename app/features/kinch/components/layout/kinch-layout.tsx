@@ -61,6 +61,12 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 				</div>
 			</div>
 
+			<div>
+				<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}&region=${region}`}>
+					View Top Kinch Results
+				</Link>
+			</div>
+
 			{children}
 
 			<h3>

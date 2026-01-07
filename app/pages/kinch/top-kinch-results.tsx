@@ -61,7 +61,7 @@ export function TopKinchResults() {
 				</p>
 			</Card>
 
-			<div className={styles["results-container"]}>
+			<div className={styles["events-list"]}>
 				{results.map((event) => (
 					<Card key={event.eventId} className={styles["event-card"]}>
 						<div className={styles["event-header"]}>
@@ -69,7 +69,7 @@ export function TopKinchResults() {
 							{event.eventName} ({regionName}, {age}+)
 						</div>
 
-						<div className={styles["results-container-inner"]}>
+						<div className={styles["event-results"]}>
 							<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
 								{event.single && (
 									<ResultItem

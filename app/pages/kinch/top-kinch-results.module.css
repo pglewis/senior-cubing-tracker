@@ -20,14 +20,13 @@
 	color: var(--color-text-secondary);
 }
 
-.results-container {
+.events-list {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-md);
 }
 
 .event-card {
-	text-align: left;
 	overflow: hidden;
 }
 
@@ -48,7 +47,7 @@
 	transform: translateY(1px);
 }
 
-.results-container-inner {
+.event-results {
 	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
 }
 

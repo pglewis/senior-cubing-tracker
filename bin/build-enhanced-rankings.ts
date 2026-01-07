@@ -3,10 +3,11 @@ import {createContext, runInContext} from "node:vm";
 import type {Missing, Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData, FlatResult, PersonProfile} from "@repo/common/types/enhanced-rankings";
 import {buildTopRanks} from "./create-topranks.ts";
+import {DATA_FILENAME} from "@repo/common/data-constants";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
 const DESTINATION_DIR = "../app/public/data";
-const outputFilePath = `${DESTINATION_DIR}/sct-data.json`;
+const outputFilePath = `${DESTINATION_DIR}/${DATA_FILENAME}`;
 
 async function main(): Promise<void> {
 	// Fetch the rankings data as js code from wca-seniors.org

@@ -72,18 +72,20 @@ export function PageLayout() {
 					</div>
 				</div>
 			</header>
-			<main ref={contentRef} className={styles["main-container"]}>
-				<div className={styles["content-positioning"]}>
+			<div className={styles.body}>
+				<div className={styles["menu-clip"]}>
 					<NavigationMenu
 						isOpen={isMenuOpen}
 						onClose={() => setIsMenuOpen(false)}
 						hamburgerRef={hamburgerRef}
 					/>
+				</div>
+				<main ref={contentRef} className={styles["scroll-container"]}>
 					<div className={clsx(styles["content-wrapper"], blockPointerEvents && styles["block-pointer-events"])}>
 						<Outlet />
 					</div>
-				</div>
-			</main>
+				</main>
+			</div>
 		</div>
 	);
 }

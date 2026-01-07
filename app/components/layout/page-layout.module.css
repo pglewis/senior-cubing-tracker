@@ -1,14 +1,14 @@
-/* Grid shell container */
+/* Flex shell container */
 .app-shell {
-	display: grid;
-	grid-template-rows: auto 1fr;
+	display: flex;
+	flex-direction: column;
 	height: 100vh;
 	overflow: hidden;
 }
 
 /* Header */
 .header {
-	grid-row: 1;
+	flex: 0 0 auto;
 	z-index: 100;
 	background-color: var(--color-background-secondary);
 	box-shadow: 0 2px var(--header-shadow-depth) rgb(0 0 0 / 20%);
@@ -48,45 +48,45 @@
 	justify-content: flex-end;
 }
 
-/* Main container - always the scroll container */
-.main-container {
-	grid-row: 2;
+/* Body - contains menu and scroll area */
+.body {
+	flex: 1;
+	position: relative;
+	overflow: hidden;
+}
+
+/* Menu clip container - positioned at content area, clips hidden menu */
+.menu-clip {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
 	width: 100%;
 	max-width: var(--max-width-content);
-	margin: 0 auto;
-	padding: 0 5px;
+	height: 100%;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+@media (width >= 520px) {
+	.menu-clip {
+		left: max(0px, calc((100vw - var(--max-width-content)) / 2));
+	}
+}
+
+/* Scroll container - full width so scrollbar is at viewport edge */
+.scroll-container {
 	height: 100%;
 	overflow-y: auto;
 }
 
-/* Positioning wrapper - provides context for menu, clips menu when hidden */
-.content-positioning {
-	position: relative;
-	height: 100%;
-	overflow: clip visible;
-}
-
+/* Content wrapper - centered with max-width */
 .content-wrapper {
-	padding: 1px 7px max(1.5em, env(safe-area-inset-bottom)) 0;
+	max-width: var(--max-width-content);
+	margin: 0 auto;
+	padding: 1px 12px max(1.5em, env(safe-area-inset-bottom));
 }
 
 .block-pointer-events {
 	pointer-events: none;
-}
-
-/* Desktop: move scrollbar to viewport edge */
-@media (width >= 520px) {
-	.main-container {
-		max-width: none;
-		padding: 0;
-	}
-
-	.content-positioning {
-		max-width: var(--max-width-content);
-		margin: 0 auto;
-	}
-
-	.content-wrapper {
-		padding: 1px 12px max(1.5em, env(safe-area-inset-bottom)) 0;
-	}
 }

@@ -5,6 +5,7 @@ dist
 
 .vscode/*
 !.vscode/extensions.json
+*.code-workspace
 .idea
 .DS_Store
 *.suo

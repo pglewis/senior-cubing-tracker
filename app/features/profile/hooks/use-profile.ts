@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import {useData} from "@repo/app/hooks/use-data";
+import {useDataOptional} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
 import type {PersonProfile, FlatResult} from "@repo/common/types/enhanced-rankings";
@@ -56,7 +56,7 @@ interface UseProfileParams {
 }
 
 export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
-	const {rankings} = useData();
+	const {rankings} = useDataOptional();
 
 	// Get person data
 	const person = useMemo(() => {

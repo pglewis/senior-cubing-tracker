@@ -23,6 +23,10 @@ export default defineConfig({
 					options: {
 						cacheName: "senior-cubing-data",
 						networkTimeoutSeconds: 10,
+						expiration: {
+							maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+							maxEntries: 5, // Keep only latest 5 files
+						}
 					}
 				}]
 			},

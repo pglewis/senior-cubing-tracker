@@ -6,7 +6,7 @@
     "scripts": {
         "lint": "eslint .",
         "tsc": "tsc",
-        "process-data": "node build-enhanced-rankings.ts && node create-topranks.ts"
+        "process-data": "node build-enhanced-rankings.ts"
     },
     "dependencies": {
         "@repo/common": "*"

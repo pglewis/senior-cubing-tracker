@@ -1,48 +1,60 @@
 import {useEffect, useRef} from "react";
 
 interface UseDataPollingOptions {
-	urls: string[];
+	url: string;
 	interval: number;
-	onDataChanged: () => void;
+	enabled?: boolean;
+	onDataChanged: () => Promise<boolean> | boolean;
 }
 
-type ETagMap = Map<string, string | null>;
-
 /**
- * Hook that periodically checks if remote data files have been updated
+ * Hook that periodically checks if remote data file has been updated
  * using ETag headers, then triggers a callback if changes are detected.
  *
  * Uses HEAD requests to minimize bandwidth - only fetches full data if needed.
  */
 export function useDataPolling({
-	urls,
+	url,
 	interval,
+	enabled = true,
 	onDataChanged,
 }: UseDataPollingOptions): void {
-	const etagsRef = useRef<ETagMap>(new Map());
+	// Baseline ETag corresponds to the last accepted data version
+	const baselineEtagRef = useRef<string | null>(null);
 
 	useEffect(() => {
+		if (!enabled) {
+			return;
+		}
+
 		async function checkForUpdates() {
 			try {
-				const currentEtags: ETagMap = new Map();
-				let allFilesChanged = true;
+				const response = await fetch(url, {
+					method: "HEAD",
+					cache: "no-store",
+				});
 
-				for (const url of urls) {
-					const response = await fetch(url, {method: "HEAD"});
-					const eTag = response.headers.get("ETag");
-					currentEtags.set(url, eTag);
-
-					const previousETag = etagsRef.current.get(url);
-					// Only trigger callback if ALL files have changed since last check
-					if (previousETag !== null && previousETag === eTag) {
-						allFilesChanged = false;
-					}
+				if (!response.ok) {
+					return;
 				}
 
-				etagsRef.current = currentEtags;
+				const currentETag = response.headers.get("ETag");
+				if (!currentETag) {
+					return;
+				}
 
-				if (allFilesChanged && etagsRef.current.size > 0) {
-					onDataChanged();
+				// First successful poll establishes baseline only
+				if (baselineEtagRef.current === null) {
+					baselineEtagRef.current = currentETag;
+					return;
+				}
+
+				// Check if data has changed
+				if (currentETag !== baselineEtagRef.current) {
+					const didRefreshSucceed = await onDataChanged();
+					if (didRefreshSucceed) {
+						baselineEtagRef.current = currentETag;
+					}
 				}
 			} catch (error) {
 				// Silently fail and retry on next interval
@@ -50,7 +62,7 @@ export function useDataPolling({
 			}
 		}
 
-		// Run initial check immediately to load data on mount
+		// Run once immediately (baseline capture or possible update check)
 		void checkForUpdates();
 
 		// Set up polling interval
@@ -60,5 +72,5 @@ export function useDataPolling({
 
 		// Cleanup
 		return () => clearInterval(intervalId);
-	}, [urls, interval, onDataChanged]);
+	}, [url, interval, enabled, onDataChanged]);
 }

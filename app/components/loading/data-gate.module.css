@@ -1,0 +1,40 @@
+.container {
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+	padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.content-width {
+	width: 100%;
+	max-width: var(--max-width-content);
+}
+
+.heading {
+	margin: 0;
+	font-size: var(--font-size-lg);
+}
+
+.message {
+	margin: 0;
+	color: var(--color-text-secondary);
+	line-height: 1.5;
+}
+
+.details {
+	margin: 0;
+	color: var(--color-text-secondary);
+	font-size: var(--font-size-sm);
+	opacity: 0.85;
+}
+
+.link {
+	color: var(--color-link);
+	text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+	color: var(--color-link-hover);
+	text-decoration: underline;
+}

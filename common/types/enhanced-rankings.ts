@@ -1,4 +1,5 @@
 import type {Missing, WCAEventId} from "./rankings-snapshot";
+import type {TopRank} from "./kinch-types";
 
 // Flattened result with all context pre-attached
 export interface FlatResult {
@@ -50,6 +51,9 @@ export interface EnhancedRankingsData {
 
 	// Flattened results - single source of truth, pre-sorted by date (newest first)
 	results: FlatResult[];
+
+	// Top ranks for each event/age/region combination (used for Kinch scoring)
+	topRanks: TopRank[];
 
 	// Event data as ID-indexed objects for O(1) lookups
 	events: {

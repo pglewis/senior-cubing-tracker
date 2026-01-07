@@ -1,0 +1,39 @@
+/* Container centers within the viewport, matching app content width */
+.loading-container {
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+	padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.content-width {
+	width: 100%;
+	max-width: var(--max-width-content);
+}
+
+.spinner {
+	width: 36px;
+	height: 36px;
+	margin: 0 auto;
+	border-radius: 999px;
+	border: 3px solid var(--color-border-subtle);
+	border-top-color: var(--color-active);
+	animation: spinner-rotate 0.9s linear infinite;
+}
+
+.message {
+	color: var(--color-text-secondary);
+	font-size: var(--font-size-md);
+}
+
+@keyframes spinner-rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spinner {
+		animation: none;
+	}
+}

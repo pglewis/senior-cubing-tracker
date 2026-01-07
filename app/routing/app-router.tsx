@@ -4,6 +4,7 @@ import {KinchRouteLayout} from "@repo/app/routing/kinch-route-layout";
 import {BASENAME} from "@repo/app/utils/basename";
 import {ErrorHandler} from "@repo/app/components/error/error-handler";
 import {PageLayout} from "@repo/app/components/layout/page-layout";
+import {DataGate} from "@repo/app/components/loading/data-gate";
 import {Home} from "@repo/app/pages/home";
 import {KinchRanks} from "@repo/app/pages/kinch/kinch-ranks";
 import {KinchRanksFaq} from "@repo/app/pages/kinch/kinch-ranks-faq";
@@ -23,15 +24,15 @@ export const appRouter = createBrowserRouter([
 			},
 			{
 				path: ROUTES.PROFILE,
-				element: <Profile />
+				element: <DataGate><Profile /></DataGate>
 			},
 			{
 				path: ROUTES.PROFILE_PERSON,
-				element: <Profile />
+				element: <DataGate><Profile /></DataGate>
 			},
 			{
 				path: ROUTES.KINCH_RANKS,
-				element: <KinchRouteLayout />,
+				element: <DataGate><KinchRouteLayout /></DataGate>,
 				children: [
 					{
 						index: true,

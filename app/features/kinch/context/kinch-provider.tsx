@@ -4,7 +4,7 @@ import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import type {TopRank} from "@repo/common/types/kinch-types";
 import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
-import {useData} from "@repo/app/hooks/use-data";
+import {useDataOptional} from "@repo/app/hooks/use-data";
 import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-context";
 import {KinchContext} from "./kinch-context";
 
@@ -15,7 +15,7 @@ const defaults = {
 } as const;
 
 export function KinchProvider({children}: {children: ReactNode;}) {
-	const {rankings, topRanks} = useData();
+	const {rankings, topRanks} = useDataOptional();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const params = useParams();
 

@@ -6,7 +6,9 @@ import {NavigationButton} from "@repo/app/components/layout/navigation-button";
 import {HamburgerButton} from "@repo/app/components/layout/hamburger-button";
 import {NavigationMenu} from "@repo/app/components/layout/navigation-menu";
 import {UpdateButton} from "@repo/app/components/layout/update-button";
+import {OfflineIndicator} from "@repo/app/components/layout/offline-indicator";
 import {useNavigationHistory} from "@repo/app/hooks/use-navigation-history";
+import {useOnlineStatus} from "@repo/app/hooks/use-online-status";
 import {useSwUpdate} from "@repo/app/hooks/use-sw-update";
 import styles from "./page-layout.module.css";
 
@@ -20,6 +22,7 @@ export function PageLayout() {
 
 	// Registers SW and sets up periodic update checks
 	const {needsUpdate, updateApp} = useSwUpdate();
+	const isOnline = useOnlineStatus();
 
 	// Scroll content to top on route change
 	useEffect(() => {
@@ -46,7 +49,11 @@ export function PageLayout() {
 							isOpen={isMenuOpen}
 							onClick={() => setIsMenuOpen(!isMenuOpen)}
 						/>
-						<UpdateButton needsUpdate={needsUpdate} onUpdate={updateApp} />
+						{!isOnline ? (
+							<OfflineIndicator />
+						) : (
+							<UpdateButton needsUpdate={needsUpdate} onUpdate={updateApp} />
+						)}
 					</div>
 					<div className={styles["header-center"]}>
 						<NavigationButton

@@ -2,10 +2,11 @@ import {writeFile, mkdir} from "node:fs/promises";
 import {createContext, runInContext} from "node:vm";
 import type {Missing, Rank, RankingsSnapshot, WCAEventId} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData, FlatResult, PersonProfile} from "@repo/common/types/enhanced-rankings";
+import {buildTopRanks} from "./create-topranks.ts";
 
 const RANKINGS_URL = "https://wca-seniors.org/data/Senior_Rankings.js";
 const DESTINATION_DIR = "../app/public/data";
-const outputFilePath = `${DESTINATION_DIR}/enhanced-rankings.json`;
+const outputFilePath = `${DESTINATION_DIR}/sct-data.json`;
 
 async function main(): Promise<void> {
 	// Fetch the rankings data as js code from wca-seniors.org
@@ -17,9 +18,16 @@ async function main(): Promise<void> {
 	// Build enhanced data structures directly
 	const enhancedData = buildEnhancedData(rankingSnapshot);
 
-	// Write the enhanced data
-	await writeFile(outputFilePath, JSON.stringify(enhancedData, null, 0), "utf8");
-	process.stdout.write("✅ Enhanced rankings data created successfully.\n");
+	// Generate and include top ranks
+	const topRanks = buildTopRanks(enhancedData);
+	const combinedData: EnhancedRankingsData = {
+		...enhancedData,
+		topRanks
+	};
+
+	// Write the combined data
+	await writeFile(outputFilePath, JSON.stringify(combinedData, null, 0), "utf8");
+	process.stdout.write("✅ Rankings data created successfully.\n");
 }
 
 // Fetch the rankings data from wca-seniors.org
@@ -48,7 +56,7 @@ async function convertToJson(sourceCode: string): Promise<RankingsSnapshot> {
 	return sandbox.rankings;
 }
 
-function buildEnhancedData(rankings: RankingsSnapshot): EnhancedRankingsData {
+function buildEnhancedData(rankings: RankingsSnapshot): Omit<EnhancedRankingsData, "topRanks"> {
 	const results: FlatResult[] = [];
 	const persons: {[personId: string]: PersonProfile;} = {};
 	const competitions: {[id: number]: {id: number; webId: string; name: string; country: string; startDate: string;};} = {};

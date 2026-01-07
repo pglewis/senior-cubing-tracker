@@ -1,0 +1,27 @@
+.container {
+	display: flex;
+	width: 24px;
+	height: 24px;
+	align-items: center;
+	justify-content: center;
+}
+
+.dot {
+	position: relative;
+	display: block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid var(--color-accent);
+	border-radius: 50%;
+}
+
+.dot::after {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 14px;
+	height: 2px;
+	background: var(--color-accent);
+	content: "";
+	transform: translate(-50%, -50%) rotate(-35deg);
+}

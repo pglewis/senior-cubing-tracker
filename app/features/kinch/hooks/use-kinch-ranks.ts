@@ -4,7 +4,7 @@ import type {EnhancedRankingsData, FlatResult} from "@repo/common/types/enhanced
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
 import {toRegionParam} from "@repo/common/util/kinch-region-utils";
-import {useData} from "@repo/app/hooks/use-data";
+import {useDataOptional} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
 	age: string;
@@ -16,7 +16,7 @@ interface KinchFilters {
 const kinchCache = new Map();
 
 export function useKinchRanks(filters: KinchFilters): KinchRank[] {
-	const {rankings, topRanks} = useData();
+	const {rankings, topRanks} = useDataOptional();
 
 	return useMemo(() => {
 		if (!rankings || !topRanks) {

@@ -43,7 +43,9 @@ export function buildTopRanks(enhancedRankings: Pick<EnhancedRankingsData, "resu
 			type: type as "single" | "average",
 			age: age,
 			region: "world",
-			result: results[0].result
+			result: results[0].result,
+			personId: results[0].personId,
+			date: results[0].date
 		});
 
 		// Track regions we've already added to avoid duplicates
@@ -61,6 +63,8 @@ export function buildTopRanks(enhancedRankings: Pick<EnhancedRankingsData, "resu
 					age: age,
 					region: continentRegion,
 					result: result.result,
+					personId: result.personId,
+					date: result.date
 				});
 			}
 
@@ -74,6 +78,8 @@ export function buildTopRanks(enhancedRankings: Pick<EnhancedRankingsData, "resu
 					age: age,
 					region: countryRegion,
 					result: result.result,
+					personId: result.personId,
+					date: result.date
 				});
 			}
 		}

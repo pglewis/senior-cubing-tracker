@@ -84,7 +84,7 @@
 .content-wrapper {
 	max-width: var(--max-width-content);
 	margin: 0 auto;
-	padding: 1px 12px max(1.5em, env(safe-area-inset-bottom));
+	padding: 1px 12px calc(4em + env(safe-area-inset-bottom));
 }
 
 .block-pointer-events {

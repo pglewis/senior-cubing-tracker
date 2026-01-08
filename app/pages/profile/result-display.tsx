@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {RankingLink} from "@repo/app/components/urls/ranking-link";
 import {dateIsRecent} from "@repo/common/util/parse";
@@ -33,8 +32,10 @@ export function ResultDisplay(props: ResultDisplayProps) {
 
 	const typeLabel = type === "single" ? "Single" : "Average";
 
+	const isRecent = dateIsRecent(date);
+
 	return (
-		<div className={clsx(styles["result-item"], dateIsRecent(date) && styles.recent)}>
+		<div className={styles["result-item"]}>
 			<div className={styles["result-info"]}>
 				<div className={styles["result-type"]}>{typeLabel}</div>
 				<div className={styles["result-value"]}>
@@ -42,7 +43,9 @@ export function ResultDisplay(props: ResultDisplayProps) {
 						{result}
 					</RankingLink>
 				</div>
-				<div className={styles["result-date"]}>{date}</div>
+				<div className={styles["result-date"]}>
+					{date} {isRecent && "🔥"}
+				</div>
 			</div>
 			<div className={styles["result-ranks"]}>
 				<div className={styles["rank-item"]}>

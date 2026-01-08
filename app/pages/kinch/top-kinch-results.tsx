@@ -3,12 +3,15 @@ import {Link} from "react-router";
 import clsx from "clsx";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
+import type {RegionInfo} from "@repo/app/features/kinch/context/kinch-context";
 import {useTopKinchResults} from "@repo/app/features/kinch/hooks/use-top-kinch-results";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
+import {RankingLink} from "@repo/app/components/urls/ranking-link";
 import {buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {dateIsRecent} from "@repo/common/util/parse";
+import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import styles from "./top-kinch-results.module.css";
 
 export function TopKinchResults() {
@@ -81,6 +84,8 @@ export function TopKinchResults() {
 										date={event.single.date}
 										age={age}
 										region={region}
+										regionInfo={regionInfo}
+										eventId={event.eventId}
 									/>
 								)}
 								{event.average && (
@@ -93,6 +98,8 @@ export function TopKinchResults() {
 										date={event.average.date}
 										age={age}
 										region={region}
+										regionInfo={regionInfo}
+										eventId={event.eventId}
 									/>
 								)}
 							</div>
@@ -113,19 +120,31 @@ interface ResultItemProps {
 	date: string;
 	age: string;
 	region: string;
+	regionInfo: RegionInfo;
+	eventId: WCAEventId;
 }
 
 function ResultItem(props: ResultItemProps) {
-	const {type, result, personId, personName, countryId, date, age, region} = props;
+	const {type, result, personId, personName, countryId, date, age, region, regionInfo, eventId} = props;
 
 	const typeLabel = type === "single" ? "Single" : "Average";
 	const isRecent = dateIsRecent(date);
 	const personUrl = `${buildKinchPersonRoute(personId)}?age=${age}&region=${region}`;
 
+	// Only pass region to RankingLink if it's not world
+	const rankingRegion = regionInfo.type !== "world" ? {type: regionInfo.type, id: regionInfo.id} : undefined;
+
 	return (
 		<div className={styles["result-item"]}>
 			<div className={styles["result-type"]}>{typeLabel}</div>
-			<div className={styles["result-value"]}>{result}</div>
+			<div className={styles["result-value"]}>
+				<RankingLink age={age} eventId={eventId} eventType={type} region={rankingRegion}>
+					{result}
+				</RankingLink>
+			</div>
+			<div className={styles["result-date"]}>
+				{date} {isRecent && "🔥"}
+			</div>
 			<div className={styles["result-person"]}>
 				<CountryFlag
 					countryCode={countryId}
@@ -136,9 +155,6 @@ function ResultItem(props: ResultItemProps) {
 				<Link to={personUrl} className={styles["person-link"]}>
 					{personName}
 				</Link>
-			</div>
-			<div className={styles["result-date"]}>
-				{date} {isRecent && "🔥"}
 			</div>
 		</div>
 	);

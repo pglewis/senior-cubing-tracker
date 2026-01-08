@@ -183,10 +183,6 @@
 	background: var(--color-background);
 }
 
-.result-item.recent {
-	background: var(--color-highlight);
-}
-
 .result-info {
 	display: flex;
 	flex-direction: column;
@@ -196,23 +192,25 @@
 	margin-bottom: var(--spacing-xs);
 	font-size: var(--font-size-xs);
 	text-transform: uppercase;
+	font-weight: var(--font-weight-bold);
 }
 
 .result-value {
 	margin-bottom: var(--spacing-xs);
-	font-size: var(--font-size-sm);
+	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	font-family: monospace;
 }
 
 .result-date {
-	font-size: var(--font-size-xs);
+	font-size: var(--font-size-sm);
 }
 
 .result-ranks {
 	display: flex;
 	justify-content: space-between;
-	font-size: var(--font-size-xs);
+	margin-top: var(--spacing-xs);
+	font-size: var(--font-size-sm);
 }
 
 .rank-item {

@@ -2,8 +2,9 @@
 export interface MultiResult {
 	/* solved minus unsolved */
 	score: number,
+	solved: number,
+	attempted: number,
 	seconds: number,
-	unsolved: number;
 }
 
 /**
@@ -18,7 +19,7 @@ export function parseMultiResult(result: string): MultiResult {
 	const score = solved - unsolved;
 	const seconds = timeResultToSeconds(time);
 
-	return {score, seconds, unsolved};
+	return {score, solved, attempted, seconds};
 }
 
 /**

@@ -292,6 +292,9 @@ function getPersonMultiScore(
 }
 
 function getKinchMultiScore(result: string) {
-	const multiResult = parseMultiResult(result);
-	return multiResult.score + 1 - multiResult.seconds / (60 * 60);
+	const {score, attempted, seconds} = parseMultiResult(result);
+	const timeLimitMinutes = Math.min(attempted * 10, 60);
+	const timeLimitSeconds = timeLimitMinutes * 60;
+	const remainingSeconds = timeLimitSeconds - seconds;
+	return score + remainingSeconds / timeLimitSeconds;
 }

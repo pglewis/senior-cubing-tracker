@@ -1,5 +1,6 @@
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {RankingLink} from "@repo/app/components/urls/ranking-link";
+import {Pill} from "@repo/app/components/pill/pill";
 import {dateIsRecent} from "@repo/common/util/parse";
 import styles from "./profile.module.css";
 
@@ -14,6 +15,7 @@ interface ResultDisplayProps {
 	eventId: WCAEventId;
 	continentId: string;
 	countryId: string;
+	achievementAge: number;
 }
 
 export function ResultDisplay(props: ResultDisplayProps) {
@@ -27,9 +29,11 @@ export function ResultDisplay(props: ResultDisplayProps) {
 		age,
 		eventId,
 		continentId,
-		countryId
+		countryId,
+		achievementAge,
 	} = props;
 
+	const showAchievementAge = achievementAge > parseInt(age);
 	const typeLabel = type === "single" ? "Single" : "Average";
 
 	const isRecent = dateIsRecent(date);
@@ -42,6 +46,7 @@ export function ResultDisplay(props: ResultDisplayProps) {
 					<RankingLink age={age} eventId={eventId} eventType={type}>
 						{result}
 					</RankingLink>
+					{showAchievementAge && <Pill>({achievementAge})</Pill>}
 				</div>
 				<div className={styles["result-date"]}>
 					{date} {isRecent && "🔥"}

@@ -1,0 +1,9 @@
+.pill {
+	margin-left: var(--spacing-xs);
+	padding: 0 var(--spacing-xs);
+	border-radius: var(--border-radius-sm);
+	background: var(--color-background-header);
+	font-size: var(--font-size-xs);
+	font-weight: var(--font-weight-normal);
+	font-family: inherit;
+}

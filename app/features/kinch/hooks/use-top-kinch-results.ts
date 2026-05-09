@@ -2,6 +2,7 @@ import {useMemo} from "react";
 import {useDataOptional} from "@repo/app/hooks/use-data";
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import type {TopRank} from "@repo/common/types/kinch-types";
+import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 
 interface TopResultForEvent {
 	eventId: WCAEventId;
@@ -11,12 +12,14 @@ interface TopResultForEvent {
 		personId: string;
 		personName: string;
 		date: string;
+		achievementAge: number;
 	};
 	average?: {
 		result: string;
 		personId: string;
 		personName: string;
 		date: string;
+		achievementAge: number;
 	};
 }
 
@@ -80,7 +83,8 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 					result: entry.single.result,
 					personId: entry.single.personId,
 					personName: person?.name || "Unknown",
-					date: entry.single.date
+					date: entry.single.date,
+					achievementAge: getAchievementAge(rankings, entry.single)
 				};
 			}
 
@@ -90,7 +94,8 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 					result: entry.average.result,
 					personId: entry.average.personId,
 					personName: person?.name || "Unknown",
-					date: entry.average.date
+					date: entry.average.date,
+					achievementAge: getAchievementAge(rankings, entry.average)
 				};
 			}
 
@@ -99,4 +104,18 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 
 		return results;
 	}, [rankings, topRanks, filters.age, filters.region]);
+}
+
+// Highest age class at which the same (eventId, type, result) was achieved by this person
+function getAchievementAge(rankings: EnhancedRankingsData, topRank: TopRank): number {
+	const person = rankings.persons[topRank.personId];
+	if (!person) return topRank.age;
+	let max = topRank.age;
+	for (const idx of person.resultIndices) {
+		const r = rankings.results[idx];
+		if (r.eventId === topRank.eventId && r.type === topRank.type && r.result === topRank.result && r.age > max) {
+			max = r.age;
+		}
+	}
+	return max;
 }

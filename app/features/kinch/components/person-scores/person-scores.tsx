@@ -3,8 +3,10 @@ import {Link} from "react-router";
 import clsx from "clsx";
 import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
 import {buildProfilePersonRoute} from "@repo/app/routing/routes";
+import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
+import {Pill} from "@repo/app/components/pill/pill";
 import {dateIsRecent} from "@repo/common/util/parse";
 import styles from "./person-scores.module.css";
 
@@ -15,6 +17,7 @@ interface PersonScoresProps {
 	countryCode: string,
 	regionName: string,
 	age: string,
+	achievementAgeByResult: Map<string, number>,
 	returnPath: string,
 	getRankingUrl: (event: KinchEvent) => string,
 	getShowInRankingsUrl: (targetPage: number) => string,
@@ -30,11 +33,13 @@ export function PersonScores(props: PersonScoresProps) {
 		countryCode,
 		regionName,
 		age,
+		achievementAgeByResult,
 		returnPath,
 		getRankingUrl,
 		getShowInRankingsUrl,
 		rowsPerPage,
 	} = props;
+	const currentAge = parseInt(age);
 	const [sortBy, setSortBy] = useState<SortColumn>("event");
 
 	// Default: sort by WCA event sort order (kinchRank events are already in this order)
@@ -45,17 +50,6 @@ export function PersonScores(props: PersonScoresProps) {
 
 	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
 	const competitorURL = `${buildProfilePersonRoute(personKinchRank.personId)}?age=${age}`;
-
-	const handleSort = (column: SortColumn) => {
-		setSortBy(column);
-	};
-
-	const handleKeyDown = (event: React.KeyboardEvent, column: SortColumn) => {
-		if (event.key === "Enter" || event.key === " ") {
-			event.preventDefault();
-			handleSort(column);
-		}
-	};
 
 	return (
 		<div className={styles.personScores}>
@@ -82,71 +76,49 @@ export function PersonScores(props: PersonScoresProps) {
 				<div className={styles.personOverallScore}>
 					Overall score: {personKinchRank.overall.toFixed(2)}
 				</div>
-				{/* <Link className={styles["return-link"]} to={returnPath}>
-					← Return to previous view
-				</Link> */}
 			</Card>
-			<table className={styles.table}>
-				<caption className="sr-only">
-					Event scores for {personKinchRank.personName}. Use the column headers to sort the table.
-				</caption>
-				<thead>
-					<tr>
-						<th
-							className={clsx(
-								styles["table-header"],
-								styles["event-column"],
-								styles["event-column-header"],
-								sortBy === "event" && styles["sorted-asc"]
-							)}
-							tabIndex={0}
-							onClick={() => handleSort("event")}
-							onKeyDown={(e) => handleKeyDown(e, "event")}
-							aria-sort={sortBy === "event" ? "ascending" : "none"}
-							aria-label="Event name, sortable column"
-						>
-							Event
-						</th>
-						<th
-							className={clsx(
-								styles["table-header"],
-								styles["score-column"],
-								styles["score-column-header"],
-								sortBy === "score" && styles["sorted-desc"],
-							)}
-							tabIndex={0}
-							onClick={() => handleSort("score")}
-							onKeyDown={(e) => handleKeyDown(e, "score")}
-							aria-sort={sortBy === "score" ? "descending" : "none"}
-							aria-label="Score, sortable column"
-						>
-							Score
-						</th>
-						<th className={clsx(styles["table-header"], styles["result-column"])}>
-							Result
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{sortedEvents.map(event => (
-						<EventRow
+
+			<div className={styles["sort-controls"]}>
+				<span className={styles["sort-label"]}>Sort:</span>
+				<ButtonTabs
+					selectedValue={sortBy}
+					onChange={(value) => setSortBy(value as SortColumn)}
+					options={[
+						{value: "event", label: "Event"},
+						{value: "score", label: "Score"},
+					]}
+				/>
+			</div>
+
+			<div
+				className={styles["event-list"]}
+				aria-label={`Event scores for ${personKinchRank.personName}`}
+			>
+				{sortedEvents.map(event => {
+					const achievementAge = event.result
+						? achievementAgeByResult.get(`${event.eventId}-${event.type}-${event.result}`)
+						: undefined;
+					return (
+						<EventCard
 							key={event.eventId}
 							event={event}
 							getRankingUrl={getRankingUrl}
+							achievementAge={achievementAge !== undefined && achievementAge > currentAge ? achievementAge : undefined}
 						/>
-					))}
-				</tbody>
-			</table>
+					);
+				})}
+			</div>
 		</div>
 	);
 }
 
-interface EventRowProps {
+interface EventCardProps {
 	event: KinchEvent;
 	getRankingUrl: (event: KinchEvent) => string;
+	achievementAge: number | undefined;
 }
 
-function EventRow({event, getRankingUrl}: EventRowProps) {
+function EventCard({event, getRankingUrl, achievementAge}: EventCardProps) {
 	const {eventName, score, result, type, date} = event;
 
 	const isRecent = date && dateIsRecent(date);
@@ -163,7 +135,7 @@ function EventRow({event, getRankingUrl}: EventRowProps) {
 		scoreDisplay = "--";
 	}
 
-	let resultText: string | React.ReactNode = "--";
+	let resultContent: React.ReactNode = <span className={styles["empty-result"]}>--</span>;
 	if (result) {
 		const rankingURL = getRankingUrl(event);
 
@@ -172,18 +144,25 @@ function EventRow({event, getRankingUrl}: EventRowProps) {
 			resultType = type === "single" ? " (sing)" : " (avg)";
 		}
 
-		resultText = (
-			<a className={styles.link} href={rankingURL} target="_blank" rel="noopener noreferrer">
-				{result}{resultType}
-			</a>
+		resultContent = (
+			<>
+				<a className={styles.link} href={rankingURL} target="_blank" rel="noopener noreferrer">
+					{result}{resultType}
+				</a>
+				{achievementAge !== undefined && <Pill>({achievementAge})</Pill>}
+			</>
 		);
 	}
 
 	return (
-		<tr className={clsx(styles.row, scoreClass)}>
-			<td className={styles["event-column"]}>{eventName} {isRecent && "🔥"}</td>
-			<td className={styles["score-column"]}>{scoreDisplay}</td>
-			<td className={styles["result-column"]}>{resultText}</td>
-		</tr>
+		<div className={clsx(styles["event-card"], scoreClass)}>
+			<div className={styles["event-card-header"]}>
+				<div className={styles["event-name"]}>
+					{eventName}{isRecent && " 🔥"}
+				</div>
+				<div className={styles["event-score"]}>{scoreDisplay}</div>
+			</div>
+			<div className={styles["event-card-result"]}>{resultContent}</div>
+		</div>
 	);
 }

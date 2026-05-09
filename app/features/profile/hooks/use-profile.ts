@@ -14,6 +14,7 @@ export interface EventResult {
     worldRank: number;
     continentRank: number;
     countryRank: number;
+    achievementAge: number;
 };
 average?: {
 	result: string;
@@ -21,6 +22,7 @@ average?: {
     worldRank: number;
     continentRank: number;
     countryRank: number;
+    achievementAge: number;
   };
   kinchScores?: {
     world: number;
@@ -94,10 +96,19 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 
 		const targetAge = parseInt(age);
 
-		// Get all results for this person at the target age
-		const personResults = rankings.results.filter(result =>
-			result.personId === wcaId && result.age === targetAge
-		);
+		const personAllResults = person.resultIndices.map(i => rankings.results[i]);
+
+		const achievementAgeByResult = new Map<string, number>();
+		for (const r of personAllResults) {
+			const key = `${r.eventId}-${r.type}-${r.result}`;
+			const prev = achievementAgeByResult.get(key) ?? 0;
+			if (r.age > prev) achievementAgeByResult.set(key, r.age);
+		}
+
+		const getAchievementAge = (r: FlatResult) =>
+			achievementAgeByResult.get(`${r.eventId}-${r.type}-${r.result}`) ?? r.age;
+
+		const personResults = personAllResults.filter(r => r.age === targetAge);
 
 		// Group results by event
 		const resultsByEvent = new Map<WCAEventId, {single?: FlatResult, average?: FlatResult}>();
@@ -136,6 +147,7 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 					worldRank: results.single.worldRank,
 					continentRank: results.single.continentRank,
 					countryRank: results.single.countryRank,
+					achievementAge: getAchievementAge(results.single),
 				};
 			}
 
@@ -146,6 +158,7 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 					worldRank: results.average.worldRank,
 					continentRank: results.average.continentRank,
 					countryRank: results.average.countryRank,
+					achievementAge: getAchievementAge(results.average),
 				};
 			}
 

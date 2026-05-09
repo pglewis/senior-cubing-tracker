@@ -1,3 +1,4 @@
+import {useMemo} from "react";
 import {Link, useParams} from "react-router";
 import {ROUTES} from "@repo/app/routing/routes";
 import type {KinchEvent} from "@repo/common/types/kinch-types";
@@ -21,6 +22,19 @@ export function PersonScoresPage() {
 	if (person) {
 		rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
 	}
+
+	const achievementAgeByResult = useMemo(() => {
+		const map = new Map<string, number>();
+		if (!rankings || !person) return map;
+		for (const idx of person.resultIndices) {
+			const r = rankings.results[idx];
+			const key = `${r.eventId}-${r.type}-${r.result}`;
+			const prev = map.get(key) ?? 0;
+			if (r.age > prev) map.set(key, r.age);
+		}
+		return map;
+	}, [rankings, person]);
+
 	if (!person || rankIndex < 0) {
 		return (
 			<>
@@ -83,6 +97,7 @@ export function PersonScoresPage() {
 				rowsPerPage={25}
 				returnPath={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}
 				age={age}
+				achievementAgeByResult={achievementAgeByResult}
 				getRankingUrl={getRankingUrl}
 				getShowInRankingsUrl={getShowInRankingsUrl}
 			/>

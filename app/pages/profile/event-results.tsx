@@ -64,6 +64,7 @@ export function EventResults({person, age, eventResults}: EventResultsProps) {
 									eventId={event.eventId}
 									continentId={person.continentId}
 									countryId={person.countryId}
+									achievementAge={event.single.achievementAge}
 								/>
 							)}
 							{event.average && (
@@ -78,6 +79,7 @@ export function EventResults({person, age, eventResults}: EventResultsProps) {
 									eventId={event.eventId}
 									continentId={person.continentId}
 									countryId={person.countryId}
+									achievementAge={event.average.achievementAge}
 								/>
 							)}
 						</div>

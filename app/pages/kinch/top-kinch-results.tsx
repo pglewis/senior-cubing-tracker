@@ -8,6 +8,7 @@ import {useTopKinchResults} from "@repo/app/features/kinch/hooks/use-top-kinch-r
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
+import {Pill} from "@repo/app/components/pill/pill";
 import {RankingLink} from "@repo/app/components/urls/ranking-link";
 import {buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {dateIsRecent} from "@repo/common/util/parse";
@@ -81,6 +82,8 @@ export function TopKinchResults() {
 										personId={event.single.personId}
 										personName={event.single.personName}
 										countryId={rankings?.persons[event.single.personId]?.countryId ?? ""}
+										highestAge={rankings?.persons[event.single.personId]?.availableAges.at(-1)}
+										achievementAge={event.single.achievementAge}
 										date={event.single.date}
 										age={age}
 										region={region}
@@ -95,6 +98,8 @@ export function TopKinchResults() {
 										personId={event.average.personId}
 										personName={event.average.personName}
 										countryId={rankings?.persons[event.average.personId]?.countryId ?? ""}
+										highestAge={rankings?.persons[event.average.personId]?.availableAges.at(-1)}
+										achievementAge={event.average.achievementAge}
 										date={event.average.date}
 										age={age}
 										region={region}
@@ -117,6 +122,8 @@ interface ResultItemProps {
 	personId: string;
 	personName: string;
 	countryId: string;
+	highestAge: number | undefined;
+	achievementAge: number;
 	date: string;
 	age: string;
 	region: string;
@@ -125,11 +132,14 @@ interface ResultItemProps {
 }
 
 function ResultItem(props: ResultItemProps) {
-	const {type, result, personId, personName, countryId, date, age, region, regionInfo, eventId} = props;
+	const {type, result, personId, personName, countryId, highestAge, achievementAge, date, age, region, regionInfo, eventId} = props;
 
 	const typeLabel = type === "single" ? "Single" : "Average";
 	const isRecent = dateIsRecent(date);
 	const personUrl = `${buildKinchPersonRoute(personId)}?age=${age}&region=${region}`;
+	const currentAge = parseInt(age);
+	const showHighestAge = highestAge !== undefined && highestAge > currentAge;
+	const showAchievementAge = achievementAge > currentAge;
 
 	// Only pass region to RankingLink if it's not world
 	const rankingRegion = regionInfo.type !== "world" ? {type: regionInfo.type, id: regionInfo.id} : undefined;
@@ -141,6 +151,7 @@ function ResultItem(props: ResultItemProps) {
 				<RankingLink age={age} eventId={eventId} eventType={type} region={rankingRegion}>
 					{result}
 				</RankingLink>
+				{showAchievementAge && <Pill>({achievementAge})</Pill>}
 			</div>
 			<div className={styles["result-date"]}>
 				{date} {isRecent && "🔥"}
@@ -155,6 +166,7 @@ function ResultItem(props: ResultItemProps) {
 				<Link to={personUrl} className={styles["person-link"]}>
 					{personName}
 				</Link>
+				{showHighestAge && <Pill>({highestAge})</Pill>}
 			</div>
 		</div>
 	);

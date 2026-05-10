@@ -71,7 +71,6 @@ export function KinchRanks() {
 
 			<KinchLeaderboard
 				displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
-				startIdx={(page - 1) * ROWS_PER_PAGE}
 				getPersonUrl={getPersonUrl}
 				highlightId={state?.highlight}
 			/>

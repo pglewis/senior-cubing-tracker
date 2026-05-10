@@ -34,6 +34,7 @@ export interface KinchRank {
 	personId: string,
 	personName: string,
 	overall: number,
+	displayRank?: number;
 	events: KinchEvent[],
 };
 

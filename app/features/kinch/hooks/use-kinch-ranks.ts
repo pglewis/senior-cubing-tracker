@@ -49,6 +49,18 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 
 		ranks.sort((a, b) => b.overall - a.overall);
 
+		// Assign tie-aware display ranks (raw values, not rounded)
+		const EPSILON = 1e-9;
+		let i = 0;
+		for (const rank of ranks) {
+			if (i > 0 && Math.abs(rank.overall - ranks[i - 1].overall) < EPSILON) {
+				rank.displayRank = ranks[i - 1].displayRank;
+			} else {
+				rank.displayRank = i + 1;
+			}
+			i++;
+		}
+
 		kinchCache.set(cacheKey, ranks);
 
 		// Cleanup old entries periodically

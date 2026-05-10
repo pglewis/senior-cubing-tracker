@@ -9,12 +9,11 @@ import {Pill} from "@repo/app/components/pill/pill";
 import styles from "./kinch-leaderboard.module.css";
 interface KinchLeaderboardProps {
 	displayRanks: KinchRank[],
-	startIdx: number,
 	getPersonUrl: (personId: string) => string,
 	highlightId?: string,
 };
 
-export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highlightId}: KinchLeaderboardProps) {
+export function KinchLeaderboard({displayRanks, getPersonUrl, highlightId}: KinchLeaderboardProps) {
 	const {rankings} = useData();
 	const {age} = useKinchContext();
 	const currentAge = parseInt(age);
@@ -36,7 +35,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 				</tr>
 			</thead>
 			<tbody>
-				{displayRanks.map((rank, index) => {
+				{displayRanks.map((rank) => {
 					const hasRecentPB = rank.events.some(event => event.date && dateIsRecent(event.date));
 					const person = rankings?.persons[rank.personId];
 					const highestAge = person?.availableAges.at(-1);
@@ -47,7 +46,7 @@ export function KinchLeaderboard({displayRanks, startIdx, getPersonUrl, highligh
 							ref={rank.personId === highlightId ? highlightRef : null}
 							className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
 						>
-							<td className={styles["rank-column"]}>{startIdx + index + 1}</td>
+							<td className={styles["rank-column"]}>{rank.displayRank}</td>
 							<td className={styles["name-column"]}>
 								<CountryFlag
 									countryCode={person?.countryId ?? ""}

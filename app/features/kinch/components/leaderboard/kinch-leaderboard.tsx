@@ -63,7 +63,7 @@ export function KinchLeaderboard({displayRanks, getPersonUrl, highlightId}: Kinc
 								{showHighestAge && <Pill>({highestAge})</Pill>}
 								{hasRecentPB && " 🔥"}
 							</td>
-							<td className={styles["score-column"]}>{rank.overall.toFixed(2)}</td>
+							<td className={styles["score-column"]}>{rank.overall.toFixed(3)}</td>
 						</tr>
 					);
 				})}

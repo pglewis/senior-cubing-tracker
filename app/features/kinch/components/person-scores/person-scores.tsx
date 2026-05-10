@@ -74,7 +74,7 @@ export function PersonScores(props: PersonScoresProps) {
 					</Link>
 				</div>
 				<div className={styles.personOverallScore}>
-					Overall score: {personKinchRank.overall.toFixed(2)}
+					Overall score: {personKinchRank.overall.toFixed(3)}
 				</div>
 			</Card>
 

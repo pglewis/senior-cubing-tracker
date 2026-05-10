@@ -47,7 +47,7 @@
 	transform: translateY(1px);
 }
 
-.event-results {
+.event-result {
 	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
 }
 

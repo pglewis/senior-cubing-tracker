@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Link} from "react-router";
 import clsx from "clsx";
-import {scoreAverageOnly, type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
+import {type KinchEvent, type KinchRank} from "@repo/common/types/kinch-types";
 import {buildProfilePersonRoute} from "@repo/app/routing/routes";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
 import {Card} from "@repo/app/components/card/card";
@@ -135,34 +135,30 @@ function EventCard({event, getRankingUrl, achievementAge}: EventCardProps) {
 		scoreDisplay = "--";
 	}
 
-	let resultContent: React.ReactNode = <span className={styles["empty-result"]}>--</span>;
-	if (result) {
-		const rankingURL = getRankingUrl(event);
-
-		let resultType = "";
-		if (event.eventId !== "333mbf" && !scoreAverageOnly[event.eventId]) {
-			resultType = type === "single" ? " (sing)" : " (avg)";
-		}
-
-		resultContent = (
-			<>
-				<a className={styles.link} href={rankingURL} target="_blank" rel="noopener noreferrer">
-					{result}{resultType}
-				</a>
-				{achievementAge !== undefined && <Pill>({achievementAge})</Pill>}
-			</>
-		);
-	}
-
 	return (
 		<div className={clsx(styles["event-card"], scoreClass)}>
 			<div className={styles["event-card-header"]}>
 				<div className={styles["event-name"]}>
-					{eventName}{isRecent && " 🔥"}
+					{eventName} {event.eventId !== "333mbf" && (type === "single" ? "single" : "average")}
 				</div>
 				<div className={styles["event-score"]}>{scoreDisplay}</div>
 			</div>
-			<div className={styles["event-card-result"]}>{resultContent}</div>
+			<div className={styles["event-card-result"]}>
+				<span className={styles["result-value"]}>
+					<a className={styles.link} href={getRankingUrl(event)} target="_blank" rel="noopener noreferrer">
+						{result}
+					</a>
+				</span>
+				<span>
+					{achievementAge !== undefined && <Pill>({achievementAge})</Pill>}
+				</span>
+				<span className={styles["result-date"]}>
+					{date}
+				</span>
+				<span>
+					{isRecent && " 🔥"}
+				</span>
+			</div>
 		</div>
 	);
 }

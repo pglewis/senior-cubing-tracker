@@ -73,7 +73,7 @@ export function TopKinchResults() {
 							{event.eventName} ({regionName}, {age}+)
 						</div>
 
-						<div className={styles["event-results"]}>
+						<div className={styles["event-result"]}>
 							<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
 								{event.single && (
 									<ResultItem

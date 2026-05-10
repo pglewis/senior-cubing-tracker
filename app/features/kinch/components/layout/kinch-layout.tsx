@@ -65,17 +65,17 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 						options={availableAgeOptions}
 					/>
 				</div>
-				{!isOnTopResults && (
-					<div className={styles["filter-item"]}>
-						<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}&region=${region}`}>
-							View Top Kinch Results
-						</Link>
-					</div>
-				)}
 				{(isOnTopResults || isOnPersonScores) && (
 					<div className={styles["filter-item"]}>
 						<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
 							View the Leaderboard
+						</Link>
+					</div>
+				)}
+				{!isOnTopResults && (
+					<div className={styles["filter-item"]}>
+						<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}&region=${region}`}>
+							View Top Kinch Results
 						</Link>
 					</div>
 				)}

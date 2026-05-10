@@ -22,6 +22,10 @@
 	width: 100%;
 }
 
+.leaderboard-link {
+	margin: var(--spacing-md) 0;
+}
+
 .profile-card {
 	margin-bottom: var(--spacing-md);
 	text-align: left;

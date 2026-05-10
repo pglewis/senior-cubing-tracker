@@ -1,4 +1,4 @@
-import {Link, useNavigate, useSearchParams, useLocation} from "react-router";
+import {Link, useNavigate, useParams, useSearchParams, useLocation} from "react-router";
 import {ROUTES, buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
@@ -32,11 +32,14 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 		navigate(buildKinchPersonRoute(item.value) + `?age=${age}&region=world`);
 	};
 
+	const {wcaid} = useParams<{wcaid?: string;}>();
 	const isOnTopResults = location.pathname.includes("top-results");
+	const isOnPersonScores = Boolean(wcaid);
+	const subtitle = isOnTopResults ? "Top Kinch Results" : isOnPersonScores ? "Competitor Scores" : "Leaderboard";
 
 	return (
 		<div className={styles.container}>
-			<h2>Senior Kinch Ranks</h2>
+			<h2>Senior Kinch Ranks: {subtitle}</h2>
 
 			<DataLastUpdated text={rankings.lastUpdated} />
 
@@ -62,17 +65,20 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 						options={availableAgeOptions}
 					/>
 				</div>
-				<div className={styles["filter-item"]}>
-					{isOnTopResults ? (
-						<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
-							View the Leaderboard
-						</Link>
-					) : (
+				{!isOnTopResults && (
+					<div className={styles["filter-item"]}>
 						<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}&region=${region}`}>
 							View Top Kinch Results
 						</Link>
-					)}
-				</div>
+					</div>
+				)}
+				{(isOnTopResults || isOnPersonScores) && (
+					<div className={styles["filter-item"]}>
+						<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
+							View the Leaderboard
+						</Link>
+					</div>
+				)}
 			</div>
 
 			{children}

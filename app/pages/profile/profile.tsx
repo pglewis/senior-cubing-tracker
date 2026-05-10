@@ -1,4 +1,5 @@
-import {useParams, useSearchParams, useNavigate} from "react-router";
+import {Link, useParams, useSearchParams, useNavigate} from "react-router";
+import {ROUTES} from "@repo/app/routing/routes";
 import {useProfile} from "@repo/app/features/profile/hooks/use-profile";
 import {useData} from "@repo/app/hooks/use-data";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
@@ -50,11 +51,10 @@ export function Profile() {
 
 	return (
 		<div className={styles.container}>
-			<h2>Senior Profiles</h2>
+			<h2>Senior Profile</h2>
 
 			<DataLastUpdated text={rankings.lastUpdated} />
 
-			{/* Always show search */}
 			<div className={styles["name-search"]}>
 				<CompetitorCombobox
 					items={comboboxItems}
@@ -62,6 +62,11 @@ export function Profile() {
 				/>
 			</div>
 
+			<div className={styles["leaderboard-link"]}>
+				<Link to={`${ROUTES.KINCH_RANKS}?age=${age}`}>
+					View the Kinch Ranks Leaderboard
+				</Link>
+			</div>
 			{/* Show profile content only if we have a valid wcaid and person */}
 			{wcaid && person && (
 				<ProfileContent

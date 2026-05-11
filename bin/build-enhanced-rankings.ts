@@ -248,14 +248,14 @@ function buildRegionalRankings(
 	const continents: {[continentId: string]: {[personId: string]: number;};} = {};
 	const countries: {[countryId: string]: {[personId: string]: number;};} = {};
 
-	// Track counts per region
 	const continentCounts: {[id: string]: number;} = {};
 	const countryCounts: {[id: string]: number;} = {};
 
-	// Track previous result and ranks for tie handling
-	let prevResult = "";
-	const prevContinentRanks: {[id: string]: number;} = {};
-	const prevCountryRanks: {[id: string]: number;} = {};
+	// Track previous result and rank PER REGION
+	const prevContinentResults: {[id: string]: string} = {};
+	const prevCountryResults: {[id: string]: string} = {};
+	const prevContinentRanks: {[id: string]: number} = {};
+	const prevCountryRanks: {[id: string]: number} = {};
 
 	const worldMissing = missingData.world;
 
@@ -265,7 +265,6 @@ function buildRegionalRankings(
 		const country = rankings.countries[countryIdToIndex[person.country]];
 		const continent = rankings.continents[continentIdToIndex[country.continent]];
 
-		// Initialize region tracking
 		if (!continents[continent.id]) {
 			continents[continent.id] = {};
 		}
@@ -273,43 +272,52 @@ function buildRegionalRankings(
 			countries[country.id] = {};
 		}
 
-		// Increment region counts
 		continentCounts[continent.id] = (continentCounts[continent.id] ?? 0) + 1;
 		countryCounts[country.id] = (countryCounts[country.id] ?? 0) + 1;
 
 		let continentRank: number;
 		let countryRank: number;
 
-		if (rank.best === prevResult) {
-			// Tie: use same rank as previous for this region
-			continentRank = prevContinentRanks[continent.id] ?? continentCounts[continent.id];
-			countryRank = prevCountryRanks[country.id] ?? countryCounts[country.id];
+		// Continent rank
+		if (rank.best === prevContinentResults[continent.id]) {
+			continentRank = prevContinentRanks[continent.id];
 		} else {
-			// Calculate gap between world rank and array position
 			const gap = rank.rank - arrayIndex - 1;
-
-			// Calculate continent fakeRatio and adjusted rank
 			const continentMissing = missingData.continents?.[continent.id];
 			const continentFakeRatio = (worldMissing > 0 && continentMissing !== undefined)
 				? continentMissing / worldMissing
-				: (worldMissing > 0 ? 0 : 1);
-			continentRank = Math.round(continentCounts[continent.id] + continentFakeRatio * gap);
+				: 0;
 
-			// Calculate country fakeRatio and adjusted rank
+			if (gap > 0) {
+				continentRank = Math.round(continentCounts[continent.id] + continentFakeRatio * gap);
+			} else {
+				continentRank = continentCounts[continent.id];
+			}
+
+			prevContinentResults[continent.id] = rank.best;
+			prevContinentRanks[continent.id] = continentRank;
+		}
+
+		// Country rank
+		if (rank.best === prevCountryResults[country.id]) {
+			countryRank = prevCountryRanks[country.id];
+		} else {
+			const gap = rank.rank - arrayIndex - 1;
 			const countryMissing = missingData.countries?.[country.id];
 			const countryFakeRatio = (worldMissing > 0 && countryMissing !== undefined)
 				? countryMissing / worldMissing
-				: (worldMissing > 0 ? 0 : 1);
-			countryRank = Math.round(countryCounts[country.id] + countryFakeRatio * gap);
+				: 0;
 
-			// Update previous ranks for tie handling
-			prevContinentRanks[continent.id] = continentRank;
+			if (gap > 0) {
+				countryRank = Math.round(countryCounts[country.id] + countryFakeRatio * gap);
+			} else {
+				countryRank = countryCounts[country.id];
+			}
+
+			prevCountryResults[country.id] = rank.best;
 			prevCountryRanks[country.id] = countryRank;
 		}
 
-		prevResult = rank.best;
-
-		// Assign adjusted regional ranks
 		continents[continent.id]![person.id] = continentRank;
 		countries[country.id]![person.id] = countryRank;
 	}

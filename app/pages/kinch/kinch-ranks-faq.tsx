@@ -40,14 +40,10 @@ export function KinchRanksFaq() {
 					do that.
 				</blockquote>
 				<p>
-					Multi-blind scoring has special handling:
+					Multi-blind results are converted to a single number for kinch scoring: <strong>Points</strong> plus
+					a <strong>time bonus</strong>.  The time bonus is a linear scale from 0 to 1, where 1 means
+					no time used and 0 means one hour. A 30-minute time earns a 0.5 time bonus.
 				</p>
-				<blockquote>
-					For multibld, your result is adjusted to a single number Points + ProportionofHourLeft.
-					[...] Someone with e.g. 11 points in 45:00 would get (11+0.25)/41.0961 = 0.2737. This
-					calculation ensures that more points always equals a better score, no matter the time
-					spent.  Less time spent still gives a better score.
-				</blockquote>
 				<p>
 					The Senior Kinch Ranks calculations use official WCA results from known senior competitors,
 					thanks to the data collected and maintained by Michael George for the

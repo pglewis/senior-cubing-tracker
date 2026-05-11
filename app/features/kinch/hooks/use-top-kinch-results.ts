@@ -9,17 +9,21 @@ interface TopResultForEvent {
 	eventName: string;
 	single?: {
 		result: string;
-		personId: string;
-		personName: string;
-		date: string;
-		achievementAge: number;
+		holders: {
+			personId: string;
+			personName: string;
+			date: string;
+			achievementAge: number;
+		}[];
 	};
 	average?: {
 		result: string;
-		personId: string;
-		personName: string;
-		date: string;
-		achievementAge: number;
+		holders: {
+			personId: string;
+			personName: string;
+			date: string;
+			achievementAge: number;
+		}[];
 	};
 }
 
@@ -38,13 +42,11 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 
 		const targetAge = parseInt(filters.age);
 
-		// Filter topRanks by age and region
 		const filteredTopRanks = topRanks.filter(tr =>
 			tr.age === targetAge && tr.region === filters.region
 		);
 
-		// Group by event
-		const eventMap = new Map<WCAEventId, {single?: TopRank; average?: TopRank}>();
+		const eventMap = new Map<string, { single?: TopRank; average?: TopRank }>();
 
 		for (const topRank of filteredTopRanks) {
 			const eventId = topRank.eventId as WCAEventId;
@@ -62,7 +64,6 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 			}
 		}
 
-		// Build results array in event order
 		const results: TopResultForEvent[] = [];
 
 		for (const eventId of rankings.eventOrder) {
@@ -78,24 +79,32 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 			};
 
 			if (entry.single) {
-				const person = rankings.persons[entry.single.personId];
 				result.single = {
 					result: entry.single.result,
-					personId: entry.single.personId,
-					personName: person?.name || "Unknown",
-					date: entry.single.date,
-					achievementAge: getAchievementAge(rankings, entry.single)
+					holders: entry.single.holders.map(h => {
+						const person = rankings.persons[h.personId];
+						return {
+							personId: h.personId,
+							personName: person?.name || "Unknown",
+							date: h.date,
+							achievementAge: getAchievementAge(rankings, entry.single!, h)
+						};
+					})
 				};
 			}
 
 			if (entry.average) {
-				const person = rankings.persons[entry.average.personId];
 				result.average = {
 					result: entry.average.result,
-					personId: entry.average.personId,
-					personName: person?.name || "Unknown",
-					date: entry.average.date,
-					achievementAge: getAchievementAge(rankings, entry.average)
+					holders: entry.average.holders.map(h => {
+						const person = rankings.persons[h.personId];
+						return {
+							personId: h.personId,
+							personName: person?.name || "Unknown",
+							date: h.date,
+							achievementAge: getAchievementAge(rankings, entry.average!, h)
+						};
+					})
 				};
 			}
 
@@ -106,9 +115,12 @@ export function useTopKinchResults(filters: TopKinchResultsFilters): TopResultFo
 	}, [rankings, topRanks, filters.age, filters.region]);
 }
 
-// Highest age class at which the same (eventId, type, result) was achieved by this person
-function getAchievementAge(rankings: EnhancedRankingsData, topRank: TopRank): number {
-	const person = rankings.persons[topRank.personId];
+function getAchievementAge(
+	rankings: EnhancedRankingsData,
+	topRank: TopRank,
+	holder: { personId: string; date: string }
+): number {
+	const person = rankings.persons[holder.personId];
 	if (!person) return topRank.age;
 	let max = topRank.age;
 	for (const idx of person.resultIndices) {

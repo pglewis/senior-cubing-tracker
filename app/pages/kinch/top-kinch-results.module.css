@@ -51,12 +51,18 @@
 	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
 }
 
-.results-grid {
-	display: grid;
-	gap: var(--spacing-md);
+.event-result-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
 }
 
-.results-grid.two-column {
+.result-grid {
+	display: grid;
+	gap: var(--spacing-sm);
+}
+
+.result-grid.two-column {
 	grid-template-columns: 1fr 1fr;
 }
 

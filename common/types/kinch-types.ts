@@ -26,8 +26,10 @@ export interface TopRank {
 	age: number,
 	region: string,
 	result: string,
-	personId: string,
-	date: string,
+	holders: {
+		personId: string,
+		date: string,
+	}[],
 };
 
 export interface KinchRank {

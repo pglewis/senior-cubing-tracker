@@ -74,38 +74,48 @@ export function TopKinchResults() {
 						</div>
 
 						<div className={styles["event-result"]}>
-							<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
+							<div className={clsx(styles["result-grid"], event.single && event.average && styles["two-column"])}>
 								{event.single && (
-									<ResultItem
-										type="single"
-										result={event.single.result}
-										personId={event.single.personId}
-										personName={event.single.personName}
-										countryId={rankings?.persons[event.single.personId]?.countryId ?? ""}
-										highestAge={rankings?.persons[event.single.personId]?.availableAges.at(-1)}
-										achievementAge={event.single.achievementAge}
-										date={event.single.date}
-										age={age}
-										region={region}
-										regionInfo={regionInfo}
-										eventId={event.eventId}
-									/>
+									<div className={styles["event-result-col"]}>
+										{event.single.holders.map(holder => (
+											<ResultItem
+												key={holder.personId}
+												type="single"
+												result={event.single!.result}
+												personId={holder.personId}
+												personName={holder.personName}
+												countryId={rankings?.persons[holder.personId]?.countryId ?? ""}
+												highestAge={rankings?.persons[holder.personId]?.availableAges.at(-1)}
+												achievementAge={holder.achievementAge}
+												date={holder.date}
+												age={age}
+												region={region}
+												regionInfo={regionInfo}
+												eventId={event.eventId}
+											/>
+										))}
+									</div>
 								)}
 								{event.average && (
-									<ResultItem
-										type="average"
-										result={event.average.result}
-										personId={event.average.personId}
-										personName={event.average.personName}
-										countryId={rankings?.persons[event.average.personId]?.countryId ?? ""}
-										highestAge={rankings?.persons[event.average.personId]?.availableAges.at(-1)}
-										achievementAge={event.average.achievementAge}
-										date={event.average.date}
-										age={age}
-										region={region}
-										regionInfo={regionInfo}
-										eventId={event.eventId}
-									/>
+									<div className={styles["event-result-col"]}>
+										{event.average.holders.map(holder => (
+											<ResultItem
+												key={holder.personId}
+												type="average"
+												result={event.average!.result}
+												personId={holder.personId}
+												personName={holder.personName}
+												countryId={rankings?.persons[holder.personId]?.countryId ?? ""}
+												highestAge={rankings?.persons[holder.personId]?.availableAges.at(-1)}
+												achievementAge={holder.achievementAge}
+												date={holder.date}
+												age={age}
+												region={region}
+												regionInfo={regionInfo}
+												eventId={event.eventId}
+											/>
+										))}
+									</div>
 								)}
 							</div>
 						</div>

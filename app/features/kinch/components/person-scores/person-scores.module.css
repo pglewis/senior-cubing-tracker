@@ -31,6 +31,7 @@
 .event-list {
 	display: flex;
 	flex-direction: column;
+	text-align: left;
 	gap: var(--spacing-sm);
 }
 

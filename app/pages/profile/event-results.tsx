@@ -13,7 +13,7 @@ interface EventResultsProps {
 
 export function EventResults({person, age, eventResults}: EventResultsProps) {
 	return (
-		<div className={styles["event-results-container"]}>
+		<div className={styles["event-result-container"]}>
 			{eventResults.map((event) => (
 				<Card key={event.eventId} className={styles["event-card"]}>
 					<div className={styles["event-header"]}>
@@ -50,8 +50,8 @@ export function EventResults({person, age, eventResults}: EventResultsProps) {
 							</div>
 						)}
 					</div>
-					<div className={styles["results-container"]}>
-						<div className={clsx(styles["results-grid"], event.single && event.average && styles["two-column"])}>
+					<div className={styles["result-container"]}>
+						<div className={clsx(styles["result-grid"], event.single && event.average && styles["two-column"])}>
 							{event.single && (
 								<ResultDisplay
 									type="single"

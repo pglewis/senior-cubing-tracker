@@ -67,6 +67,13 @@ export function Profile() {
 					View the Kinch Ranks Leaderboard
 				</Link>
 			</div>
+
+			<div className={styles["leaderboard-link"]}>
+				<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}`}>
+					View Top Kinch Results
+				</Link>
+			</div>
+
 			{/* Show profile content only if we have a valid wcaid and person */}
 			{wcaid && person && (
 				<ProfileContent

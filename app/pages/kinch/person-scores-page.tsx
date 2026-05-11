@@ -49,7 +49,7 @@ export function PersonScoresPage() {
 						Region: <code className={styles["highlighted-data"]}>{region}</code><br />
 					</p>
 					<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
-						View the main Leaderboard
+						View the Kinch Ranks Leaderboard
 					</Link>
 				</div>
 			</>

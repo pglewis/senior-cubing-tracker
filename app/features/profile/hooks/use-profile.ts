@@ -127,9 +127,9 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 		}
 
 		// Get kinch event scores for this person
-		const worldKinchRank = worldKinchRanks.find(rank => rank.personId === wcaId);
-		const continentKinchRank = continentKinchRanks.find(rank => rank.personId === wcaId);
-		const countryKinchRank = countryKinchRanks.find(rank => rank.personId === wcaId);
+		const worldKinchRank = worldKinchRanks.getPersonRank(wcaId);
+		const continentKinchRank = continentKinchRanks.getPersonRank(wcaId);
+		const countryKinchRank = countryKinchRanks.getPersonRank(wcaId);
 
 		// Convert to EventResult format
 		const events: EventResult[] = [];
@@ -201,23 +201,17 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 			};
 		}
 
-		// Find the person's entry in each ranking list and get their position
-		const worldRankIndex = worldKinchRanks.findIndex(rank => rank.personId === wcaId);
-		const continentRankIndex = continentKinchRanks.findIndex(rank => rank.personId === wcaId);
-		const countryRankIndex = countryKinchRanks.findIndex(rank => rank.personId === wcaId);
-
-		const worldRank = worldKinchRanks[worldRankIndex];
-		const continentRank = continentKinchRanks[continentRankIndex];
-		const countryRank = countryKinchRanks[countryRankIndex];
+		const worldRank = worldKinchRanks.getPersonRank(wcaId);
+		const continentRank = continentKinchRanks.getPersonRank(wcaId);
+		const countryRank = countryKinchRanks.getPersonRank(wcaId);
 
 		return {
 			world: worldRank?.overall || 0,
 			continent: continentRank?.overall || 0,
 			country: countryRank?.overall || 0,
-			// Ranking positions are 1-indexed (add 1 to array index)
-			worldRank: worldRankIndex >= 0 ? worldRankIndex + 1 : 0,
-			continentRank: continentRankIndex >= 0 ? continentRankIndex + 1 : 0,
-			countryRank: countryRankIndex >= 0 ? countryRankIndex + 1 : 0,
+			worldRank: worldRank?.displayRank || 0,
+			continentRank: continentRank?.displayRank || 0,
+			countryRank: countryRank?.displayRank || 0,
 		};
 	}, [person, wcaId, worldKinchRanks, continentKinchRanks, countryKinchRanks]);
 

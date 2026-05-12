@@ -15,15 +15,15 @@ interface KinchFilters {
 // Outside component - persists across component unmounts
 const kinchCache = new Map();
 
-export function useKinchRanks(filters: KinchFilters): KinchRank[] {
+export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPersonRank: (personId: string) => KinchRank | null} {
 	const {rankings, topRanks} = useDataOptional();
 
 	return useMemo(() => {
 		if (!rankings || !topRanks) {
-			return [];
+			return {ranks: [], getPersonRank: () => null};
 		}
 
-		const cacheKey = `${rankings?.lastUpdated || "v1"}-${filters.age || "all"}-${filters.region || "all"}`;
+		const cacheKey = `v2-${rankings?.lastUpdated || "v1"}-${filters.age || "all"}-${filters.region || "all"}`;
 
 		if (kinchCache.has(cacheKey)) {
 			return kinchCache.get(cacheKey);
@@ -61,7 +61,12 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 			i++;
 		}
 
-		kinchCache.set(cacheKey, ranks);
+		const result = {
+			ranks,
+			getPersonRank: (personId: string) => ranks.find(r => r.personId === personId) || null
+		};
+
+		kinchCache.set(cacheKey, result);
 
 		// Cleanup old entries periodically
 		if (kinchCache.size > 50) {
@@ -69,7 +74,7 @@ export function useKinchRanks(filters: KinchFilters): KinchRank[] {
 			keysToDelete.forEach(key => kinchCache.delete(key));
 		}
 
-		return ranks;
+		return result;
 	}, [rankings, topRanks, filters]);
 }
 

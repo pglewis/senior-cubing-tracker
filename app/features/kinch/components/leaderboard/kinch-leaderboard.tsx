@@ -35,7 +35,9 @@ export function KinchLeaderboard({displayRanks, getPersonUrl, highlightId}: Kinc
 				</tr>
 			</thead>
 			<tbody>
-				{displayRanks.map((rank) => {
+				{displayRanks.map((rank, index) => {
+					const isTiedWithPrev = index > 0 && Math.abs(rank.overall - displayRanks[index - 1].overall) < Number.EPSILON;
+					const showRankNumber = index === 0 || !isTiedWithPrev;
 					const hasRecentPB = rank.events.some(event => event.date && dateIsRecent(event.date));
 					const person = rankings?.persons[rank.personId];
 					const highestAge = person?.availableAges.at(-1);
@@ -46,7 +48,7 @@ export function KinchLeaderboard({displayRanks, getPersonUrl, highlightId}: Kinc
 							ref={rank.personId === highlightId ? highlightRef : null}
 							className={`${styles.row} ${rank.personId === highlightId ? styles.highlighted : ""}`}
 						>
-							<td className={styles["rank-column"]}>{rank.displayRank}</td>
+							<td className={styles["rank-column"]}>{showRankNumber ? rank.displayRank : ""}</td>
 							<td className={styles["name-column"]}>
 								<CountryFlag
 									countryCode={person?.countryId ?? ""}

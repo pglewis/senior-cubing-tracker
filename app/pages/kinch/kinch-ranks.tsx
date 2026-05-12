@@ -21,7 +21,7 @@ export function KinchRanks() {
 	} = useKinchContext();
 	const {state} = useLocation();
 	const kinchRanks = useKinchRanks({age, region});
-	const totalPages = Math.ceil(kinchRanks.length / ROWS_PER_PAGE);
+	const totalPages = Math.ceil(kinchRanks.ranks.length / ROWS_PER_PAGE);
 
 	// Calculate available age options for the current region
 	const ageOptions = useMemo(() => {
@@ -70,7 +70,7 @@ export function KinchRanks() {
 			)}
 
 			<KinchLeaderboard
-				displayRanks={kinchRanks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
+				displayRanks={kinchRanks.ranks.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE)}
 				getPersonUrl={getPersonUrl}
 				highlightId={state?.highlight}
 			/>

@@ -26,7 +26,7 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 	const [searchParams] = useSearchParams();
 	const location = useLocation();
 	const navigate = useNavigate();
-	const kinchRanks = useKinchRanks({age, region});
+	const {ranks: kinchRanks} = useKinchRanks({age, region});
 
 	const handleCompetitorSelect = (item: ComboboxItem) => {
 		navigate(buildKinchPersonRoute(item.value) + `?age=${age}&region=world`);

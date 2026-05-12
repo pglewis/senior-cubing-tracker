@@ -13,7 +13,6 @@ import styles from "./person-scores.module.css";
 interface PersonScoresProps {
 	// Pre-processed person data
 	personKinchRank: KinchRank,
-	kinchRanking: number,
 	countryCode: string,
 	regionName: string,
 	age: string,
@@ -29,7 +28,6 @@ type SortColumn = "event" | "score";
 export function PersonScores(props: PersonScoresProps) {
 	const {
 		personKinchRank,
-		kinchRanking,
 		countryCode,
 		regionName,
 		age,
@@ -48,6 +46,7 @@ export function PersonScores(props: PersonScoresProps) {
 		sortedEvents.sort((a, b) => b.score - a.score);
 	}
 
+	const kinchRanking = personKinchRank.displayRank ?? 0;
 	const targetPage = Math.ceil(kinchRanking / rowsPerPage);
 	const competitorURL = `${buildProfilePersonRoute(personKinchRank.personId)}?age=${age}`;
 

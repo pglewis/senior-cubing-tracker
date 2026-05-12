@@ -13,15 +13,10 @@ export function PersonScoresPage() {
 	const {wcaid} = useParams<{wcaid: string;}>();
 	const {age, region, regionInfo} = useKinchContext();
 	const {rankings} = useData();
-	const kinchRanks = useKinchRanks({age, region});
-
+	const {getPersonRank} = useKinchRanks({age, region});
 	const personId = wcaid || "";
 	const person = rankings?.persons[personId];
-	let rankIndex = -1;
-
-	if (person) {
-		rankIndex = kinchRanks.findIndex(kr => kr.personId === wcaid);
-	}
+	const personKinchRank = getPersonRank(personId);
 
 	const achievementAgeByResult = useMemo(() => {
 		const map = new Map<string, number>();
@@ -35,7 +30,7 @@ export function PersonScoresPage() {
 		return map;
 	}, [rankings, person]);
 
-	if (!person || rankIndex < 0) {
+	if (!person || !personKinchRank) {
 		return (
 			<>
 				<div className={styles["not-found"]}>
@@ -56,12 +51,9 @@ export function PersonScoresPage() {
 		);
 	}
 
-	const ageOptions = person.availableAges
+	const ageOptions = [...person.availableAges]
 		.sort((a, b) => a - b)
 		.map(age => ({value: age.toString(), label: `${age}+`}));
-
-	const personKinchRank = kinchRanks[rankIndex];
-	const ranking = rankIndex + 1;
 
 	// Helper functions
 	const getRegionName = () => {
@@ -93,7 +85,6 @@ export function PersonScoresPage() {
 				countryCode={person.countryId || ""}
 				regionName={getRegionName()}
 				personKinchRank={personKinchRank}
-				kinchRanking={ranking}
 				rowsPerPage={25}
 				returnPath={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}
 				age={age}

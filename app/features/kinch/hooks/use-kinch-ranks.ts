@@ -29,8 +29,7 @@ export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPe
 			return kinchCache.get(cacheKey);
 		}
 
-		// Get events in canonical order from the enhanced rankings data
-		const allEvents = rankings.eventOrder;
+		const kinchEvents = getKinchEvents(rankings);
 
 		// Filter results by age and region upfront
 		const relevantResults = getRelevantResults(rankings, filters);
@@ -41,7 +40,7 @@ export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPe
 		// Calculate kinch ranks for each person
 		const ranks: KinchRank[] = [];
 		for (const [personId, personResults] of resultsByPerson) {
-			const kinchRank = getRanksForPerson(rankings, topRanks, filters, personId, personResults, allEvents);
+			const kinchRank = getRanksForPerson(rankings, topRanks, filters, personId, personResults, kinchEvents);
 			if (kinchRank.overall > 0) {
 				ranks.push(kinchRank);
 			}
@@ -80,6 +79,16 @@ export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPe
 	}, [rankings, topRanks, filters]);
 }
 
+/**
+ * Events scored for Kinch, in canonical order. An event counts once anyone has a
+ * result in it, so a newly added WCA event doesn't lower every overall score
+ * before it has been competed in.
+ */
+function getKinchEvents(rankings: EnhancedRankingsData): WCAEventId[] {
+	const eventsWithResults = new Set(rankings.results.map(result => result.eventId));
+	return rankings.eventOrder.filter(eventId => eventsWithResults.has(eventId));
+}
+
 function getRelevantResults(rankings: EnhancedRankingsData, filters: KinchFilters): FlatResult[] {
 	const targetAge = parseInt(filters.age);
 
@@ -105,7 +114,7 @@ function getRanksForPerson(
 	filters: KinchFilters,
 	personId: string,
 	personResults: FlatResult[],
-	allEvents: WCAEventId[]
+	kinchEvents: WCAEventId[]
 ): KinchRank {
 	const person = rankings.persons[personId];
 	if (!person) {
@@ -127,7 +136,7 @@ function getRanksForPerson(
 	}
 
 	// Calculate score for each event using the dynamic events list
-	for (const eventId of allEvents) {
+	for (const eventId of kinchEvents) {
 		if (eventId === "333mbf") {
 			// Multi blind is a special case
 			kinchRank.events.push(getPersonMultiScore(topRanks, eventId, resultsByEventType, filters, rankings));

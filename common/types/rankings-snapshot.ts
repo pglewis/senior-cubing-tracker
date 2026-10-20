@@ -38,7 +38,8 @@ export type WCAEventId =
 	"sq1" |
 	"444bf" |
 	"555bf" |
-	"333mbf"
+	"333mbf" |
+	"fto"
 
 export interface WCAEvent {
 	/** eg 333bf */

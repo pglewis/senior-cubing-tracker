@@ -9,6 +9,16 @@ import {Pill} from "@repo/app/components/pill/pill";
 import {dateIsRecent} from "@repo/common/util/parse";
 import styles from "./event-card.module.css";
 
+/**
+ * Fallback @cubing/icons classes for events it doesn't yet ship as "event-<id>".
+ * Both classes are applied, so the icon keeps working once upstream adds the
+ * "event-<id>" class. Its glyph code points are assigned in build order, so we
+ * reference its class names, never the code points.
+ */
+const eventIconFallbackClasses: Partial<Record<WCAEventId, string>> = {
+	fto: "unofficial-fto",
+};
+
 /** Vertical list of event cards */
 export function EventCardList({children}: {children: React.ReactNode}) {
 	return <div className={styles["event-card-list"]}>{children}</div>;
@@ -28,7 +38,7 @@ export function EventCard({eventId, title, headerExtra, single, average}: EventC
 		<Card className={styles["event-card"]}>
 			<div className={styles["event-header"]}>
 				<div className={styles["event-name"]}>
-					<span className={clsx("cubing-icon", `event-${eventId}`, styles["event-icon"])}></span>
+					<span className={clsx("cubing-icon", `event-${eventId}`, eventIconFallbackClasses[eventId], styles["event-icon"])}></span>
 					{title}
 				</div>
 				{headerExtra}

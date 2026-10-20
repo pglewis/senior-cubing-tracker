@@ -18,6 +18,7 @@ export const scoreAverageOnly: Record<WCAEventId, boolean> = {
 	"444bf": false,
 	"555bf": false,
 	"333mbf": false,
+	"fto": true,
 };
 
 export interface TopRank {

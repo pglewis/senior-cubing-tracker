@@ -15,7 +15,11 @@ export default defineConfig({
 			manifestFilename: "manifest.json",
 			includeAssets: ["favicon.ico", "robots.txt"],
 			workbox: {
-				globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+				globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+				// Workbox defaults, plus the bare 32 hex digit cache-buster @cubing/icons appends
+				// to its font URL (Vite already hashes the file name), so the precached font
+				// is found offline
+				ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^[0-9a-f]{32}$/],
 				cleanupOutdatedCaches: true,
 				runtimeCaching: [{
 					urlPattern: /\/data\/.*\.json$/,
@@ -117,7 +121,9 @@ export default defineConfig({
 			name: "post-build-html-transform",
 			writeBundle(options) {
 				const fullBaseUrl = process.env.VITE_FULL_BASE_URL || "";
-				if (!fullBaseUrl) return;
+				if (!fullBaseUrl) {
+					return;
+				}
 
 				const outDir = options.dir || "../dist";
 				const indexPath = resolve(outDir, "index.html");

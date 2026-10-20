@@ -1,5 +1,5 @@
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
-import {toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {toRegionParam} from "@repo/common/util/region-utils";
 import styles from "./region-filter.module.css";
 
 interface RegionFilterProps {

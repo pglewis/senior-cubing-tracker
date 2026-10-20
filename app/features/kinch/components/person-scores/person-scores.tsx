@@ -7,7 +7,9 @@ import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
 import {Card} from "@repo/app/components/card/card";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import {Pill} from "@repo/app/components/pill/pill";
+import {RankingLink} from "@repo/app/components/urls/ranking-link";
 import {dateIsRecent} from "@repo/common/util/parse";
+import {getResultKey} from "@repo/common/util/achievement-age";
 import styles from "./person-scores.module.css";
 
 interface PersonScoresProps {
@@ -16,9 +18,11 @@ interface PersonScoresProps {
 	countryCode: string,
 	regionName: string,
 	age: string,
-	achievementAgeByResult: Map<string, number>,
+	/** Prefixed region parameter (e.g. "world", "CNA" or "NNA") */
+	region: string,
+	/** Achievement ages keyed by getResultKey */
+	achievementAges: Map<string, number>,
 	returnPath: string,
-	getRankingUrl: (event: KinchEvent) => string,
 	getShowInRankingsUrl: (targetPage: number) => string,
 	rowsPerPage: number,
 };
@@ -31,9 +35,9 @@ export function PersonScores(props: PersonScoresProps) {
 		countryCode,
 		regionName,
 		age,
-		achievementAgeByResult,
+		region,
+		achievementAges,
 		returnPath,
-		getRankingUrl,
 		getShowInRankingsUrl,
 		rowsPerPage,
 	} = props;
@@ -94,14 +98,13 @@ export function PersonScores(props: PersonScoresProps) {
 				aria-label={`Event scores for ${personKinchRank.personName}`}
 			>
 				{sortedEvents.map(event => {
-					const achievementAge = event.result
-						? achievementAgeByResult.get(`${event.eventId}-${event.type}-${event.result}`)
-						: undefined;
+					const achievementAge = getEventAchievementAge(event, achievementAges);
 					return (
-						<EventCard
+						<EventScoreCard
 							key={event.eventId}
 							event={event}
-							getRankingUrl={getRankingUrl}
+							age={age}
+							region={region}
 							achievementAge={achievementAge !== undefined && achievementAge > currentAge ? achievementAge : undefined}
 						/>
 					);
@@ -111,13 +114,22 @@ export function PersonScores(props: PersonScoresProps) {
 	);
 }
 
-interface EventCardProps {
+function getEventAchievementAge(event: KinchEvent, achievementAges: Map<string, number>): number | undefined {
+	const {eventId, type, result, date} = event;
+	if (!type || !result || !date) {
+		return undefined;
+	}
+	return achievementAges.get(getResultKey({eventId, type, result, date}));
+}
+
+interface EventScoreCardProps {
 	event: KinchEvent;
-	getRankingUrl: (event: KinchEvent) => string;
+	age: string;
+	region: string;
 	achievementAge: number | undefined;
 }
 
-function EventCard({event, getRankingUrl, achievementAge}: EventCardProps) {
+function EventScoreCard({event, age, region, achievementAge}: EventScoreCardProps) {
 	const {eventName, score, result, type, date} = event;
 
 	const isRecent = date && dateIsRecent(date);
@@ -144,9 +156,11 @@ function EventCard({event, getRankingUrl, achievementAge}: EventCardProps) {
 			</div>
 			<div className={styles["event-card-result"]}>
 				<span className={styles["result-value"]}>
-					<a className={styles.link} href={getRankingUrl(event)} target="_blank" rel="noopener noreferrer">
-						{result}
-					</a>
+					{type && (
+						<RankingLink className={styles.link} eventId={event.eventId} eventType={type} age={age} region={region}>
+							{result}
+						</RankingLink>
+					)}
 				</span>
 				<span>
 					{achievementAge !== undefined && <Pill>({achievementAge})</Pill>}

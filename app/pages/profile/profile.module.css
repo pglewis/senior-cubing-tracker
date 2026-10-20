@@ -1,31 +1,3 @@
-.container {
-	max-width: var(--max-width-content);
-	margin: 0 auto;
-	text-align: center;
-}
-
-.container input {
-	width: 100%;
-	max-width: var(--max-width-controls);
-}
-
-.name-search {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin: var(--spacing-md) 0;
-	gap: var(--spacing-md);
-}
-
-.name-search > * {
-	max-width: var(--max-width-controls);
-	width: 100%;
-}
-
-.leaderboard-link {
-	margin: var(--spacing-md) 0;
-}
-
 .profile-card {
 	margin-bottom: var(--spacing-md);
 	text-align: left;
@@ -97,41 +69,6 @@
 	/* All scores go in the third row */
 }
 
-/* New Event Card Styles */
-.event-result-container {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-md);
-}
-
-.event-card {
-	text-align: left;
-	overflow: hidden;
-}
-
-.event-header {
-	display: flex;
-	margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) 0;
-	padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
-	border-bottom: 1px solid var(--color-border);
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: var(--spacing-md);
-	background: var(--color-background-header);
-}
-
-.event-name {
-	display: flex;
-	align-items: center;
-	gap: var(--spacing-xs);
-	font-size: var(--font-size-sm);
-	font-weight: var(--font-weight-bold);
-}
-
-.event-name span {
-	transform: translateY(2px);
-}
-
 .event-kinch {
 	display: flex;
 	flex-direction: column;
@@ -163,51 +100,6 @@
 .kinch-value-score {
 	color: var(--color-active);
 	font-weight: var(--font-weight-bold);
-}
-
-.result-container {
-	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
-}
-
-.result-grid {
-	display: grid;
-	gap: var(--spacing-sm);
-}
-
-.result-grid.two-column {
-	grid-template-columns: 1fr 1fr;
-}
-
-.result-item {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-sm);
-	padding: var(--spacing-sm);
-	border-radius: var(--border-radius-sm);
-	background: var(--color-background);
-}
-
-.result-info {
-	display: flex;
-	flex-direction: column;
-}
-
-.result-type {
-	margin-bottom: var(--spacing-xs);
-	font-size: var(--font-size-xs);
-	text-transform: uppercase;
-	font-weight: var(--font-weight-bold);
-}
-
-.result-value {
-	margin-bottom: var(--spacing-xs);
-	font-size: var(--font-size-md);
-	font-weight: var(--font-weight-bold);
-	font-family: monospace;
-}
-
-.result-date {
-	font-size: var(--font-size-sm);
 }
 
 .result-ranks {

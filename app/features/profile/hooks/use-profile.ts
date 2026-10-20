@@ -1,60 +1,56 @@
 import {useMemo} from "react";
 import {useDataOptional} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
-import {toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {toRegionParam} from "@repo/common/util/region-utils";
+import {getAchievementAges, getResultKey} from "@repo/common/util/achievement-age";
 import type {PersonProfile, FlatResult} from "@repo/common/types/enhanced-rankings";
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 
-export interface EventResult {
-  eventId: WCAEventId;
-  eventName: string;
-  single?: {
-    result: string;
-	date: string;
-    worldRank: number;
-    continentRank: number;
-    countryRank: number;
-    achievementAge: number;
-};
-average?: {
+interface ProfileResult {
 	result: string;
 	date: string;
-    worldRank: number;
-    continentRank: number;
-    countryRank: number;
-    achievementAge: number;
-  };
-  kinchScores?: {
-    world: number;
-    continent: number;
-    country: number;
-  };
+	worldRank: number;
+	continentRank: number;
+	countryRank: number;
+	achievementAge: number;
+}
+
+export interface EventResult {
+	eventId: WCAEventId;
+	eventName: string;
+	single?: ProfileResult;
+	average?: ProfileResult;
+	kinchScores?: {
+		world: number;
+		continent: number;
+		country: number;
+	};
 }
 
 export interface ProfileData {
-  // Person details
-  person: PersonProfile | null;
+	// Person details
+	person: PersonProfile | null;
 
-  // Kinch scores for the selected age/region
-  kinchScores: {
-    world: number;
-    continent: number;
-    country: number;
-    worldRank: number;
-    continentRank: number;
-    countryRank: number;
-  };
+	// Kinch scores for the selected age/region
+	kinchScores: {
+		world: number;
+		continent: number;
+		country: number;
+		worldRank: number;
+		continentRank: number;
+		countryRank: number;
+	};
 
-  // Event results with rankings for the selected age
-  eventResults: EventResult[];
+	// Event results with rankings for the selected age
+	eventResults: EventResult[];
 
-  // Available age categories for this person
-  availableAges: string[];
+	// Available age categories for this person
+	availableAges: string[];
 }
 
 interface UseProfileParams {
-  wcaId: string;
-  age: string;
+	wcaId: string;
+	age: string;
 }
 
 export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
@@ -62,13 +58,17 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 
 	// Get person data
 	const person = useMemo(() => {
-		if (!rankings || !wcaId) return null;
+		if (!rankings || !wcaId) {
+			return null;
+		}
 		return rankings.persons[wcaId] || null;
 	}, [rankings, wcaId]);
 
 	// Get available age categories from person profile
 	const availableAges = useMemo(() => {
-		if (!person) return [];
+		if (!person) {
+			return [];
+		}
 		return person.availableAges.map(age => age.toString());
 	}, [person]);
 
@@ -92,23 +92,25 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 
 	// Get event results for the selected age
 	const eventResults = useMemo(() => {
-		if (!rankings || !person || !age) return [];
+		if (!rankings || !person || !age) {
+			return [];
+		}
 
 		const targetAge = parseInt(age);
 
-		const personAllResults = person.resultIndices.map(i => rankings.results[i]);
+		const achievementAges = getAchievementAges(rankings, person.personId);
+		const toProfileResult = (r: FlatResult): ProfileResult => ({
+			result: r.result,
+			date: rankings.competitions[r.competitionId].startDate,
+			worldRank: r.worldRank,
+			continentRank: r.continentRank,
+			countryRank: r.countryRank,
+			achievementAge: achievementAges.get(getResultKey(r)) ?? r.age,
+		});
 
-		const achievementAgeByResult = new Map<string, number>();
-		for (const r of personAllResults) {
-			const key = `${r.eventId}-${r.type}-${r.result}`;
-			const prev = achievementAgeByResult.get(key) ?? 0;
-			if (r.age > prev) achievementAgeByResult.set(key, r.age);
-		}
-
-		const getAchievementAge = (r: FlatResult) =>
-			achievementAgeByResult.get(`${r.eventId}-${r.type}-${r.result}`) ?? r.age;
-
-		const personResults = personAllResults.filter(r => r.age === targetAge);
+		const personResults = person.resultIndices
+			.map(i => rankings.results[i])
+			.filter(r => r.age === targetAge);
 
 		// Group results by event
 		const resultsByEvent = new Map<WCAEventId, {single?: FlatResult, average?: FlatResult}>();
@@ -138,29 +140,9 @@ export function useProfile({wcaId, age}: UseProfileParams): ProfileData {
 			const eventResult: EventResult = {
 				eventId,
 				eventName: rankings.events[eventId].name,
+				single: results.single && toProfileResult(results.single),
+				average: results.average && toProfileResult(results.average),
 			};
-
-			if (results.single) {
-				eventResult.single = {
-					result: results.single.result,
-					date: rankings.competitions[results.single.competitionId].startDate,
-					worldRank: results.single.worldRank,
-					continentRank: results.single.continentRank,
-					countryRank: results.single.countryRank,
-					achievementAge: getAchievementAge(results.single),
-				};
-			}
-
-			if (results.average) {
-				eventResult.average = {
-					result: results.average.result,
-					date: rankings.competitions[results.average.competitionId].startDate,
-					worldRank: results.average.worldRank,
-					continentRank: results.average.continentRank,
-					countryRank: results.average.countryRank,
-					achievementAge: getAchievementAge(results.average),
-				};
-			}
 
 			// Add kinch scores for this event
 			const worldKinchEvent = worldKinchRank?.events.find(e => e.eventId === eventId);

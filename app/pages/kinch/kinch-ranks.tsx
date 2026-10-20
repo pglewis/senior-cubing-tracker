@@ -1,7 +1,6 @@
-import {useRef, useMemo} from "react";
+import {useRef} from "react";
 import {useLocation} from "react-router";
 import {buildKinchPersonRoute} from "@repo/app/routing/routes";
-import {useData} from "@repo/app/hooks/use-data";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
@@ -12,28 +11,16 @@ import styles from "./kinch-ranks.module.css";
 export function KinchRanks() {
 	const ROWS_PER_PAGE = 25;
 	const topPaginationRef = useRef<HTMLDivElement>(null);
-	const {topRanks} = useData();
 	const {
 		age,
 		region,
 		page,
+		ageOptions,
 		setParams
 	} = useKinchContext();
 	const {state} = useLocation();
 	const kinchRanks = useKinchRanks({age, region});
 	const totalPages = Math.ceil(kinchRanks.ranks.length / ROWS_PER_PAGE);
-
-	// Calculate available age options for the current region
-	const ageOptions = useMemo(() => {
-		if (!topRanks) return [];
-
-		return Array.from(new Set(topRanks
-			.filter(tr => tr.region === region)
-			.map(tr => tr.age)
-		))
-			.sort((a, b) => a - b)
-			.map(age => ({value: age.toString(), label: `${age}+`}));
-	}, [topRanks, region]);
 
 	// Pagination
 	const handlePageChange = (newPage: number) => {

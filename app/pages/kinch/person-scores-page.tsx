@@ -1,8 +1,10 @@
 import {useMemo} from "react";
 import {Link, useParams} from "react-router";
 import {ROUTES} from "@repo/app/routing/routes";
-import type {KinchEvent} from "@repo/common/types/kinch-types";
+import {getAchievementAges} from "@repo/common/util/achievement-age";
+import {getRegionName} from "@repo/common/util/region-utils";
 import {useData} from "@repo/app/hooks/use-data";
+import {getAgeOptions} from "@repo/app/utils/age-options";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
 import {KinchLayout} from "@repo/app/features/kinch/components/layout/kinch-layout";
@@ -11,24 +13,14 @@ import styles from "./person-scores-page.module.css";
 
 export function PersonScoresPage() {
 	const {wcaid} = useParams<{wcaid: string;}>();
-	const {age, region, regionInfo} = useKinchContext();
+	const {age, region} = useKinchContext();
 	const {rankings} = useData();
 	const {getPersonRank} = useKinchRanks({age, region});
 	const personId = wcaid || "";
 	const person = rankings?.persons[personId];
 	const personKinchRank = getPersonRank(personId);
 
-	const achievementAgeByResult = useMemo(() => {
-		const map = new Map<string, number>();
-		if (!rankings || !person) return map;
-		for (const idx of person.resultIndices) {
-			const r = rankings.results[idx];
-			const key = `${r.eventId}-${r.type}-${r.result}`;
-			const prev = map.get(key) ?? 0;
-			if (r.age > prev) map.set(key, r.age);
-		}
-		return map;
-	}, [rankings, person]);
+	const achievementAges = useMemo(() => getAchievementAges(rankings, personId), [rankings, personId]);
 
 	if (!person || !personKinchRank) {
 		return (
@@ -51,29 +43,7 @@ export function PersonScoresPage() {
 		);
 	}
 
-	const ageOptions = [...person.availableAges]
-		.sort((a, b) => a - b)
-		.map(age => ({value: age.toString(), label: `${age}+`}));
-
-	// Helper functions
-	const getRegionName = () => {
-		if (regionInfo.type === "world") return "World";
-		if (regionInfo.type === "continent") {
-			return rankings?.continents[regionInfo.id]?.name || regionInfo.id;
-		}
-		return rankings?.countries[regionInfo.id]?.name || regionInfo.id;
-	};
-
-	const getRankingUrl = (event: KinchEvent) => {
-		const baseRankingURL = "https://wca-seniors.org/Senior_Rankings.html";
-		let regionParam = "";
-		if (regionInfo.type === "continent") {
-			regionParam = "-" + regionInfo.id.toLowerCase();
-		} else if (regionInfo.type === "country") {
-			regionParam = "-xx-" + regionInfo.id.toLowerCase();
-		}
-		return `${baseRankingURL}#${event.eventId}-${event.type}-${age}${regionParam}`;
-	};
+	const ageOptions = getAgeOptions(person.availableAges);
 
 	const getShowInRankingsUrl = (targetPage: number) => {
 		return `${ROUTES.KINCH_RANKS}?page=${targetPage}&age=${age}&region=${region}`;
@@ -83,13 +53,13 @@ export function PersonScoresPage() {
 		<KinchLayout availableAgeOptions={ageOptions}>
 			<PersonScores
 				countryCode={person.countryId || ""}
-				regionName={getRegionName()}
+				regionName={getRegionName(rankings, region)}
 				personKinchRank={personKinchRank}
 				rowsPerPage={25}
 				returnPath={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}
 				age={age}
-				achievementAgeByResult={achievementAgeByResult}
-				getRankingUrl={getRankingUrl}
+				region={region}
+				achievementAges={achievementAges}
 				getShowInRankingsUrl={getShowInRankingsUrl}
 			/>
 		</KinchLayout>

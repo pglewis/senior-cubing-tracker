@@ -1,26 +1,4 @@
-.header-card {
-	margin-bottom: var(--spacing-md);
-	text-align: center;
-}
-
-.header-title {
-	margin: 0 0 var(--spacing-xs) 0;
-	padding: 0;
-}
-
-.header-subtitle {
-	margin-bottom: var(--spacing-sm);
-	font-size: var(--font-size-md);
-	font-weight: var(--font-weight-bold);
-}
-
-.description {
-	margin: 0;
-	font-size: var(--font-size-sm);
-	color: var(--color-text-secondary);
-}
-
-.events-list {
+.event-card-list {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-md);
@@ -32,29 +10,29 @@
 
 .event-header {
 	display: flex;
-	align-items: center;
-	gap: var(--spacing-xs);
 	margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) 0;
 	padding: var(--spacing-sm);
 	border-bottom: 1px solid var(--color-border);
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--spacing-md);
 	background: var(--color-background-header);
+}
+
+.event-name {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-xs);
 	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-bold);
 }
 
-.event-header .cubing-icon {
-	font-size: 0.85em;
-	transform: translateY(1px);
+.event-icon {
+	transform: translateY(2px);
 }
 
 .event-result {
 	margin: 0 calc(-1 * var(--spacing-sm)) calc(-1 * var(--spacing-sm));
-}
-
-.event-result-col {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-sm);
 }
 
 .result-grid {
@@ -64,6 +42,12 @@
 
 .result-grid.two-column {
 	grid-template-columns: 1fr 1fr;
+}
+
+.result-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
 }
 
 .result-item {
@@ -77,7 +61,6 @@
 
 .result-type {
 	font-size: var(--font-size-xs);
-	text-transform: uppercase;
 	font-weight: var(--font-weight-bold);
 	color: var(--color-text-secondary);
 }
@@ -88,20 +71,20 @@
 	font-family: monospace;
 }
 
-.result-person {
+.result-date {
+	font-size: var(--font-size-sm);
+	color: var(--color-text-secondary);
+}
+
+.result-holder {
 	font-size: var(--font-size-md);
 }
 
-.person-link {
+.holder-link {
 	color: var(--color-active);
 	text-decoration: none;
 }
 
-.person-link:hover {
+.holder-link:hover {
 	text-decoration: underline;
-}
-
-.result-date {
-	font-size: var(--font-size-sm);
-	color: var(--color-text-secondary);
 }

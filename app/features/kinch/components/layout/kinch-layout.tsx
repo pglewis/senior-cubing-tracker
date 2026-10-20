@@ -3,16 +3,17 @@ import {ROUTES, buildKinchPersonRoute} from "@repo/app/routing/routes";
 import {useData} from "@repo/app/hooks/use-data";
 import {useKinchContext} from "@repo/app/features/kinch/hooks/use-kinch-context";
 import {useKinchRanks} from "@repo/app/features/kinch/hooks/use-kinch-ranks";
-import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
+import {ButtonTabs, type ButtonTabOption} from "@repo/app/components/button-tabs/button-tabs";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
-import {RegionFilter} from "@repo/app/features/kinch/components/filters/region-filter";
+import {FilterBar, FilterItem} from "@repo/app/components/filter-bar/filter-bar";
+import {PageContainer} from "@repo/app/components/page-container/page-container";
+import {RegionFilter} from "@repo/app/components/region-filter/region-filter";
 import {CompetitorCombobox} from "@repo/app/components/competitor-combobox/competitor-combobox";
 import type {ComboboxItem} from "@repo/app/components/combobox/combobox";
-import styles from "./kinch-layout.module.css";
 
 interface KinchLayoutProps {
 	children: React.ReactNode;
-	availableAgeOptions: {value: string; label: string}[];
+	availableAgeOptions: ButtonTabOption[];
 }
 
 export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
@@ -38,48 +39,55 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 	const subtitle = isOnTopResults ? "Top Kinch Results" : isOnPersonScores ? "Competitor Scores" : "Leaderboard";
 
 	return (
-		<div className={styles.container}>
+		<PageContainer>
 			<h2>Senior Kinch Ranks: {subtitle}</h2>
 
 			<DataLastUpdated text={rankings.lastUpdated} />
 
-			<div className={styles.filters}>
-				<div className={styles["filter-item"]}>
+			<FilterBar>
+				<FilterItem>
 					<CompetitorCombobox
 						items={kinchRanks.map(kr => ({value: kr.personId, label: kr.personName}))}
 						onSelect={handleCompetitorSelect}
 					/>
-				</div>
-				<div className={styles["filter-item"]}>
+				</FilterItem>
+				<FilterItem>
 					<RegionFilter
 						value={region}
 						onChange={(value) => setParams({region: value, page: 1})}
 						continents={regionInfo.continents}
 						countries={regionInfo.countries}
 					/>
-				</div>
-				<div className={styles["filter-item"]}>
+				</FilterItem>
+				<FilterItem>
 					<ButtonTabs
 						selectedValue={age}
 						onChange={(value) => setParams({age: value, page: 1}, {preventScrollReset: true})}
 						options={availableAgeOptions}
 					/>
-				</div>
+				</FilterItem>
 				{(isOnTopResults || isOnPersonScores) && (
-					<div className={styles["filter-item"]}>
+					<FilterItem>
 						<Link to={`${ROUTES.KINCH_RANKS}?age=${age}&region=${region}`}>
 							View the Leaderboard
 						</Link>
-					</div>
+					</FilterItem>
+				)}
+				{isOnTopResults && (
+					<FilterItem>
+						<Link to={`${ROUTES.RECORDS}?age=${age}&region=${region}`}>
+							View All Event Records
+						</Link>
+					</FilterItem>
 				)}
 				{!isOnTopResults && (
-					<div className={styles["filter-item"]}>
+					<FilterItem>
 						<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}&region=${region}`}>
 							View Top Kinch Results
 						</Link>
-					</div>
+					</FilterItem>
 				)}
-			</div>
+			</FilterBar>
 
 			{children}
 
@@ -88,6 +96,6 @@ export function KinchLayout({children, availableAgeOptions}: KinchLayoutProps) {
 					What are Kinch Ranks?
 				</Link>
 			</h3>
-		</div>
+		</PageContainer>
 	);
 }

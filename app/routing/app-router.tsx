@@ -12,6 +12,7 @@ import {TopKinchResults} from "@repo/app/pages/kinch/top-kinch-results";
 import {CompetitorDataFaq} from "@repo/app/pages/competitor-data-faq";
 import {PersonScoresPage} from "@repo/app/pages/kinch/person-scores-page";
 import {Profile} from "@repo/app/pages/profile/profile";
+import {Records} from "@repo/app/pages/records/records";
 
 export const appRouter = createBrowserRouter([
 	{
@@ -52,6 +53,10 @@ export const appRouter = createBrowserRouter([
 						element: <TopKinchResults />
 					}
 				]
+			},
+			{
+				path: ROUTES.RECORDS,
+				element: <DataGate><Records /></DataGate>
 			},
 			{
 				path: ROUTES.COMPETITOR_DATA_FAQ,

@@ -1,26 +1,23 @@
 import type {EventRanking, WCAEventId} from "@repo/common/types/rankings-snapshot";
-import type {RegionInfo} from "@repo/app/features/kinch/context/kinch-context";
+import {fromRegionParam} from "@repo/common/util/region-utils";
 
 export interface RankingLinkProps {
 	eventId: WCAEventId;
 	eventType: EventRanking["type"];
 	age: string;
-	region?: {
-		type: RegionInfo["type"];
-		id: RegionInfo["id"];
-	};
+	/** Prefixed region parameter (e.g. "world", "CNA" or "NNA") */
+	region?: string;
 	children: React.ReactNode;
 	className?: string;
 };
 
-export function RankingLink({eventId, eventType, age, region, children, className}: RankingLinkProps) {
+export function RankingLink({eventId, eventType, age, region = "world", children, className}: RankingLinkProps) {
 	const baseRankingURL = "https://wca-seniors.org/Senior_Rankings.html";
 
 	let regionParam = "";
-	if (region && region.type === "continent") {
-		regionParam = `-${region.id.toLowerCase()}`;
-	} else if (region && region.type === "country") {
-		regionParam = `-xx-${region.id.toLowerCase()}`;
+	if (region !== "world") {
+		const {id, isContinent} = fromRegionParam(region);
+		regionParam = isContinent ? `-${id.toLowerCase()}` : `-xx-${id.toLowerCase()}`;
 	}
 
 	const rankingURL = `${baseRankingURL}#${eventId}-${eventType}-${age}${regionParam}`;

@@ -2,9 +2,10 @@ import {Link} from "react-router";
 import type {ProfileData} from "@repo/app/features/profile/hooks/use-profile";
 import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import {buildKinchPersonRoute} from "@repo/app/routing/routes";
-import {toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {toRegionParam} from "@repo/common/util/region-utils";
 import {Card} from "@repo/app/components/card/card";
 import {ButtonTabs} from "@repo/app/components/button-tabs/button-tabs";
+import {getAgeOptions} from "@repo/app/utils/age-options";
 import {CountryFlag} from "@repo/app/components/flags/country-flag";
 import {EventResults} from "./event-results";
 import styles from "./profile.module.css";
@@ -12,7 +13,6 @@ import styles from "./profile.module.css";
 interface ProfileContentProps {
 	person: NonNullable<ProfileData["person"]>;
 	age: string;
-	availableAges: string[];
 	kinchScores: ProfileData["kinchScores"];
 	eventResults: ProfileData["eventResults"];
 	rankings: EnhancedRankingsData;
@@ -23,7 +23,6 @@ export function ProfileContent(props: ProfileContentProps) {
 	const {
 		person,
 		age,
-		availableAges,
 		kinchScores,
 		eventResults,
 		rankings,
@@ -60,10 +59,7 @@ export function ProfileContent(props: ProfileContentProps) {
 			{/* Age Tabs */}
 			<div className={styles["age-tabs-container"]}>
 				<ButtonTabs
-					options={availableAges.map(availableAge => ({
-						value: availableAge,
-						label: `${availableAge}+`
-					}))}
+					options={getAgeOptions(person.availableAges)}
 					selectedValue={age}
 					onChange={onAgeChange}
 				/>

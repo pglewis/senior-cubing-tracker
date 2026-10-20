@@ -3,7 +3,7 @@ import {scoreAverageOnly, type KinchRank, type KinchEvent, type TopRank} from "@
 import type {EnhancedRankingsData, FlatResult} from "@repo/common/types/enhanced-rankings";
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {timeResultToSeconds, parseMultiResult} from "@repo/common/util/parse";
-import {toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {isResultInRegion} from "@repo/common/util/region-utils";
 import {useDataOptional} from "@repo/app/hooks/use-data";
 
 interface KinchFilters {
@@ -71,7 +71,9 @@ export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPe
 		// Cleanup old entries periodically
 		if (kinchCache.size > 50) {
 			const keysToDelete = Array.from(kinchCache.keys()).slice(0, 10);
-			keysToDelete.forEach(key => kinchCache.delete(key));
+			for (const key of keysToDelete) {
+				kinchCache.delete(key);
+			}
 		}
 
 		return result;
@@ -81,22 +83,7 @@ export function useKinchRanks(filters: KinchFilters): {ranks: KinchRank[]; getPe
 function getRelevantResults(rankings: EnhancedRankingsData, filters: KinchFilters): FlatResult[] {
 	const targetAge = parseInt(filters.age);
 
-	return rankings.results.filter(result => {
-		// Filter by age
-		if (result.age !== targetAge) {
-			return false;
-		}
-
-		// Filter by region
-		if (filters.region === "world") {
-			return true;
-		}
-
-		const countryRegion = toRegionParam(result.countryId, false);
-		const continentRegion = toRegionParam(result.continentId, true);
-
-		return filters.region === countryRegion || filters.region === continentRegion;
-	});
+	return rankings.results.filter(result => result.age === targetAge && isResultInRegion(result, filters.region));
 }
 
 function groupResultsByPerson(results: FlatResult[]): Map<string, FlatResult[]> {

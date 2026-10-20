@@ -5,9 +5,10 @@ import {useData} from "@repo/app/hooks/use-data";
 import {DataLastUpdated} from "@repo/app/components/data-last-updated/data-last-updated";
 import {CompetitorCombobox} from "@repo/app/components/competitor-combobox/competitor-combobox";
 import type {ComboboxItem} from "@repo/app/components/combobox/combobox";
+import {FilterBar, FilterItem} from "@repo/app/components/filter-bar/filter-bar";
+import {PageContainer} from "@repo/app/components/page-container/page-container";
 import {ProfileContent} from "./profile-content";
 import {PersonNotFound} from "./person-not-found";
-import styles from "./profile.module.css";
 
 export function Profile() {
 	const {wcaid} = useParams<{wcaid?: string;}>();
@@ -50,36 +51,35 @@ export function Profile() {
 	};
 
 	return (
-		<div className={styles.container}>
+		<PageContainer>
 			<h2>Senior Profile</h2>
 
 			<DataLastUpdated text={rankings.lastUpdated} />
 
-			<div className={styles["name-search"]}>
-				<CompetitorCombobox
-					items={comboboxItems}
-					onSelect={handleCompetitorSelect}
-				/>
-			</div>
-
-			<div className={styles["leaderboard-link"]}>
-				<Link to={`${ROUTES.KINCH_RANKS}?age=${age}`}>
-					View the Kinch Ranks Leaderboard
-				</Link>
-			</div>
-
-			<div className={styles["leaderboard-link"]}>
-				<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}`}>
-					View Top Kinch Results
-				</Link>
-			</div>
+			<FilterBar>
+				<FilterItem>
+					<CompetitorCombobox
+						items={comboboxItems}
+						onSelect={handleCompetitorSelect}
+					/>
+				</FilterItem>
+				<FilterItem>
+					<Link to={`${ROUTES.KINCH_RANKS}?age=${age}`}>
+						View the Kinch Ranks Leaderboard
+					</Link>
+				</FilterItem>
+				<FilterItem>
+					<Link to={`${ROUTES.KINCH_TOP_RESULTS}?age=${age}`}>
+						View Top Kinch Results
+					</Link>
+				</FilterItem>
+			</FilterBar>
 
 			{/* Show profile content only if we have a valid wcaid and person */}
 			{wcaid && person && (
 				<ProfileContent
 					person={person}
 					age={age}
-					availableAges={availableAges}
 					kinchScores={kinchScores}
 					eventResults={eventResults}
 					rankings={rankings}
@@ -89,6 +89,6 @@ export function Profile() {
 
 			{/* Show message if wcaid provided but person not found */}
 			{wcaid && !person && <PersonNotFound />}
-		</div>
+		</PageContainer>
 	);
 }

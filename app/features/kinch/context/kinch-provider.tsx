@@ -3,8 +3,9 @@ import {useParams, useSearchParams, type NavigateOptions} from "react-router";
 import type {Continent, Country} from "@repo/common/types/rankings-snapshot";
 import type {EnhancedRankingsData} from "@repo/common/types/enhanced-rankings";
 import type {TopRank} from "@repo/common/types/kinch-types";
-import {fromRegionParam, toRegionParam} from "@repo/common/util/kinch-region-utils";
+import {toRegionParam} from "@repo/common/util/region-utils";
 import {useDataOptional} from "@repo/app/hooks/use-data";
+import {getAgeOptions} from "@repo/app/utils/age-options";
 import type {KinchContextParams, KinchContextType, RegionInfo} from "./kinch-context";
 import {KinchContext} from "./kinch-context";
 
@@ -43,16 +44,6 @@ export function KinchProvider({children}: {children: ReactNode;}) {
 	};
 
 	const region = searchParams.get("region") || defaults.region;
-	const {id, isContinent} = fromRegionParam(region);
-
-	let regionType: RegionInfo["type"];
-	if (id === "world") {
-		regionType = "world";
-	} else if (isContinent) {
-		regionType = "continent";
-	} else {
-		regionType = "country";
-	}
 
 	const {continents, countries} = useMemo(() => (
 		getFilteredRegions(
@@ -64,11 +55,13 @@ export function KinchProvider({children}: {children: ReactNode;}) {
 	), [rankings, topRanks, wcaid, age]);
 
 	const regionInfo: RegionInfo = {
-		id,
-		type: regionType,
 		continents: continents,
 		countries: countries,
 	};
+
+	const ageOptions = useMemo(() => (
+		getAgeOptions((topRanks ?? []).filter(tr => tr.region === region).map(tr => tr.age))
+	), [topRanks, region]);
 
 	const value: KinchContextType = {
 		page: page,
@@ -76,6 +69,7 @@ export function KinchProvider({children}: {children: ReactNode;}) {
 		wcaid: wcaid,
 		region,
 		regionInfo,
+		ageOptions,
 		setParams,
 	};
 

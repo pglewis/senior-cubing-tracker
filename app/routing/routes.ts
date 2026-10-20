@@ -6,6 +6,7 @@ export const ROUTES = {
 	KINCH_PERSON: "/kinch-ranks/:wcaid",
 	KINCH_FAQ: "/kinch-ranks/faq",
 	KINCH_TOP_RESULTS: "/kinch-ranks/top-results",
+	RECORDS: "/records",
 	COMPETITOR_DATA_FAQ: "/competitor-data-faq",
 } as const;
 

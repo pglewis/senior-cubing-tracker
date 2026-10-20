@@ -1,7 +1,7 @@
 import type {WCAEventId} from "@repo/common/types/rankings-snapshot";
 import {RankingLink} from "@repo/app/components/urls/ranking-link";
-import {Pill} from "@repo/app/components/pill/pill";
-import {dateIsRecent} from "@repo/common/util/parse";
+import {ResultItem} from "@repo/app/components/event-card/event-card";
+import {toRegionParam} from "@repo/common/util/region-utils";
 import styles from "./profile.module.css";
 
 interface ResultDisplayProps {
@@ -33,25 +33,15 @@ export function ResultDisplay(props: ResultDisplayProps) {
 		achievementAge,
 	} = props;
 
-	const showAchievementAge = achievementAge > parseInt(age);
-	const typeLabel = type === "single" ? "Single" : "Average";
-
-	const isRecent = dateIsRecent(date);
-
 	return (
-		<div className={styles["result-item"]}>
-			<div className={styles["result-info"]}>
-				<div className={styles["result-type"]}>{typeLabel}</div>
-				<div className={styles["result-value"]}>
-					<RankingLink age={age} eventId={eventId} eventType={type}>
-						{result}
-					</RankingLink>
-					{showAchievementAge && <Pill>({achievementAge})</Pill>}
-				</div>
-				<div className={styles["result-date"]}>
-					{date} {isRecent && "🔥"}
-				</div>
-			</div>
+		<ResultItem
+			type={type}
+			result={result}
+			date={date}
+			eventId={eventId}
+			age={age}
+			achievementAge={achievementAge}
+		>
 			<div className={styles["result-ranks"]}>
 				<div className={styles["rank-item"]}>
 					<div className={styles["rank-label"]}>WR</div>
@@ -64,7 +54,7 @@ export function ResultDisplay(props: ResultDisplayProps) {
 				<div className={styles["rank-item"]}>
 					<div className={styles["rank-label"]}>CR</div>
 					<div className={styles["rank-value"]}>
-						<RankingLink age={age} eventId={eventId} eventType={type} region={{type: "continent", id: continentId}}>
+						<RankingLink age={age} eventId={eventId} eventType={type} region={toRegionParam(continentId, true)}>
 							#{continentRank}
 						</RankingLink>
 					</div>
@@ -72,12 +62,12 @@ export function ResultDisplay(props: ResultDisplayProps) {
 				<div className={styles["rank-item"]}>
 					<div className={styles["rank-label"]}>NR</div>
 					<div className={styles["rank-value"]}>
-						<RankingLink age={age} eventId={eventId} eventType={type} region={{type: "country", id: countryId}}>
+						<RankingLink age={age} eventId={eventId} eventType={type} region={toRegionParam(countryId, false)}>
 							#{countryRank}
 						</RankingLink>
 					</div>
 				</div>
 			</div>
-		</div>
+		</ResultItem>
 	);
 }

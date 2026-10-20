@@ -25,6 +25,12 @@ export function Home() {
 						</dd>
 					</dl>
 					<dl>
+						<dt><Link to={ROUTES.RECORDS} className={styles.link}>Senior Event Records</Link></dt>
+						<dd>
+							The best single and average in every event for each age group and region, all on one page.
+						</dd>
+					</dl>
+					<dl>
 						<dt><a href="https://pglewis.github.io/wca-recent-senior-records/recent/" target="_blank" rel="noopener noreferrer" className={styles.link}>Recent Senior Records</a></dt>
 						<dd>
 							Recent top senior results, see who is out there raising the bar for everyone else.

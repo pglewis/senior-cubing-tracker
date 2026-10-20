@@ -85,7 +85,6 @@ export function TopKinchResults() {
 												personId={holder.personId}
 												personName={holder.personName}
 												countryId={rankings?.persons[holder.personId]?.countryId ?? ""}
-												highestAge={rankings?.persons[holder.personId]?.availableAges.at(-1)}
 												achievementAge={holder.achievementAge}
 												date={holder.date}
 												age={age}
@@ -106,7 +105,6 @@ export function TopKinchResults() {
 												personId={holder.personId}
 												personName={holder.personName}
 												countryId={rankings?.persons[holder.personId]?.countryId ?? ""}
-												highestAge={rankings?.persons[holder.personId]?.availableAges.at(-1)}
 												achievementAge={holder.achievementAge}
 												date={holder.date}
 												age={age}
@@ -132,7 +130,6 @@ interface ResultItemProps {
 	personId: string;
 	personName: string;
 	countryId: string;
-	highestAge: number | undefined;
 	achievementAge: number;
 	date: string;
 	age: string;
@@ -142,13 +139,12 @@ interface ResultItemProps {
 }
 
 function ResultItem(props: ResultItemProps) {
-	const {type, result, personId, personName, countryId, highestAge, achievementAge, date, age, region, regionInfo, eventId} = props;
+	const {type, result, personId, personName, countryId, achievementAge, date, age, region, regionInfo, eventId} = props;
 
 	const typeLabel = type === "single" ? "Single" : "Average";
 	const isRecent = dateIsRecent(date);
 	const personUrl = `${buildKinchPersonRoute(personId)}?age=${age}&region=${region}`;
 	const currentAge = parseInt(age);
-	const showHighestAge = highestAge !== undefined && highestAge > currentAge;
 	const showAchievementAge = achievementAge > currentAge;
 
 	// Only pass region to RankingLink if it's not world
@@ -176,7 +172,6 @@ function ResultItem(props: ResultItemProps) {
 				<Link to={personUrl} className={styles["person-link"]}>
 					{personName}
 				</Link>
-				{showHighestAge && <Pill>({highestAge})</Pill>}
 			</div>
 		</div>
 	);
